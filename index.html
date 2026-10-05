@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Liuzhou Loop — Expat & Youth Insider</title>
+    <!-- Custom Favicon (Letter L Brand Icon) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='12' fill='%23FF5722'/><text x='50% ' y='54% ' font-family='Outfit, sans-serif' font-weight='800' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'>L</text></svg>">
     <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -243,20 +245,20 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, getDocs, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ==========================================
-        // REPLACE WITH YOUR FIREBASE CONFIG KEYS
+        // YOUR FIREBASE CONFIG KEYS
         // ==========================================
         const firebaseConfig = {
-  apiKey: "AIzaSyDIG8J6EcBIAzepPWxFq0jgG9SgBeLUmaA",
-  authDomain: "liuzhou-loop.firebaseapp.com",
-  projectId: "liuzhou-loop",
-  storageBucket: "liuzhou-loop.firebasestorage.app",
-  messagingSenderId: "107290553877",
-  appId: "1:107290553877:web:1acb58586deb3cfde9281c",
-  measurementId: "G-6V7ZCCKTR6"
-};
+            apiKey: "AIzaSyDIG8J6EcBIAzepPWxFq0jgG9SgBeLUmaA",
+            authDomain: "liuzhou-loop.firebaseapp.com",
+            projectId: "liuzhou-loop",
+            storageBucket: "liuzhou-loop.firebasestorage.app",
+            messagingSenderId: "107290553877",
+            appId: "1:107290553877:web:1acb58586deb3cfde9281c",
+            measurementId: "G-6V7ZCCKTR6"
+        };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -306,6 +308,18 @@
                 activeBtn.classList.add('bg-brand-dark', 'text-white');
             }
             renderPosts();
+        }
+
+        // Delete Post Function
+        window.deletePost = async function(postId) {
+            if (confirm("Are you sure you want to bin this post from the cloud?")) {
+                try {
+                    await deleteDoc(doc(db, "posts", postId));
+                } catch (error) {
+                    console.error("Error removing document: ", error);
+                    alert("Failed to delete post from cloud.");
+                }
+            }
         }
 
         // Handle Form Submission to Cloud Firestore
@@ -399,13 +413,16 @@
             }
 
             grid.innerHTML = filtered.map(p => `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/50 transition-all">
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/50 transition-all relative group">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
                             <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${p.category === 'spot' ? 'bg-brand-orange/10 text-brand-orange' : 'bg-brand-light text-brand-dark'}">
                                 ${p.category === 'spot' ? 'Secret Spot' : 'Lifehack'}
                             </span>
-                            <span class="text-xs text-brand-muted">Just now</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-brand-muted">Just now</span>
+                                <button onclick="deletePost('${p.id}')" title="Delete post" class="text-brand-muted hover:text-brand-geranium transition-colors p-1 text-xs">🗑️</button>
+                            </div>
                         </div>
                         <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                         <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -432,10 +449,13 @@
             }
 
             grid.innerHTML = articles.map(p => `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
                     <div class="flex items-center justify-between text-xs text-brand-muted">
                         <span class="text-brand-lime font-bold uppercase tracking-wider">Article</span>
-                        <span>Just now</span>
+                        <div class="flex items-center gap-2">
+                            <span>Just now</span>
+                            <button onclick="deletePost('${p.id}')" title="Delete article" class="text-brand-muted hover:text-brand-geranium transition-colors p-1 text-xs">🗑️</button>
+                        </div>
                     </div>
                     <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -458,10 +478,13 @@
             }
 
             grid.innerHTML = anons.map(p => `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
                     <div class="flex items-center justify-between text-xs text-brand-geranium font-bold uppercase tracking-wider">
                         <span>Liuzhou Anon</span>
-                        <span>Just now</span>
+                        <div class="flex items-center gap-2">
+                            <span>Just now</span>
+                            <button onclick="deletePost('${p.id}')" title="Delete post" class="text-brand-muted hover:text-brand-geranium transition-colors p-1 text-xs">🗑️</button>
+                        </div>
                     </div>
                     <h3 class="font-heading font-bold text-lg text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -483,10 +506,13 @@
             }
 
             grid.innerHTML = corners.map(p => `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
                     <div class="flex items-center justify-between text-xs text-brand-orange font-bold uppercase tracking-wider">
                         <span>English Corner</span>
-                        <span>Just now</span>
+                        <div class="flex items-center gap-2">
+                            <span>Just now</span>
+                            <button onclick="deletePost('${p.id}')" title="Delete meetup" class="text-brand-muted hover:text-brand-geranium transition-colors p-1 text-xs">🗑️</button>
+                        </div>
                     </div>
                     <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
