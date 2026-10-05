@@ -37,7 +37,6 @@
     </script>
     <style>
         body { background-color: #F8F9FA; color: #1D1E2C; }
-        /* Custom scrollbar for sleek minimalist feel */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #F8F9FA; }
         ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
@@ -110,7 +109,7 @@
                 </div>
             </div>
 
-            <!-- Quick Action Box / Discord Vibe Banner -->
+            <!-- Quick Action Box -->
             <div class="lg:col-span-4 bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-4">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Community Status</span>
@@ -145,15 +144,7 @@
         </div>
 
         <!-- Dynamic Post Grid -->
-        <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Empty State Notice -->
-            <div id="empty-state" class="col-span-full py-16 text-center space-y-3 bg-white rounded-3xl border border-dashed border-brand-border">
-                <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
-                <h4 class="font-heading font-bold text-lg text-brand-dark">The canvas is completely empty</h4>
-                <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the very first insider to drop a lifehack, secret spot, or thought into Liuzhou Loop.</p>
-                <button onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Add First Post</button>
-            </div>
-        </div>
+        <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
         <!-- Independent Articles Section -->
         <section id="articles" class="pt-8">
@@ -164,14 +155,10 @@
                 </div>
                 <button onclick="openModalCustom('article')" class="text-xs font-bold uppercase tracking-wider bg-brand-lime/10 text-brand-lime hover:bg-brand-lime hover:text-white px-4 py-2 rounded-full transition-colors">+ Write Article</button>
             </div>
-            <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div id="articles-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
-                    No independent articles published yet. Be the first local writer to publish here.
-                </div>
-            </div>
+            <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
 
-        <!-- Liuzhou Anon / Confessions Section -->
+        <!-- Liuzhou Anon Section -->
         <section id="anon" class="pt-8">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -180,11 +167,7 @@
                 </div>
                 <button onclick="openModalCustom('anon')" class="text-xs font-bold uppercase tracking-wider bg-brand-geranium/10 text-brand-geranium hover:bg-brand-geranium hover:text-white px-4 py-2 rounded-full transition-colors">+ Post Anonymously</button>
             </div>
-            <div id="anon-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div id="anon-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
-                    The anonymous board is clean. Drop your random questions, vents, or queries here.
-                </div>
-            </div>
+            <div id="anon-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </section>
 
         <!-- English Corner Section -->
@@ -196,11 +179,7 @@
                 </div>
                 <button onclick="openModalCustom('corner')" class="text-xs font-bold uppercase tracking-wider bg-brand-orange/10 text-brand-orange hover:bg-brand-orange hover:text-white px-4 py-2 rounded-full transition-colors">+ Host Session</button>
             </div>
-            <div id="corner-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div id="corner-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
-                    No English corners scheduled yet. Hosts, add your weekly meeting spot and time!
-                </div>
-            </div>
+            <div id="corner-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
 
     </main>
@@ -263,13 +242,12 @@
         </div>
     </footer>
 
-    <!-- JavaScript Application Logic -->
+    <!-- JavaScript Application Logic with LocalStorage -->
     <script>
-        // In-memory data store initialized completely empty
-        let posts = [];
+        // Load posts from browser storage so they don't disappear on refresh
+        let posts = JSON.parse(localStorage.getItem('liuzhou_loop_posts')) || [];
         let currentFilter = 'all';
 
-        // Toggle category field visibility
         document.getElementById('postCategory').addEventListener('change', function(e) {
             const locWrapper = document.getElementById('locationFieldWrapper');
             if (e.target.value === 'corner') {
@@ -333,6 +311,10 @@
             };
 
             posts.unshift(newPost);
+            
+            // Save securely to browser localStorage
+            localStorage.setItem('liuzhou_loop_posts', JSON.stringify(posts));
+
             closeModal();
             renderAll();
         }
@@ -346,7 +328,6 @@
         }
 
         function updateCounters() {
-            // Count unique authors or total submissions for active insiders
             const uniqueAuthors = new Set(posts.map(p => p.author)).size;
             document.getElementById('active-count').innerText = uniqueAuthors;
             
@@ -356,7 +337,7 @@
             const articlesCount = posts.filter(p => p.category === 'article').length;
             document.getElementById('articles-count').innerText = articlesCount;
 
-            document.getElementById('post-count').innerText = posts.filter(p => p.category === 'lifehack' || p.category === 'spot' || currentFilter === 'all').length;
+            document.getElementById('post-count').innerText = posts.filter(p => p.category === 'lifehack' || p.category === 'spot').length;
         }
 
         function renderPosts() {
@@ -366,7 +347,7 @@
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div id="empty-state" class="col-span-full py-16 text-center space-y-3 bg-white rounded-3xl border border-dashed border-brand-border">
+                    <div class="col-span-full py-16 text-center space-y-3 bg-white rounded-3xl border border-dashed border-brand-border">
                         <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
                         <h4 class="font-heading font-bold text-lg text-brand-dark">No posts found in this feed</h4>
                         <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to add a lifehack or secret spot!</p>
@@ -402,7 +383,7 @@
 
             if (articles.length === 0) {
                 grid.innerHTML = `
-                    <div id="articles-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
                         No independent articles published yet. Be the first local writer to publish here.
                     </div>
                 `;
@@ -428,7 +409,7 @@
 
             if (anons.length === 0) {
                 grid.innerHTML = `
-                    <div id="anon-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
                         The anonymous board is clean. Drop your random questions, vents, or queries here.
                     </div>
                 `;
@@ -453,7 +434,7 @@
 
             if (corners.length === 0) {
                 grid.innerHTML = `
-                    <div id="corner-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
                         No English corners scheduled yet. Hosts, add your weekly meeting spot and time!
                     </div>
                 `;
