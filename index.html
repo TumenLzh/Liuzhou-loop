@@ -1,488 +1,486 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Liuzhou Loop — Expat & Local Insider Hub</title>
-    <!-- Tailwind CSS CDN -->
+    <title>The Liuzhou Loop — Expat & Youth Insider</title>
+    <!-- Google Fonts: Plus Jakarta Sans for modern editorial look & Outfit for clean headers -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        geranium: '#FF4D26',
-                        sunyellow: '#FFCC00',
-                        mintgreen: '#10B981',
-                        softdark: '#262626',
-                        cardbg: '#FAFAFA'
+                        brand: {
+                            orange: '#FF5722',
+                            geranium: '#E63946',
+                            yellow: '#FFB703',
+                            lime: '#2A9D8F',
+                            dark: '#1D1E2C',
+                            light: '#F8F9FA',
+                            card: '#FFFFFF',
+                            border: '#E5E7EB',
+                            muted: '#6B7280'
+                        }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-                        display: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        heading: ['"Outfit"', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            color: #404040;
-            background-color: #F8F9FA;
-        }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #F1F1F1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #D4D4D4;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #A3A3A3;
-        }
+        body { background-color: #F8F9FA; color: #1D1E2C; }
+        /* Custom scrollbar for sleek minimalist feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #F8F9FA; }
+        ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
     </style>
 </head>
-<body class="bg-[#F8F9FA] text-[#404040] antialiased selection:bg-geranium selection:text-white">
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white">
 
-    <!-- Navigation Bar -->
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-neutral-200">
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-brand-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-geranium via-sunyellow to-mintgreen flex items-center justify-center text-white font-black text-xl shadow-md shadow-geranium/20">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-transform">
                     L
                 </div>
                 <div>
-                    <span class="font-extrabold text-2xl tracking-tight text-softdark font-display">LIUZHOU<span class="text-geranium">.LOOP</span></span>
-                    <span class="block text-[10px] uppercase font-bold tracking-widest text-neutral-400">Expat & Youth Insider</span>
+                    <span class="font-heading font-extrabold text-xl tracking-tight text-brand-dark">LIUZHOU.LOOP</span>
+                    <span class="block text-[10px] uppercase tracking-widest text-brand-muted font-semibold">Expat & Youth Insider</span>
                 </div>
-            </div>
+            </a>
 
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-neutral-600">
-                <a href="#feed" class="hover:text-geranium transition-colors">Discover</a>
-                <a href="#categories" class="hover:text-geranium transition-colors">Lifehacks</a>
-                <a href="#spots" class="hover:text-geranium transition-colors">Secret Spots</a>
-                <a href="#about" class="hover:text-geranium transition-colors">About Us</a>
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-brand-dark">
+                <a href="#feed" class="hover:text-brand-orange transition-colors">Feed</a>
+                <a href="#articles" class="hover:text-brand-orange transition-colors">Articles</a>
+                <a href="#secrets" class="hover:text-brand-orange transition-colors">Secret Spots</a>
+                <a href="#anon" class="hover:text-brand-orange transition-colors">Liuzhou Anon</a>
+                <a href="#english-corner" class="hover:text-brand-orange transition-colors">English Corner</a>
             </nav>
 
-            <div class="flex items-center space-x-4">
-                <button onclick="openModal()" class="bg-geranium hover:bg-[#e03d17] text-white font-bold px-5 py-2.5 rounded-full shadow-lg shadow-geranium/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 text-sm flex items-center space-x-2">
-                    <i class="fa-solid fa-plus text-xs"></i>
-                    <span>Drop a Tip</span>
+            <!-- Action Button -->
+            <div class="flex items-center gap-3">
+                <button onclick="openModal()" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all duration-200 flex items-center gap-2">
+                    <span>+ Drop a Post</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden bg-white border-b border-neutral-200">
-        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-sunyellow/10 blur-3xl pointer-events-none"></div>
-        <div class="absolute bottom-0 left-1/4 -mb-20 w-80 h-80 rounded-full bg-geranium/10 blur-3xl pointer-events-none"></div>
+    <!-- Main Hero Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-8 space-y-6">
+                <div class="inline-flex items-center gap-2 bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full">
+                    <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+                    Liuzhou Open Community Hub • 2026
+                </div>
+                <h1 class="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.08] text-brand-dark">
+                    Your City. <span class="text-brand-orange">Your Rules.</span> No Bullshit.
+                </h1>
+                <p class="text-lg text-brand-muted max-w-2xl font-normal leading-relaxed">
+                    A clean, modern platform built by and for the youth, expats, and independent minds of Liuzhou. Share lifehacks, local independent articles, anonymous questions, or host an English corner.
+                </p>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="inline-flex items-center space-x-2 bg-neutral-100 border border-neutral-200 px-3.5 py-1.5 rounded-full text-xs font-bold text-neutral-600">
-                        <span class="w-2 h-2 rounded-full bg-mintgreen animate-pulse"></span>
-                        <span>Liuzhou Underground Edition • 2026</span>
+                <!-- Real-time Live Counters -->
+                <div class="pt-4 grid grid-cols-3 gap-4 max-w-lg border-t border-brand-border">
+                    <div>
+                        <span id="active-count" class="block font-heading font-extrabold text-3xl text-brand-dark">0</span>
+                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold">Active Insiders</span>
                     </div>
-                    
-                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-softdark tracking-tight leading-[1.05]">
-                        Survive & Thrive in <span class="text-transparent bg-clip-text bg-gradient-to-r from-geranium via-orange-500 to-sunyellow">Liuzhou</span> with Style.
-                    </h1>
-                    
-                    <p class="text-lg sm:text-xl text-neutral-500 font-normal max-w-2xl leading-relaxed">
-                        No boring tourist guides or clunky translated apps. Real lifehacks, underground coffee spots, late-night river snail rice noodles (Luosifen), and expat survival notes crafted for the modern youth.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-                        <a href="#feed" class="bg-softdark hover:bg-black text-white font-bold px-8 py-4 rounded-2xl shadow-xl transition-all text-center flex items-center justify-center space-x-3 group">
-                            <span>Explore Feed</span>
-                            <i class="fa-solid fa-arrow-down text-xs group-hover:translate-y-1 transition-transform"></i>
-                        </a>
-                        <button onclick="openModal()" class="bg-neutral-100 hover:bg-neutral-200 text-softdark font-bold px-8 py-4 rounded-2xl transition-all text-center flex items-center justify-center space-x-2 border border-neutral-200">
-                            <i class="fa-solid fa-bolt text-geranium"></i>
-                            <span>Share a Lifehack</span>
-                        </button>
+                    <div>
+                        <span id="secrets-count" class="block font-heading font-extrabold text-3xl text-brand-orange">0</span>
+                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold">Secret Spots</span>
                     </div>
-
-                    <!-- Quick stats / badges -->
-                    <div class="pt-6 grid grid-cols-3 gap-4 border-t border-neutral-100">
-                        <div>
-                            <div class="text-2xl font-black text-softdark font-display">1.4k+</div>
-                            <div class="text-xs font-semibold text-neutral-400">Active Insiders</div>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-black text-geranium font-display">320+</div>
-                            <div class="text-xs font-semibold text-neutral-400">Secret Spots</div>
-                        </div>
-                        <div>
-                            <div class="text-2xl font-black text-mintgreen font-display">100%</div>
-                            <div class="text-xs font-semibold text-neutral-400">English Native</div>
-                        </div>
+                    <div>
+                        <span id="articles-count" class="block font-heading font-extrabold text-3xl text-brand-lime">0</span>
+                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold">Live Articles</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Hero visual card showcase -->
-                <div class="lg:col-span-5">
-                    <div class="relative mx-auto max-w-md lg:max-w-none">
-                        <div class="absolute -inset-1.5 bg-gradient-to-r from-geranium to-sunyellow rounded-3xl blur-lg opacity-30"></div>
-                        <div class="relative bg-white p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-2xl space-y-6">
-                            <div class="flex items-center justify-between pb-4 border-b border-neutral-100">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-full bg-geranium/10 text-geranium flex items-center justify-center font-bold">
-                                        <i class="fa-solid fa-fire"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-softdark text-sm">Spotlight of the Day</h4>
-                                        <span class="text-xs text-neutral-400">Shared 2 hours ago</span>
-                                    </div>
-                                </div>
-                                <span class="bg-sunyellow/20 text-yellow-800 font-extrabold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">Must Visit</span>
-                            </div>
-
-                            <div class="space-y-3">
-                                <div class="h-48 rounded-2xl overflow-hidden relative group">
-                                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80" 
-                                         onerror="this.src='https://placehold.co/800x500/262626/FFFFFF?text=Liuzhou+River+Park';" 
-                                         alt="Liuzhou riverfront" 
-                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
-                                        <span class="text-white font-bold text-sm">Binjiang Riverside Greenway (Morning Jog Spot)</span>
-                                    </div>
-                                </div>
-                                <p class="text-sm text-neutral-500 leading-relaxed">
-                                    "Pro tip for morning joggers: Hit the upper deck near Fengqing Bridge around 6:30 AM before the humidity kicks in. Zero traffic, fresh breeze off the Liu River, and the airpods-friendly playlist view is unmatched."
-                                </p>
-                            </div>
-
-                            <div class="flex items-center justify-between pt-2 text-xs font-semibold text-neutral-400">
-                                <span class="flex items-center space-x-1 text-geranium"><i class="fa-solid fa-heart"></i> <span>248 upvotes</span></span>
-                                <span>By @AlexInLiuzhou</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Quick Action Box / Discord Vibe Banner -->
+            <div class="lg:col-span-4 bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Community Status</span>
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-600 text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live & Open
+                    </span>
                 </div>
+                <h3 class="font-heading font-bold text-xl text-brand-dark">Got something to put out there?</h3>
+                <p class="text-sm text-brand-muted leading-relaxed">
+                    Whether it's an underground food spot, an independent news scoop, or a random late-night thought—drop it into the stream.
+                </p>
+                <button onclick="openModal()" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl shadow-sm transition-colors text-center block">
+                    Create a Post / Tip
+                </button>
             </div>
         </div>
     </section>
 
-    <!-- Main Content & Feed Section -->
-    <main id="feed" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-neutral-200">
-            <div>
-                <span class="text-geranium font-extrabold text-xs uppercase tracking-widest block mb-1">Live Community Feed</span>
-                <h2 class="text-3xl sm:text-4xl font-black text-softdark tracking-tight">The Latest Intel & Lifehacks</h2>
+    <!-- Main Content Feed Section -->
+    <main id="feed" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full space-y-16">
+
+        <!-- Feed Filtering Tabs -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6">
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+                <button onclick="filterCategory('all')" id="btn-all" class="tab-btn bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
+                <button onclick="filterCategory('lifehack')" id="btn-lifehack" class="tab-btn bg-white hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
+                <button onclick="filterCategory('spot')" id="btn-spot" class="tab-btn bg-white hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
             </div>
-            
-            <!-- Category Filter Tabs -->
-            <div class="mt-6 md:mt-0 flex flex-wrap gap-2" id="filter-container">
-                <button onclick="filterPosts('all')" data-category="all" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-softdark text-white shadow-md">All Posts</button>
-                <button onclick="filterPosts('lifehack')" data-category="lifehack" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200">⚡ Lifehacks</button>
-                <button onclick="filterPosts('spot')" data-category="spot" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200">☕ Secret Spots</button>
-                <button onclick="filterPosts('food')" data-category="food" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200">🍜 Luosifen & Eats</button>
-                <button onclick="filterPosts('survival')" data-category="survival" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200">🛠️ Expat Survival</button>
+            <div class="text-xs text-brand-muted font-semibold">
+                Showing <span id="post-count">0</span> contributions
             </div>
         </div>
 
-        <!-- Feed Grid -->
-        <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Dynamic posts will be injected here -->
+        <!-- Dynamic Post Grid -->
+        <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Empty State Notice -->
+            <div id="empty-state" class="col-span-full py-16 text-center space-y-3 bg-white rounded-3xl border border-dashed border-brand-border">
+                <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
+                <h4 class="font-heading font-bold text-lg text-brand-dark">The canvas is completely empty</h4>
+                <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the very first insider to drop a lifehack, secret spot, or thought into Liuzhou Loop.</p>
+                <button onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Add First Post</button>
+            </div>
         </div>
+
+        <!-- Independent Articles Section -->
+        <section id="articles" class="pt-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-lime">Journalism & Opinions</span>
+                    <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark">Independent Articles</h2>
+                </div>
+                <button onclick="openModalCustom('article')" class="text-xs font-bold uppercase tracking-wider bg-brand-lime/10 text-brand-lime hover:bg-brand-lime hover:text-white px-4 py-2 rounded-full transition-colors">+ Write Article</button>
+            </div>
+            <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div id="articles-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                    No independent articles published yet. Be the first local writer to publish here.
+                </div>
+            </div>
+        </section>
+
+        <!-- Liuzhou Anon / Confessions Section -->
+        <section id="anon" class="pt-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-geranium">No Names, Just Noise</span>
+                    <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark">Liuzhou Anon</h2>
+                </div>
+                <button onclick="openModalCustom('anon')" class="text-xs font-bold uppercase tracking-wider bg-brand-geranium/10 text-brand-geranium hover:bg-brand-geranium hover:text-white px-4 py-2 rounded-full transition-colors">+ Post Anonymously</button>
+            </div>
+            <div id="anon-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div id="anon-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                    The anonymous board is clean. Drop your random questions, vents, or queries here.
+                </div>
+            </div>
+        </section>
+
+        <!-- English Corner Section -->
+        <section id="english-corner" class="pt-8 pb-12">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-orange">Weekly Meetups</span>
+                    <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark">English Corner Schedule</h2>
+                </div>
+                <button onclick="openModalCustom('corner')" class="text-xs font-bold uppercase tracking-wider bg-brand-orange/10 text-brand-orange hover:bg-brand-orange hover:text-white px-4 py-2 rounded-full transition-colors">+ Host Session</button>
+            </div>
+            <div id="corner-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div id="corner-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                    No English corners scheduled yet. Hosts, add your weekly meeting spot and time!
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Modal for submitting new tip / lifehack -->
-    <div id="post-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-neutral-200 relative transform transition-all animate-in fade-in zoom-in duration-200">
-            <button onclick="closeModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-500 flex items-center justify-center font-bold transition-colors">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <div class="mb-6">
-                <span class="text-geranium font-extrabold text-xs uppercase tracking-widest block mb-1">Contribute to the Loop</span>
-                <h3 class="text-2xl font-black text-softdark tracking-tight">Drop Your Liuzhou Intel</h3>
-                <p class="text-xs text-neutral-400 mt-1">Found an epic spot? A genius local lifehack? Share it with the community.</p>
+    <!-- Submission Modal -->
+    <div id="postModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-6 relative animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between">
+                <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Drop to Liuzhou Loop</h3>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
-
-            <form id="submit-form" onsubmit="handlePostSubmit(event)" class="space-y-4">
+            
+            <form id="submissionForm" onsubmit="handleSubmission(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Your Name / Handle</label>
-                    <input type="text" id="author-input" required placeholder="e.g. Sarah J. or @expat_liuzhou" 
-                           class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-geranium transition-colors">
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Category</label>
-                        <select id="category-input" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-geranium transition-colors">
-                            <option value="lifehack">⚡ Lifehack</option>
-                            <option value="spot">☕ Secret Spot</option>
-                            <option value="food">🍜 Food & Luosifen</option>
-                            <option value="survival">🛠️ Expat Survival</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Title / Headline</label>
-                        <input type="text" id="title-input" required placeholder="e.g. Best Wi-Fi Cafe near University" 
-                               class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-geranium transition-colors">
-                    </div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Category</label>
+                    <select id="postCategory" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-semibold text-brand-dark focus:outline-none focus:border-brand-orange">
+                        <option value="lifehack">Lifehack</option>
+                        <option value="spot">Secret Spot</option>
+                        <option value="article">Independent Article</option>
+                        <option value="anon">Liuzhou Anon (Anonymous)</option>
+                        <option value="corner">English Corner Session</option>
+                    </select>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Image URL (Optional)</label>
-                    <input type="url" id="image-input" placeholder="https://images.unsplash.com/..." 
-                           class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-geranium transition-colors">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Title or Headline</label>
+                    <input type="text" id="postTitle" required placeholder="e.g. Best late night noodles near Binjiang..." class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+
+                <div id="locationFieldWrapper" class="hidden">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Location / Venue</label>
+                    <input type="text" id="postLocation" placeholder="e.g. Riverside Park, Saturday 4 PM" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1.5">Your Tip / Story</label>
-                    <textarea id="content-input" required rows="4" placeholder="Spill the details... Where is it? How much does it cost? Any insider tips?" 
-                              class="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-geranium transition-colors"></textarea>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Content / Details</label>
+                    <textarea id="postContent" required rows="4" placeholder="Write your full tip, story, or question here..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></textarea>
                 </div>
 
-                <div class="pt-2">
-                    <button type="submit" class="w-full bg-geranium hover:bg-[#e03d17] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-geranium/25 transition-all text-sm">
-                        Publish to The Loop 🚀
-                    </button>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Your Name / Alias (Leave blank if anon)</label>
+                    <input type="text" id="postAuthor" placeholder="e.g. Alex or Anonymous" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeModal()" class="px-6 py-3 rounded-full text-sm font-semibold text-brand-muted hover:text-brand-dark">Cancel</button>
+                    <button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-full text-sm shadow-sm transition-colors">Publish Live</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer id="about" class="bg-white border-t border-neutral-200 mt-20 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-xl bg-geranium flex items-center justify-center text-white font-bold text-sm">
-                    L
-                </div>
-                <span class="font-extrabold text-lg text-softdark tracking-tight">LIUZHOU<span class="text-geranium">.LOOP</span></span>
-            </div>
-            
-            <p class="text-xs text-neutral-400 text-center md:text-left">
-                Built with zero corporate BS, maximum espresso, and pure modern European web energy. Made for Liuzhou youth & expats.
-            </p>
-
-            <div class="flex items-center space-x-6 text-neutral-400">
-                <a href="#" class="hover:text-geranium transition-colors"><i class="fa-brands fa-instagram text-lg"></i></a>
-                <a href="#" class="hover:text-geranium transition-colors"><i class="fa-brands fa-telegram text-lg"></i></a>
-                <a href="#" class="hover:text-geranium transition-colors"><i class="fa-brands fa-discord text-lg"></i></a>
+    <footer class="bg-white border-t border-brand-border py-8 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted font-semibold">
+            <p>© 2026 The Liuzhou Loop. Built by the youth, for the youth.</p>
+            <div class="flex items-center gap-6">
+                <a href="#feed" class="hover:text-brand-orange transition-colors">Back to Top ↑</a>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Initial mock posts data representing Liuzhou lifehacks and spots
-        let posts = [
-            {
-                id: 1,
-                category: 'spot',
-                title: 'Rooftop Sunrise over Peach Blossom River',
-                author: 'Marcus V.',
-                time: '4 hours ago',
-                image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
-                content: 'Skip the overcrowded tourist peaks. Head to the east bank residential rooftops near the river bend right at 6 AM. Bring your airpods and grab an iced oat latte beforehand—absolute cinematic morning workout views.',
-                likes: 184,
-                liked: false
-            },
-            {
-                id: 2,
-                category: 'lifehack',
-                title: 'How to Master DiDi and Meituan Without Fluent Mandarin',
-                author: 'Elena K.',
-                time: 'Yesterday',
-                image: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=800&q=80',
-                content: 'Pro tip: Use the WeChat mini-program version of DiDi instead of the standalone app. The English translation plugins in WeChat mini-programs work way better for pinning exact alleyway locations in Liuzhou!',
-                likes: 95,
-                liked: false
-            },
-            {
-                id: 3,
-                category: 'food',
-                title: 'The Hidden Luosifen Stall Behind the Old Mill',
-                author: 'Abao_99',
-                time: '2 days ago',
-                image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80',
-                content: 'Everyone goes to the downtown tourist shops, but if you want authentic pungent goodness without a 40-minute queue, look for the blue awning on Hexi Road. Ask for extra fried bean curd skin (fupi)!',
-                likes: 312,
-                liked: false
-            },
-            {
-                id: 4,
-                category: 'survival',
-                title: 'Beating the Guangxi Summer Humidity: Expat Guide',
-                author: 'Liam_Nomad',
-                time: '3 days ago',
-                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
-                content: 'Never wear heavy cotton when walking around Liuzhou in July. Stick to technical merino or lightweight linen. Also, convenience store iced herbal teas are your lifesaver when you are miles from AC.',
-                likes: 142,
-                liked: false
-            }
-        ];
-
+        // In-memory data store initialized completely empty
+        let posts = [];
         let currentFilter = 'all';
 
-        // Render posts to grid
-        function renderPosts() {
-            const grid = document.getElementById('posts-grid');
-            grid.innerHTML = '';
-
-            const filtered = currentFilter === 'all' 
-                ? posts 
-                : posts.filter(p => p.category === currentFilter);
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-16 text-center text-neutral-400">
-                        <i class="fa-solid fa-mug-hot text-4xl mb-3 text-neutral-300"></i>
-                        <p class="text-base font-medium">No posts found in this category yet. Be the first to drop one!</p>
-                    </div>
-                `;
-                return;
+        // Toggle category field visibility
+        document.getElementById('postCategory').addEventListener('change', function(e) {
+            const locWrapper = document.getElementById('locationFieldWrapper');
+            if (e.target.value === 'corner') {
+                locWrapper.classList.remove('hidden');
+            } else {
+                locWrapper.classList.add('hidden');
             }
+        });
 
-            filtered.forEach(post => {
-                const categoryBadge = getCategoryBadge(post.category);
-                const card = document.createElement('div');
-                card.className = "bg-white rounded-3xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group";
-                
-                card.innerHTML = `
-                    <div>
-                        <div class="h-52 overflow-hidden relative">
-                            <img src="${post.image}" 
-                                 onerror="this.src='https://placehold.co/800x500/262626/FFFFFF?text=Liuzhou+Loop';" 
-                                 alt="${post.title}" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute top-4 left-4">
-                                ${categoryBadge}
-                            </div>
-                        </div>
-                        <div class="p-6 space-y-3">
-                            <div class="flex items-center justify-between text-xs text-neutral-400 font-semibold">
-                                <span>By ${post.author}</span>
-                                <span>${post.time}</span>
-                            </div>
-                            <h3 class="font-extrabold text-xl text-softdark tracking-tight leading-snug group-hover:text-geranium transition-colors">
-                                ${post.title}
-                            </h3>
-                            <p class="text-sm text-neutral-500 leading-relaxed line-clamp-3">
-                                ${post.content}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-6 pt-2 border-t border-neutral-100 flex items-center justify-between">
-                        <button onclick="likePost(${post.id})" class="flex items-center space-x-1.5 text-xs font-bold ${post.liked ? 'text-geranium' : 'text-neutral-400 hover:text-geranium'} transition-colors">
-                            <i class="${post.liked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-                            <span>${post.likes} Upvotes</span>
-                        </button>
-                        <span class="text-xs font-semibold text-neutral-400 flex items-center space-x-1">
-                            <i class="fa-regular fa-bookmark"></i>
-                            <span>Save</span>
-                        </span>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function getCategoryBadge(cat) {
-            switch(cat) {
-                case 'lifehack':
-                    return '<span class="bg-geranium text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">⚡ Lifehack</span>';
-                case 'spot':
-                    return '<span class="bg-sunyellow text-yellow-900 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">☕ Secret Spot</span>';
-                case 'food':
-                    return '<span class="bg-mintgreen text-emerald-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">🍜 Food & Luosifen</span>';
-                case 'survival':
-                    return '<span class="bg-softdark text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">🛠️ Survival</span>';
-                default:
-                    return '';
-            }
-        }
-
-        // Filter functionality
-        function filterPosts(cat) {
-            currentFilter = cat;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                if(btn.dataset.category === cat) {
-                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-softdark text-white shadow-md";
-                } else {
-                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200";
-                }
-            });
-            renderPosts();
-        }
-
-        // Like toggle
-        function likePost(id) {
-            const post = posts.find(p => p.id === id);
-            if(post) {
-                if(post.liked) {
-                    post.likes -= 1;
-                    post.liked = false;
-                } else {
-                    post.likes += 1;
-                    post.liked = true;
-                }
-                renderPosts();
-            }
-        }
-
-        // Modal controls
         function openModal() {
-            const modal = document.getElementById('post-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            document.getElementById('postModal').classList.remove('hidden');
+            document.getElementById('postModal').classList.add('flex');
+        }
+
+        function openModalCustom(category) {
+            document.getElementById('postCategory').value = category;
+            const event = new Event('change');
+            document.getElementById('postCategory').dispatchEvent(event);
+            openModal();
         }
 
         function closeModal() {
-            const modal = document.getElementById('post-modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
+            document.getElementById('postModal').classList.add('hidden');
+            document.getElementById('postModal').classList.remove('flex');
+            document.getElementById('submissionForm').reset();
+            document.getElementById('locationFieldWrapper').classList.add('hidden');
         }
 
-        // Handle form submission
-        function handlePostSubmit(e) {
-            e.preventDefault();
-            const author = document.getElementById('author-input').value;
-            const category = document.getElementById('category-input').value;
-            const title = document.getElementById('title-input').value;
-            const image = document.getElementById('image-input').value || 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80';
-            const content = document.getElementById('content-input').value;
+        function filterCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-dark', 'text-white');
+                btn.classList.add('bg-white', 'text-brand-muted', 'border', 'border-brand-border');
+            });
+            const activeBtn = document.getElementById(`btn-${cat}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-white', 'text-brand-muted', 'border', 'border-brand-border');
+                activeBtn.classList.add('bg-brand-dark', 'text-white');
+            }
+            renderPosts();
+        }
+
+        function handleSubmission(event) {
+            event.preventDefault();
+            const category = document.getElementById('postCategory').value;
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            const authorInput = document.getElementById('postAuthor').value.trim();
+            const location = document.getElementById('postLocation').value;
+
+            let author = authorInput ? authorInput : (category === 'anon' ? 'Anonymous Insider' : 'Liuzhou Resident');
 
             const newPost = {
                 id: Date.now(),
                 category,
                 title,
-                author: author.startsWith('@') ? author : '@' + author,
-                time: 'Just now',
-                image,
                 content,
-                likes: 1,
-                liked: true
+                author,
+                location: location || '',
+                time: 'Just now'
             };
 
             posts.unshift(newPost);
-            renderPosts();
             closeModal();
-            document.getElementById('submit-form').reset();
+            renderAll();
         }
 
-        // Initial render on window load
-        window.onload = function() {
+        function renderAll() {
             renderPosts();
-        };
+            renderArticles();
+            renderAnon();
+            renderCorner();
+            updateCounters();
+        }
+
+        function updateCounters() {
+            // Count unique authors or total submissions for active insiders
+            const uniqueAuthors = new Set(posts.map(p => p.author)).size;
+            document.getElementById('active-count').innerText = uniqueAuthors;
+            
+            const secretsCount = posts.filter(p => p.category === 'spot').length;
+            document.getElementById('secrets-count').innerText = secretsCount;
+
+            const articlesCount = posts.filter(p => p.category === 'article').length;
+            document.getElementById('articles-count').innerText = articlesCount;
+
+            document.getElementById('post-count').innerText = posts.filter(p => p.category === 'lifehack' || p.category === 'spot' || currentFilter === 'all').length;
+        }
+
+        function renderPosts() {
+            const grid = document.getElementById('posts-grid');
+            const mainFeedPosts = posts.filter(p => p.category === 'lifehack' || p.category === 'spot');
+            const filtered = currentFilter === 'all' ? mainFeedPosts : mainFeedPosts.filter(p => p.category === currentFilter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div id="empty-state" class="col-span-full py-16 text-center space-y-3 bg-white rounded-3xl border border-dashed border-brand-border">
+                        <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
+                        <h4 class="font-heading font-bold text-lg text-brand-dark">No posts found in this feed</h4>
+                        <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to add a lifehack or secret spot!</p>
+                        <button onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Drop a Post</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/50 transition-all">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${p.category === 'spot' ? 'bg-brand-orange/10 text-brand-orange' : 'bg-brand-light text-brand-dark'}">
+                                ${p.category === 'spot' ? 'Secret Spot' : 'Lifehack'}
+                            </span>
+                            <span class="text-xs text-brand-muted">${p.time}</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
+                        <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
+                    </div>
+                    <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
+                        <span>By ${escapeHtml(p.author)}</span>
+                        <span class="text-brand-orange">Liuzhou Insider</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderArticles() {
+            const grid = document.getElementById('articles-grid');
+            const articles = posts.filter(p => p.category === 'article');
+
+            if (articles.length === 0) {
+                grid.innerHTML = `
+                    <div id="articles-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                        No independent articles published yet. Be the first local writer to publish here.
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = articles.map(p => `
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
+                    <div class="flex items-center justify-between text-xs text-brand-muted">
+                        <span class="text-brand-lime font-bold uppercase tracking-wider">Article</span>
+                        <span>${p.time}</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
+                    <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
+                    <div class="pt-2 text-xs font-semibold text-brand-dark">Author: ${escapeHtml(p.author)}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderAnon() {
+            const grid = document.getElementById('anon-grid');
+            const anons = posts.filter(p => p.category === 'anon');
+
+            if (anons.length === 0) {
+                grid.innerHTML = `
+                    <div id="anon-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                        The anonymous board is clean. Drop your random questions, vents, or queries here.
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = anons.map(p => `
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
+                    <div class="flex items-center justify-between text-xs text-brand-geranium font-bold uppercase tracking-wider">
+                        <span>Liuzhou Anon</span>
+                        <span>${p.time}</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-lg text-brand-dark">${escapeHtml(p.title)}</h3>
+                    <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderCorner() {
+            const grid = document.getElementById('corner-grid');
+            const corners = posts.filter(p => p.category === 'corner');
+
+            if (corners.length === 0) {
+                grid.innerHTML = `
+                    <div id="corner-empty" class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                        No English corners scheduled yet. Hosts, add your weekly meeting spot and time!
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = corners.map(p => `
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
+                    <div class="flex items-center justify-between text-xs text-brand-orange font-bold uppercase tracking-wider">
+                        <span>English Corner</span>
+                        <span>${p.time}</span>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
+                    <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
+                    ${p.location ? `<div class="bg-brand-light p-3 rounded-xl text-xs font-semibold text-brand-dark">📍 Location: ${escapeHtml(p.location)}</div>` : ''}
+                    <div class="text-xs font-semibold text-brand-muted">Host: ${escapeHtml(p.author)}</div>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Initial render
+        renderAll();
     </script>
 </body>
 </html>
