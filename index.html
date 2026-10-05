@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Liuzhou Loop — Expat & Youth Insider</title>
-    <!-- Google Fonts: Plus Jakarta Sans for modern editorial look & Outfit for clean headers -->
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS for modern styling -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -48,7 +48,6 @@
     <!-- Top Navigation Bar -->
     <header class="sticky top-0 z-50 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-brand-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Logo -->
             <a href="#" class="flex items-center gap-3 group">
                 <div class="w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-transform">
                     L
@@ -59,7 +58,6 @@
                 </div>
             </a>
 
-            <!-- Nav Links -->
             <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-brand-dark">
                 <a href="#feed" class="hover:text-brand-orange transition-colors">Feed</a>
                 <a href="#articles" class="hover:text-brand-orange transition-colors">Articles</a>
@@ -68,7 +66,6 @@
                 <a href="#english-corner" class="hover:text-brand-orange transition-colors">English Corner</a>
             </nav>
 
-            <!-- Action Button -->
             <div class="flex items-center gap-3">
                 <button onclick="openModal()" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all duration-200 flex items-center gap-2">
                     <span>+ Drop a Post</span>
@@ -83,16 +80,16 @@
             <div class="lg:col-span-8 space-y-6">
                 <div class="inline-flex items-center gap-2 bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full">
                     <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
-                    Liuzhou Open Community Hub • 2026
+                    Liuzhou Open Cloud Community • 2026
                 </div>
                 <h1 class="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.08] text-brand-dark">
                     Your City. <span class="text-brand-orange">Your Rules.</span> No Bullshit.
                 </h1>
                 <p class="text-lg text-brand-muted max-w-2xl font-normal leading-relaxed">
-                    A clean, modern platform built by and for the youth, expats, and independent minds of Liuzhou. Share lifehacks, local independent articles, anonymous questions, or host an English corner.
+                    A clean, cloud-synced platform built for the youth and expats of Liuzhou. Real-time posts, independent articles, anonymous boards, and English corners visible to everyone instantly.
                 </p>
 
-                <!-- Real-time Live Counters -->
+                <!-- Live Counters -->
                 <div class="pt-4 grid grid-cols-3 gap-4 max-w-lg border-t border-brand-border">
                     <div>
                         <span id="active-count" class="block font-heading font-extrabold text-3xl text-brand-dark">0</span>
@@ -109,17 +106,16 @@
                 </div>
             </div>
 
-            <!-- Quick Action Box -->
             <div class="lg:col-span-4 bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Community Status</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Cloud Status</span>
                     <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-600 text-xs font-semibold px-2.5 py-1 rounded-full">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live & Open
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Real-time Sync
                     </span>
                 </div>
                 <h3 class="font-heading font-bold text-xl text-brand-dark">Got something to put out there?</h3>
                 <p class="text-sm text-brand-muted leading-relaxed">
-                    Whether it's an underground food spot, an independent news scoop, or a random late-night thought—drop it into the stream.
+                    Synced instantly across the globe. Drop your tips or stories into the live cloud stream.
                 </p>
                 <button onclick="openModal()" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl shadow-sm transition-colors text-center block">
                     Create a Post / Tip
@@ -144,7 +140,9 @@
         </div>
 
         <!-- Dynamic Post Grid -->
-        <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="col-span-full py-16 text-center text-sm text-brand-muted">Connecting to cloud database...</div>
+        </div>
 
         <!-- Independent Articles Section -->
         <section id="articles" class="pt-8">
@@ -226,7 +224,7 @@
 
                 <div class="pt-2 flex items-center justify-end gap-3">
                     <button type="button" onclick="closeModal()" class="px-6 py-3 rounded-full text-sm font-semibold text-brand-muted hover:text-brand-dark">Cancel</button>
-                    <button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-full text-sm shadow-sm transition-colors">Publish Live</button>
+                    <button type="submit" id="submitBtn" class="bg-brand-orange hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-full text-sm shadow-sm transition-colors">Publish Live</button>
                 </div>
             </form>
         </div>
@@ -235,18 +233,57 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-brand-border py-8 mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted font-semibold">
-            <p>© 2026 The Liuzhou Loop. Built by the youth, for the youth.</p>
+            <p>© 2026 The Liuzhou Loop. Cloud-powered global feed.</p>
             <div class="flex items-center gap-6">
                 <a href="#feed" class="hover:text-brand-orange transition-colors">Back to Top ↑</a>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript Application Logic with LocalStorage -->
-    <script>
-        // Load posts from browser storage so they don't disappear on refresh
-        let posts = JSON.parse(localStorage.getItem('liuzhou_loop_posts')) || [];
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ==========================================
+        // REPLACE WITH YOUR FIREBASE CONFIG KEYS
+        // ==========================================
+        const firebaseConfig = {
+  apiKey: "AIzaSyDIG8J6EcBIAzepPWxFq0jgG9SgBeLUmaA",
+  authDomain: "liuzhou-loop.firebaseapp.com",
+  projectId: "liuzhou-loop",
+  storageBucket: "liuzhou-loop.firebasestorage.app",
+  messagingSenderId: "107290553877",
+  appId: "1:107290553877:web:1acb58586deb3cfde9281c",
+  measurementId: "G-6V7ZCCKTR6"
+};
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let posts = [];
         let currentFilter = 'all';
+
+        // UI Handlers
+        window.openModal = function() {
+            document.getElementById('postModal').classList.remove('hidden');
+            document.getElementById('postModal').classList.add('flex');
+        }
+
+        window.openModalCustom = function(category) {
+            document.getElementById('postCategory').value = category;
+            const event = new Event('change');
+            document.getElementById('postCategory').dispatchEvent(event);
+            window.openModal();
+        }
+
+        window.closeModal = function() {
+            document.getElementById('postModal').classList.add('hidden');
+            document.getElementById('postModal').classList.remove('flex');
+            document.getElementById('submissionForm').reset();
+            document.getElementById('locationFieldWrapper').classList.add('hidden');
+        }
 
         document.getElementById('postCategory').addEventListener('change', function(e) {
             const locWrapper = document.getElementById('locationFieldWrapper');
@@ -257,26 +294,7 @@
             }
         });
 
-        function openModal() {
-            document.getElementById('postModal').classList.remove('hidden');
-            document.getElementById('postModal').classList.add('flex');
-        }
-
-        function openModalCustom(category) {
-            document.getElementById('postCategory').value = category;
-            const event = new Event('change');
-            document.getElementById('postCategory').dispatchEvent(event);
-            openModal();
-        }
-
-        function closeModal() {
-            document.getElementById('postModal').classList.add('hidden');
-            document.getElementById('postModal').classList.remove('flex');
-            document.getElementById('submissionForm').reset();
-            document.getElementById('locationFieldWrapper').classList.add('hidden');
-        }
-
-        function filterCategory(cat) {
+        window.filterCategory = function(cat) {
             currentFilter = cat;
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-brand-dark', 'text-white');
@@ -290,8 +308,13 @@
             renderPosts();
         }
 
-        function handleSubmission(event) {
+        // Handle Form Submission to Cloud Firestore
+        window.handleSubmission = async function(event) {
             event.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerText = "Publishing to Cloud...";
+            submitBtn.disabled = true;
+
             const category = document.getElementById('postCategory').value;
             const title = document.getElementById('postTitle').value;
             const content = document.getElementById('postContent').value;
@@ -300,24 +323,42 @@
 
             let author = authorInput ? authorInput : (category === 'anon' ? 'Anonymous Insider' : 'Liuzhou Resident');
 
-            const newPost = {
-                id: Date.now(),
-                category,
-                title,
-                content,
-                author,
-                location: location || '',
-                time: 'Just now'
-            };
+            try {
+                await addDoc(collection(db, "posts"), {
+                    category,
+                    title,
+                    content,
+                    author,
+                    location: location || '',
+                    createdAt: serverTimestamp()
+                });
 
-            posts.unshift(newPost);
-            
-            // Save securely to browser localStorage
-            localStorage.setItem('liuzhou_loop_posts', JSON.stringify(posts));
-
-            closeModal();
-            renderAll();
+                window.closeModal();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Failed to publish to cloud. Check your Firebase console settings.");
+            } finally {
+                submitBtn.innerText = "Publish Live";
+                submitBtn.disabled = false;
+            }
         }
+
+        // Real-time listener from Firebase Firestore
+        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            posts = [];
+            snapshot.forEach((doc) => {
+                posts.push({ id: doc.id, ...doc.data() });
+            });
+            renderAll();
+        }, (error) => {
+            console.error("Error listening to Firestore:", error);
+            document.getElementById('posts-grid').innerHTML = `
+                <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-brand-border text-brand-geranium font-semibold text-sm">
+                    Cloud database connection error. Make sure you replaced your Firebase config keys in the code!
+                </div>
+            `;
+        });
 
         function renderAll() {
             renderPosts();
@@ -349,8 +390,8 @@
                 grid.innerHTML = `
                     <div class="col-span-full py-16 text-center space-y-3 bg-white rounded-3xl border border-dashed border-brand-border">
                         <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
-                        <h4 class="font-heading font-bold text-lg text-brand-dark">No posts found in this feed</h4>
-                        <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to add a lifehack or secret spot!</p>
+                        <h4 class="font-heading font-bold text-lg text-brand-dark">No posts in the cloud feed yet</h4>
+                        <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to drop a lifehack or secret spot!</p>
                         <button onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Drop a Post</button>
                     </div>
                 `;
@@ -364,14 +405,14 @@
                             <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${p.category === 'spot' ? 'bg-brand-orange/10 text-brand-orange' : 'bg-brand-light text-brand-dark'}">
                                 ${p.category === 'spot' ? 'Secret Spot' : 'Lifehack'}
                             </span>
-                            <span class="text-xs text-brand-muted">${p.time}</span>
+                            <span class="text-xs text-brand-muted">Just now</span>
                         </div>
                         <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                         <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
                     </div>
                     <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
                         <span>By ${escapeHtml(p.author)}</span>
-                        <span class="text-brand-orange">Liuzhou Insider</span>
+                        <span class="text-brand-orange">Cloud Verified</span>
                     </div>
                 </div>
             `).join('');
@@ -384,7 +425,7 @@
             if (articles.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
-                        No independent articles published yet. Be the first local writer to publish here.
+                        No independent articles published yet.
                     </div>
                 `;
                 return;
@@ -394,7 +435,7 @@
                 <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
                     <div class="flex items-center justify-between text-xs text-brand-muted">
                         <span class="text-brand-lime font-bold uppercase tracking-wider">Article</span>
-                        <span>${p.time}</span>
+                        <span>Just now</span>
                     </div>
                     <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -410,7 +451,7 @@
             if (anons.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
-                        The anonymous board is clean. Drop your random questions, vents, or queries here.
+                        The anonymous board is clean.
                     </div>
                 `;
                 return;
@@ -420,7 +461,7 @@
                 <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
                     <div class="flex items-center justify-between text-xs text-brand-geranium font-bold uppercase tracking-wider">
                         <span>Liuzhou Anon</span>
-                        <span>${p.time}</span>
+                        <span>Just now</span>
                     </div>
                     <h3 class="font-heading font-bold text-lg text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -435,7 +476,7 @@
             if (corners.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
-                        No English corners scheduled yet. Hosts, add your weekly meeting spot and time!
+                        No English corners scheduled yet.
                     </div>
                 `;
                 return;
@@ -445,7 +486,7 @@
                 <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3">
                     <div class="flex items-center justify-between text-xs text-brand-orange font-bold uppercase tracking-wider">
                         <span>English Corner</span>
-                        <span>${p.time}</span>
+                        <span>Just now</span>
                     </div>
                     <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -456,12 +497,10 @@
         }
 
         function escapeHtml(text) {
+            if (!text) return '';
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return text.replace(/[&<>"']/g, m => map[m]);
         }
-
-        // Initial render
-        renderAll();
     </script>
 </body>
 </html>
