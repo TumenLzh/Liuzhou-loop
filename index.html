@@ -43,6 +43,12 @@
         ::-webkit-scrollbar-track { background: #F8F9FA; }
         ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white">
@@ -69,7 +75,12 @@
             </nav>
 
             <div class="flex items-center gap-3">
-                <button onclick="openModal()" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all duration-200 flex items-center gap-2">
+                <!-- Auth status -->
+                <div id="auth-area" class="flex items-center gap-3">
+                    <button onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
+                    <button onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
+                </div>
+                <button onclick="openModal()" id="drop-post-btn" class="hidden bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all duration-200 flex items-center gap-2">
                     <span>+ Drop a Post</span>
                 </button>
             </div>
@@ -117,9 +128,9 @@
                 </div>
                 <h3 class="font-heading font-bold text-xl text-brand-dark">Got something to put out there?</h3>
                 <p class="text-sm text-brand-muted leading-relaxed">
-                    Synced instantly across the globe. Drop your tips or stories into the live cloud stream.
+                    Create a free account to post, upload photos, comment, and delete your own content. Liuzhou Anon stays fully anonymous.
                 </p>
-                <button onclick="openModal()" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl shadow-sm transition-colors text-center block">
+                <button onclick="openModal()" id="hero-post-btn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl shadow-sm transition-colors text-center block">
                     Create a Post / Tip
                 </button>
             </div>
@@ -184,9 +195,39 @@
 
     </main>
 
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-6 relative">
+            <div class="flex items-center justify-between">
+                <h3 id="auth-title" class="font-heading font-extrabold text-2xl text-brand-dark">Create Account</h3>
+                <button onclick="closeAuthModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+            </div>
+            <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
+                <div id="display-name-wrapper">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Display Name</label>
+                    <input type="text" id="authDisplayName" placeholder="How others will see you" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Email</label>
+                    <input type="email" id="authEmail" required placeholder="you@example.com" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Password</label>
+                    <input type="password" id="authPassword" required minlength="6" placeholder="At least 6 characters" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+                <p id="auth-error" class="text-sm text-brand-geranium hidden"></p>
+                <button type="submit" id="authSubmitBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Create Account</button>
+            </form>
+            <p class="text-center text-sm text-brand-muted">
+                <span id="auth-switch-text">Already have an account?</span>
+                <button type="button" id="auth-switch-btn" onclick="toggleAuthMode()" class="text-brand-orange font-semibold hover:underline">Log in</button>
+            </p>
+        </div>
+    </div>
+
     <!-- Submission Modal -->
     <div id="postModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-6 relative animate-in fade-in zoom-in-95 duration-200">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-6 relative animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
                 <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Drop to Liuzhou Loop</h3>
                 <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
@@ -219,9 +260,17 @@
                     <textarea id="postContent" required rows="4" placeholder="Write your full tip, story, or question here..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></textarea>
                 </div>
 
+                <!-- Image upload (optional) -->
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Your Name / Alias (Leave blank if anon)</label>
-                    <input type="text" id="postAuthor" placeholder="e.g. Alex or Anonymous" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Photo (optional)</label>
+                    <input type="file" id="postImage" accept="image/*" class="w-full text-sm text-brand-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-orange/10 file:text-brand-orange hover:file:bg-brand-orange/20">
+                    <p class="text-xs text-brand-muted mt-1">JPG, PNG or WebP • max ~5 MB recommended</p>
+                </div>
+
+                <div id="author-field-wrapper">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Your Name / Alias</label>
+                    <input type="text" id="postAuthor" placeholder="Will use your display name if left blank" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                    <p id="anon-note" class="hidden text-xs text-brand-geranium mt-1">Liuzhou Anon posts are always shown as “Anonymous Insider” — your real name is never displayed.</p>
                 </div>
 
                 <div class="pt-2 flex items-center justify-end gap-3">
@@ -229,6 +278,19 @@
                     <button type="submit" id="submitBtn" class="bg-brand-orange hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-full text-sm shadow-sm transition-colors">Publish Live</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Post Detail + Comments Modal -->
+    <div id="detailModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between p-6 border-b border-brand-border">
+                <h3 class="font-heading font-extrabold text-xl text-brand-dark">Post & Comments</h3>
+                <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+            </div>
+            <div id="detail-content" class="overflow-y-auto flex-1 p-6 space-y-6">
+                <!-- Filled by JS -->
+            </div>
         </div>
     </div>
 
@@ -245,7 +307,9 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         // ==========================================
         // YOUR FIREBASE CONFIG KEYS
@@ -263,9 +327,14 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
 
         let posts = [];
         let currentFilter = 'all';
+        let currentUser = null;
+        let authMode = 'signup'; // 'signup' | 'login'
+        let currentDetailPostId = null;
 
         // ---------- Helpers ----------
         function escapeHtml(text) {
@@ -286,13 +355,136 @@
             return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
         }
 
+        // ---------- Auth UI ----------
+        function updateAuthUI() {
+            const authArea = document.getElementById('auth-area');
+            const dropBtn = document.getElementById('drop-post-btn');
+            const heroBtn = document.getElementById('hero-post-btn');
+
+            if (currentUser) {
+                const name = currentUser.displayName || currentUser.email.split('@')[0];
+                authArea.innerHTML = `
+                    <span class="text-sm font-semibold text-brand-dark hidden sm:inline">Hi, ${escapeHtml(name)}</span>
+                    <button onclick="handleLogout()" class="text-sm font-semibold text-brand-muted hover:text-brand-geranium transition-colors">Log out</button>
+                `;
+                dropBtn.classList.remove('hidden');
+                dropBtn.classList.add('flex');
+                heroBtn.onclick = () => openModal();
+                heroBtn.innerText = 'Create a Post / Tip';
+            } else {
+                authArea.innerHTML = `
+                    <button onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
+                    <button onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
+                `;
+                dropBtn.classList.add('hidden');
+                dropBtn.classList.remove('flex');
+                heroBtn.onclick = () => openAuthModal('signup');
+                heroBtn.innerText = 'Sign up to Post';
+            }
+            // Re-render posts so delete buttons appear/disappear
+            renderAll();
+        }
+
+        window.openAuthModal = function(mode) {
+            authMode = mode;
+            const title = document.getElementById('auth-title');
+            const btn = document.getElementById('authSubmitBtn');
+            const switchText = document.getElementById('auth-switch-text');
+            const switchBtn = document.getElementById('auth-switch-btn');
+            const nameWrapper = document.getElementById('display-name-wrapper');
+            document.getElementById('auth-error').classList.add('hidden');
+
+            if (mode === 'signup') {
+                title.innerText = 'Create Account';
+                btn.innerText = 'Create Account';
+                switchText.innerText = 'Already have an account?';
+                switchBtn.innerText = 'Log in';
+                nameWrapper.classList.remove('hidden');
+            } else {
+                title.innerText = 'Log In';
+                btn.innerText = 'Log In';
+                switchText.innerText = "Don't have an account?";
+                switchBtn.innerText = 'Sign up';
+                nameWrapper.classList.add('hidden');
+            }
+            document.getElementById('authModal').classList.remove('hidden');
+            document.getElementById('authModal').classList.add('flex');
+        }
+
+        window.closeAuthModal = function() {
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('authModal').classList.remove('flex');
+            document.getElementById('authForm').reset();
+            document.getElementById('auth-error').classList.add('hidden');
+        }
+
+        window.toggleAuthMode = function() {
+            openAuthModal(authMode === 'signup' ? 'login' : 'signup');
+        }
+
+        window.handleAuth = async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value;
+            const displayName = document.getElementById('authDisplayName').value.trim();
+            const errEl = document.getElementById('auth-error');
+            const btn = document.getElementById('authSubmitBtn');
+            btn.disabled = true;
+            btn.innerText = authMode === 'signup' ? 'Creating...' : 'Logging in...';
+            errEl.classList.add('hidden');
+
+            try {
+                if (authMode === 'signup') {
+                    const cred = await createUserWithEmailAndPassword(auth, email, password);
+                    if (displayName) {
+                        await updateProfile(cred.user, { displayName });
+                    }
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
+                }
+                closeAuthModal();
+            } catch (error) {
+                console.error(error);
+                let msg = error.message;
+                if (error.code === 'auth/email-already-in-use') msg = 'That email is already registered. Try logging in.';
+                if (error.code === 'auth/weak-password') msg = 'Password should be at least 6 characters.';
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = 'Wrong email or password.';
+                if (error.code === 'auth/user-not-found') msg = 'No account found with that email.';
+                errEl.innerText = msg;
+                errEl.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = authMode === 'signup' ? 'Create Account' : 'Log In';
+            }
+        }
+
+        window.handleLogout = async function() {
+            await signOut(auth);
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            updateAuthUI();
+        });
+
         // ---------- UI Handlers ----------
         window.openModal = function() {
+            if (!currentUser) {
+                openAuthModal('signup');
+                return;
+            }
             document.getElementById('postModal').classList.remove('hidden');
             document.getElementById('postModal').classList.add('flex');
+            // prefill author with display name
+            document.getElementById('postAuthor').value = currentUser.displayName || '';
+            updateAnonNote();
         }
 
         window.openModalCustom = function(category) {
+            if (!currentUser) {
+                openAuthModal('signup');
+                return;
+            }
             document.getElementById('postCategory').value = category;
             const event = new Event('change');
             document.getElementById('postCategory').dispatchEvent(event);
@@ -304,6 +496,7 @@
             document.getElementById('postModal').classList.remove('flex');
             document.getElementById('submissionForm').reset();
             document.getElementById('locationFieldWrapper').classList.add('hidden');
+            document.getElementById('anon-note').classList.add('hidden');
         }
 
         document.getElementById('postCategory').addEventListener('change', function(e) {
@@ -313,7 +506,18 @@
             } else {
                 locWrapper.classList.add('hidden');
             }
+            updateAnonNote();
         });
+
+        function updateAnonNote() {
+            const cat = document.getElementById('postCategory').value;
+            const note = document.getElementById('anon-note');
+            if (cat === 'anon') {
+                note.classList.remove('hidden');
+            } else {
+                note.classList.add('hidden');
+            }
+        }
 
         window.filterCategory = function(cat) {
             currentFilter = cat;
@@ -329,9 +533,13 @@
             renderPosts();
         }
 
-        // ---------- Form Submission ----------
+        // ---------- Form Submission (with optional image) ----------
         window.handleSubmission = async function(event) {
             event.preventDefault();
+            if (!currentUser) {
+                openAuthModal('signup');
+                return;
+            }
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.innerText = "Publishing to Cloud...";
             submitBtn.disabled = true;
@@ -341,27 +549,175 @@
             const content = document.getElementById('postContent').value.trim();
             const authorInput = document.getElementById('postAuthor').value.trim();
             const location = document.getElementById('postLocation').value.trim();
+            const imageFile = document.getElementById('postImage').files[0];
 
-            let author = authorInput
-                ? authorInput
-                : (category === 'anon' ? 'Anonymous Insider' : 'Liuzhou Resident');
+            // Anon always shows as Anonymous Insider
+            let author = category === 'anon'
+                ? 'Anonymous Insider'
+                : (authorInput || currentUser.displayName || currentUser.email.split('@')[0] || 'Liuzhou Resident');
 
             try {
+                let imageUrl = '';
+                if (imageFile) {
+                    submitBtn.innerText = "Uploading photo...";
+                    const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
+                    await uploadBytes(storageRef, imageFile);
+                    imageUrl = await getDownloadURL(storageRef);
+                }
+
+                submitBtn.innerText = "Publishing...";
                 await addDoc(collection(db, "posts"), {
                     category,
                     title,
                     content,
                     author,
                     location: location || '',
+                    imageUrl: imageUrl || '',
+                    userId: currentUser.uid,          // for ownership / delete
                     createdAt: serverTimestamp()
                 });
                 window.closeModal();
             } catch (error) {
                 console.error("Error adding document: ", error);
-                alert("Failed to publish to cloud. Check your Firebase console settings / rules.");
+                alert("Failed to publish. Check Firebase console (Auth, Storage rules, and Firestore rules).");
             } finally {
                 submitBtn.innerText = "Publish Live";
                 submitBtn.disabled = false;
+            }
+        }
+
+        // ---------- Delete own post ----------
+        window.deletePost = async function(postId, postUserId) {
+            if (!currentUser || currentUser.uid !== postUserId) {
+                alert("You can only delete your own posts.");
+                return;
+            }
+            if (!confirm("Delete this post permanently?")) return;
+            try {
+                await deleteDoc(doc(db, "posts", postId));
+                // also delete its comments
+                const commentsSnap = await getDocs(query(collection(db, "comments"), where("postId", "==", postId)));
+                const deletes = commentsSnap.docs.map(d => deleteDoc(d.ref));
+                await Promise.all(deletes);
+            } catch (error) {
+                console.error(error);
+                alert("Could not delete. Check your Firestore security rules.");
+            }
+        }
+
+        // ---------- Detail modal + Comments ----------
+        window.openDetailModal = async function(postId) {
+            currentDetailPostId = postId;
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            const contentEl = document.getElementById('detail-content');
+            contentEl.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-bold uppercase tracking-wider ${
+                            post.category === 'spot' ? 'text-brand-orange' :
+                            post.category === 'article' ? 'text-brand-lime' :
+                            post.category === 'anon' ? 'text-brand-geranium' :
+                            post.category === 'corner' ? 'text-brand-orange' : 'text-brand-dark'
+                        }">${post.category === 'spot' ? 'Secret Spot' : post.category === 'article' ? 'Article' : post.category === 'anon' ? 'Liuzhou Anon' : post.category === 'corner' ? 'English Corner' : 'Lifehack'}</span>
+                        <span class="text-brand-muted">${formatTime(post.createdAt)}</span>
+                    </div>
+                    <h2 class="font-heading font-extrabold text-2xl text-brand-dark">${escapeHtml(post.title)}</h2>
+                    ${post.imageUrl ? `<img src="${escapeHtml(post.imageUrl)}" alt="Post image" class="w-full rounded-2xl object-cover max-h-80">` : ''}
+                    <p class="text-brand-muted leading-relaxed whitespace-pre-wrap">${escapeHtml(post.content)}</p>
+                    ${post.location ? `<div class="bg-brand-light p-3 rounded-xl text-sm font-semibold text-brand-dark">📍 ${escapeHtml(post.location)}</div>` : ''}
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="font-semibold text-brand-dark">${post.category === 'anon' ? 'Anonymous Insider' : 'By ' + escapeHtml(post.author)}</span>
+                        ${currentUser && currentUser.uid === post.userId ? `
+                            <button onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-geranium text-xs font-bold hover:underline">Delete my post</button>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <div class="border-t border-brand-border pt-6 space-y-4">
+                    <h4 class="font-heading font-bold text-lg text-brand-dark">Comments</h4>
+                    <div id="comments-list" class="space-y-3">
+                        <p class="text-sm text-brand-muted">Loading comments...</p>
+                    </div>
+                    ${currentUser ? `
+                        <form id="commentForm" onsubmit="addComment(event)" class="space-y-3 pt-2">
+                            <textarea id="commentText" required rows="2" placeholder="Add a comment..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-3 text-sm focus:outline-none focus:border-brand-orange"></textarea>
+                            <button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2 rounded-full">Post Comment</button>
+                        </form>
+                    ` : `
+                        <p class="text-sm text-brand-muted"> <button onclick="closeDetailModal(); openAuthModal('login');" class="text-brand-orange font-semibold hover:underline">Log in</button> to leave a comment.</p>
+                    `}
+                </div>
+            `;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+            document.getElementById('detailModal').classList.add('flex');
+
+            // Load comments
+            loadComments(postId);
+        }
+
+        window.closeDetailModal = function() {
+            document.getElementById('detailModal').classList.add('hidden');
+            document.getElementById('detailModal').classList.remove('flex');
+            currentDetailPostId = null;
+        }
+
+        async function loadComments(postId) {
+            const listEl = document.getElementById('comments-list');
+            try {
+                const q = query(collection(db, "comments"), where("postId", "==", postId), orderBy("createdAt", "asc"));
+                // one-time fetch is fine; for live you could use onSnapshot
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    listEl.innerHTML = `<p class="text-sm text-brand-muted">No comments yet. Be the first!</p>`;
+                    return;
+                }
+                listEl.innerHTML = snap.docs.map(d => {
+                    const c = d.data();
+                    return `
+                        <div class="bg-brand-light rounded-2xl p-4 space-y-1">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-semibold text-brand-dark">${escapeHtml(c.author)}</span>
+                                <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
+                            </div>
+                            <p class="text-sm text-brand-muted">${escapeHtml(c.text)}</p>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error(err);
+                listEl.innerHTML = `<p class="text-sm text-brand-geranium">Could not load comments. You may need a composite index or check rules.</p>`;
+            }
+        }
+
+        window.addComment = async function(event) {
+            event.preventDefault();
+            if (!currentUser || !currentDetailPostId) return;
+            const text = document.getElementById('commentText').value.trim();
+            if (!text) return;
+
+            const btn = event.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerText = 'Posting...';
+
+            try {
+                await addDoc(collection(db, "comments"), {
+                    postId: currentDetailPostId,
+                    text,
+                    author: currentUser.displayName || currentUser.email.split('@')[0] || 'Insider',
+                    userId: currentUser.uid,
+                    createdAt: serverTimestamp()
+                });
+                document.getElementById('commentText').value = '';
+                loadComments(currentDetailPostId);
+            } catch (err) {
+                console.error(err);
+                alert("Could not post comment. Check Firestore rules.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Post Comment';
             }
         }
 
@@ -404,6 +760,41 @@
                 posts.filter(p => p.category === 'lifehack' || p.category === 'spot').length;
         }
 
+        function makePostCard(p, extraClass = '') {
+            const canDelete = currentUser && p.userId && currentUser.uid === p.userId;
+            return `
+                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/50 transition-all relative group cursor-pointer ${extraClass}"
+                     onclick="openDetailModal('${p.id}')">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${
+                                p.category === 'spot' ? 'bg-brand-orange/10 text-brand-orange' :
+                                p.category === 'article' ? 'bg-brand-lime/10 text-brand-lime' :
+                                p.category === 'anon' ? 'bg-brand-geranium/10 text-brand-geranium' :
+                                'bg-brand-light text-brand-dark'
+                            }">
+                                ${p.category === 'spot' ? 'Secret Spot' :
+                                  p.category === 'article' ? 'Article' :
+                                  p.category === 'anon' ? 'Liuzhou Anon' :
+                                  p.category === 'corner' ? 'English Corner' : 'Lifehack'}
+                            </span>
+                            <span class="text-xs text-brand-muted">${formatTime(p.createdAt)}</span>
+                        </div>
+                        ${p.imageUrl ? `<img src="${escapeHtml(p.imageUrl)}" alt="" class="w-full h-40 object-cover rounded-2xl">` : ''}
+                        <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
+                        <p class="text-sm text-brand-muted leading-relaxed line-clamp-3">${escapeHtml(p.content)}</p>
+                    </div>
+                    <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
+                        <span>${p.category === 'anon' ? 'Anonymous Insider' : 'By ' + escapeHtml(p.author)}</span>
+                        <div class="flex items-center gap-3">
+                            ${canDelete ? `<button onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-geranium hover:underline">Delete</button>` : ''}
+                            <span class="text-brand-orange">View →</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         function renderPosts() {
             const grid = document.getElementById('posts-grid');
             const mainFeedPosts = posts.filter(p => p.category === 'lifehack' || p.category === 'spot');
@@ -423,24 +814,7 @@
                 return;
             }
 
-            grid.innerHTML = filtered.map(p => `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/50 transition-all relative group">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${p.category === 'spot' ? 'bg-brand-orange/10 text-brand-orange' : 'bg-brand-light text-brand-dark'}">
-                                ${p.category === 'spot' ? 'Secret Spot' : 'Lifehack'}
-                            </span>
-                            <span class="text-xs text-brand-muted">${formatTime(p.createdAt)}</span>
-                        </div>
-                        <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
-                        <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
-                    </div>
-                    <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
-                        <span>By ${escapeHtml(p.author)}</span>
-                        <span class="text-brand-orange">Cloud Verified</span>
-                    </div>
-                </div>
-            `).join('');
+            grid.innerHTML = filtered.map(p => makePostCard(p)).join('');
         }
 
         function renderArticles() {
@@ -456,17 +830,7 @@
                 return;
             }
 
-            grid.innerHTML = articles.map(p => `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
-                    <div class="flex items-center justify-between text-xs text-brand-muted">
-                        <span class="text-brand-lime font-bold uppercase tracking-wider">Article</span>
-                        <span>${formatTime(p.createdAt)}</span>
-                    </div>
-                    <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
-                    <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
-                    <div class="pt-2 text-xs font-semibold text-brand-dark">Author: ${escapeHtml(p.author)}</div>
-                </div>
-            `).join('');
+            grid.innerHTML = articles.map(p => makePostCard(p)).join('');
         }
 
         function renderAnon() {
@@ -482,16 +846,7 @@
                 return;
             }
 
-            grid.innerHTML = anons.map(p => `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
-                    <div class="flex items-center justify-between text-xs text-brand-geranium font-bold uppercase tracking-wider">
-                        <span>Liuzhou Anon</span>
-                        <span class="font-normal text-brand-muted normal-case tracking-normal">${formatTime(p.createdAt)}</span>
-                    </div>
-                    <h3 class="font-heading font-bold text-lg text-brand-dark">${escapeHtml(p.title)}</h3>
-                    <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
-                </div>
-            `).join('');
+            grid.innerHTML = anons.map(p => makePostCard(p)).join('');
         }
 
         function renderCorner() {
@@ -507,18 +862,7 @@
                 return;
             }
 
-            grid.innerHTML = corners.map(p => `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
-                    <div class="flex items-center justify-between text-xs text-brand-orange font-bold uppercase tracking-wider">
-                        <span>English Corner</span>
-                        <span class="font-normal text-brand-muted normal-case tracking-normal">${formatTime(p.createdAt)}</span>
-                    </div>
-                    <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
-                    <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
-                    ${p.location ? `<div class="bg-brand-light p-3 rounded-xl text-xs font-semibold text-brand-dark">📍 Location: ${escapeHtml(p.location)}</div>` : ''}
-                    <div class="text-xs font-semibold text-brand-muted">Host: ${escapeHtml(p.author)}</div>
-                </div>
-            `).join('');
+            grid.innerHTML = corners.map(p => makePostCard(p)).join('');
         }
     </script>
 </body>
