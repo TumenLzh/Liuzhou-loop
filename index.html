@@ -51,7 +51,7 @@
         }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white">
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white relative">
 
     <!-- Top Navigation Bar -->
     <header class="sticky top-0 z-50 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-brand-border">
@@ -75,17 +75,21 @@
             </nav>
 
             <div class="flex items-center gap-3">
-                <!-- Auth status -->
+                <!-- Auth status (Log in / Sign up or Name & Log out) -->
                 <div id="auth-area" class="flex items-center gap-3">
                     <button onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
                     <button onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
                 </div>
-                <button onclick="openModal()" id="drop-post-btn" class="hidden bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition-all duration-200 flex items-center gap-2">
-                    <span>+ Drop a Post</span>
-                </button>
             </div>
         </div>
     </header>
+
+    <!-- Floating Bottom-Right Drop a Post Button (Visible only when logged in) -->
+    <div id="floating-drop-btn-container" class="fixed bottom-6 right-6 z-40 hidden">
+        <button onclick="openModal()" class="bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20">
+            <span class="text-lg leading-none">+</span> Drop a Post
+        </button>
+    </div>
 
     <!-- Main Hero Section -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
@@ -130,7 +134,7 @@
                 <p class="text-sm text-brand-muted leading-relaxed">
                     Create a free account to post, upload photos, comment, and delete your own content. Liuzhou Anon stays fully anonymous.
                 </p>
-                <button onclick="openModal()" id="hero-post-btn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl shadow-sm transition-colors text-center block">
+                <button onclick="heroActionClick()" id="hero-post-btn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl shadow-sm transition-colors text-center block">
                     Create a Post / Tip
                 </button>
             </div>
@@ -358,7 +362,7 @@
         // ---------- Auth UI ----------
         function updateAuthUI() {
             const authArea = document.getElementById('auth-area');
-            const dropBtn = document.getElementById('drop-post-btn');
+            const floatingBtnContainer = document.getElementById('floating-drop-btn-container');
             const heroBtn = document.getElementById('hero-post-btn');
 
             if (currentUser) {
@@ -367,8 +371,7 @@
                     <span class="text-sm font-semibold text-brand-dark hidden sm:inline">Hi, ${escapeHtml(name)}</span>
                     <button onclick="handleLogout()" class="text-sm font-semibold text-brand-muted hover:text-brand-geranium transition-colors">Log out</button>
                 `;
-                dropBtn.classList.remove('hidden');
-                dropBtn.classList.add('flex');
+                floatingBtnContainer.classList.remove('hidden');
                 heroBtn.onclick = () => openModal();
                 heroBtn.innerText = 'Create a Post / Tip';
             } else {
@@ -376,13 +379,20 @@
                     <button onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
                     <button onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
                 `;
-                dropBtn.classList.add('hidden');
-                dropBtn.classList.remove('flex');
+                floatingBtnContainer.classList.add('hidden');
                 heroBtn.onclick = () => openAuthModal('signup');
                 heroBtn.innerText = 'Sign up to Post';
             }
             // Re-render posts so delete buttons appear/disappear
             renderAll();
+        }
+
+        window.heroActionClick = function() {
+            if (!currentUser) {
+                openAuthModal('signup');
+            } else {
+                openModal();
+            }
         }
 
         window.openAuthModal = function(mode) {
@@ -717,7 +727,7 @@
                 if (currentDetailPostId) loadComments(currentDetailPostId);
             } catch (err) {
                 console.error(err);
-                alert("Could not delete comment. Check your Firestore security rules (allow delete if request.auth.uid == resource.data.userId).");
+                alert("Could not delete comment. Check your Firestore security rules.");
             }
         }
 
@@ -743,7 +753,7 @@
                 if (currentDetailPostId) loadComments(currentDetailPostId);
             } catch (err) {
                 console.error(err);
-                alert("Could not update comment. Check your Firestore rules (you need allow update for comment owners).");
+                alert("Could not update comment.");
             }
         }
 
@@ -769,7 +779,7 @@
                 loadComments(currentDetailPostId);
             } catch (err) {
                 console.error(err);
-                alert("Could not post comment. Check Firestore rules.");
+                alert("Could not post comment.");
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Post Comment';
