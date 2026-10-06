@@ -307,7 +307,7 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, query, orderBy, serverTimestamp, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
@@ -668,7 +668,6 @@
             const listEl = document.getElementById('comments-list');
             try {
                 const q = query(collection(db, "comments"), where("postId", "==", postId), orderBy("createdAt", "asc"));
-                // one-time fetch is fine; for live you could use onSnapshot
                 const snap = await getDocs(q);
                 if (snap.empty) {
                     listEl.innerHTML = `<p class="text-sm text-brand-muted">No comments yet. Be the first!</p>`;
@@ -676,19 +675,75 @@
                 }
                 listEl.innerHTML = snap.docs.map(d => {
                     const c = d.data();
+                    const cid = d.id;
+                    const isOwner = currentUser && c.userId && currentUser.uid === c.userId;
                     return `
-                        <div class="bg-brand-light rounded-2xl p-4 space-y-1">
+                        <div class="bg-brand-light rounded-2xl p-4 space-y-1" id="comment-${cid}">
                             <div class="flex items-center justify-between text-xs">
                                 <span class="font-semibold text-brand-dark">${escapeHtml(c.author)}</span>
-                                <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
+                                    ${isOwner ? `
+                                        <button onclick="startEditComment('${cid}')" class="text-brand-orange hover:underline font-semibold">Edit</button>
+                                        <button onclick="deleteComment('${cid}', '${c.userId}')" class="text-brand-geranium hover:underline font-semibold">Delete</button>
+                                    ` : ''}
+                                </div>
                             </div>
-                            <p class="text-sm text-brand-muted">${escapeHtml(c.text)}</p>
+                            <p class="text-sm text-brand-muted" id="comment-text-${cid}">${escapeHtml(c.text)}</p>
+                            <div id="comment-edit-${cid}" class="hidden space-y-2 pt-1">
+                                <textarea id="comment-edit-input-${cid}" rows="2" class="w-full bg-white border border-brand-border rounded-xl p-2 text-sm focus:outline-none focus:border-brand-orange">${escapeHtml(c.text)}</textarea>
+                                <div class="flex gap-2">
+                                    <button onclick="saveEditComment('${cid}')" class="bg-brand-orange text-white text-xs font-semibold px-3 py-1.5 rounded-full">Save</button>
+                                    <button onclick="cancelEditComment('${cid}')" class="text-brand-muted text-xs font-semibold px-3 py-1.5">Cancel</button>
+                                </div>
+                            </div>
                         </div>
                     `;
                 }).join('');
             } catch (err) {
                 console.error(err);
                 listEl.innerHTML = `<p class="text-sm text-brand-geranium">Could not load comments. You may need a composite index or check rules.</p>`;
+            }
+        }
+
+        window.deleteComment = async function(commentId, commentUserId) {
+            if (!currentUser || currentUser.uid !== commentUserId) {
+                alert("You can only delete your own comments.");
+                return;
+            }
+            if (!confirm("Delete this comment?")) return;
+            try {
+                await deleteDoc(doc(db, "comments", commentId));
+                if (currentDetailPostId) loadComments(currentDetailPostId);
+            } catch (err) {
+                console.error(err);
+                alert("Could not delete comment. Check your Firestore security rules (allow delete if request.auth.uid == resource.data.userId).");
+            }
+        }
+
+        window.startEditComment = function(commentId) {
+            document.getElementById(`comment-text-${commentId}`).classList.add('hidden');
+            document.getElementById(`comment-edit-${commentId}`).classList.remove('hidden');
+        }
+
+        window.cancelEditComment = function(commentId) {
+            document.getElementById(`comment-text-${commentId}`).classList.remove('hidden');
+            document.getElementById(`comment-edit-${commentId}`).classList.add('hidden');
+        }
+
+        window.saveEditComment = async function(commentId) {
+            const input = document.getElementById(`comment-edit-input-${commentId}`);
+            const newText = input.value.trim();
+            if (!newText) {
+                alert("Comment can’t be empty.");
+                return;
+            }
+            try {
+                await updateDoc(doc(db, "comments", commentId), { text: newText });
+                if (currentDetailPostId) loadComments(currentDetailPostId);
+            } catch (err) {
+                console.error(err);
+                alert("Could not update comment. Check your Firestore rules (you need allow update for comment owners).");
             }
         }
 
