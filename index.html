@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Liuzhou Loop — Expat & Youth Insider</title>
     <!-- Custom Favicon (Letter L Brand Icon) -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='12' fill='%23FF5722'/><text x='50% ' y='54% ' font-family='Outfit, sans-serif' font-weight='800' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'>L</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='12' fill='%23FF5722'/><text x='50%' y='54%' font-family='Outfit, sans-serif' font-weight='800' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'>L</text></svg>">
     <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,7 +88,7 @@
                     Your City. <span class="text-brand-orange">Your Rules.</span> No Bullshit.
                 </h1>
                 <p class="text-lg text-brand-muted max-w-2xl font-normal leading-relaxed">
-                    A clean, cloud-synced platform built for the youth and expats of Liuzhou. Real-time posts, independent articles, anonymous boards, and English corners visible to everyone instantly. Ииндинда, крч ити курдук...
+                    A clean, cloud-synced platform built for the youth and expats of Liuzhou. Real-time posts, independent articles, anonymous boards, and English corners — visible to everyone instantly.
                 </p>
 
                 <!-- Live Counters -->
@@ -245,7 +245,7 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, getDocs, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ==========================================
         // YOUR FIREBASE CONFIG KEYS
@@ -267,7 +267,26 @@
         let posts = [];
         let currentFilter = 'all';
 
-        // UI Handlers
+        // ---------- Helpers ----------
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return String(text).replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function formatTime(ts) {
+            if (!ts) return 'Just now';
+            const date = ts.toDate ? ts.toDate() : new Date(ts);
+            const diffSec = Math.floor((Date.now() - date.getTime()) / 1000);
+
+            if (diffSec < 60) return 'Just now';
+            if (diffSec < 3600) return Math.floor(diffSec / 60) + 'm ago';
+            if (diffSec < 86400) return Math.floor(diffSec / 3600) + 'h ago';
+            if (diffSec < 604800) return Math.floor(diffSec / 86400) + 'd ago';
+            return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        }
+
+        // ---------- UI Handlers ----------
         window.openModal = function() {
             document.getElementById('postModal').classList.remove('hidden');
             document.getElementById('postModal').classList.add('flex');
@@ -303,26 +322,14 @@
                 btn.classList.add('bg-white', 'text-brand-muted', 'border', 'border-brand-border');
             });
             const activeBtn = document.getElementById(`btn-${cat}`);
-            if(activeBtn) {
+            if (activeBtn) {
                 activeBtn.classList.remove('bg-white', 'text-brand-muted', 'border', 'border-brand-border');
                 activeBtn.classList.add('bg-brand-dark', 'text-white');
             }
             renderPosts();
         }
 
-        // Delete Post Function
-        window.deletePost = async function(postId) {
-            if (confirm("Are you sure you want to bin this post from the cloud?")) {
-                try {
-                    await deleteDoc(doc(db, "posts", postId));
-                } catch (error) {
-                    console.error("Error removing document: ", error);
-                    alert("Failed to delete post from cloud.");
-                }
-            }
-        }
-
-        // Handle Form Submission to Cloud Firestore
+        // ---------- Form Submission ----------
         window.handleSubmission = async function(event) {
             event.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
@@ -330,12 +337,14 @@
             submitBtn.disabled = true;
 
             const category = document.getElementById('postCategory').value;
-            const title = document.getElementById('postTitle').value;
-            const content = document.getElementById('postContent').value;
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
             const authorInput = document.getElementById('postAuthor').value.trim();
-            const location = document.getElementById('postLocation').value;
+            const location = document.getElementById('postLocation').value.trim();
 
-            let author = authorInput ? authorInput : (category === 'anon' ? 'Anonymous Insider' : 'Liuzhou Resident');
+            let author = authorInput
+                ? authorInput
+                : (category === 'anon' ? 'Anonymous Insider' : 'Liuzhou Resident');
 
             try {
                 await addDoc(collection(db, "posts"), {
@@ -346,30 +355,29 @@
                     location: location || '',
                     createdAt: serverTimestamp()
                 });
-
                 window.closeModal();
             } catch (error) {
                 console.error("Error adding document: ", error);
-                alert("Failed to publish to cloud. Check your Firebase console settings.");
+                alert("Failed to publish to cloud. Check your Firebase console settings / rules.");
             } finally {
                 submitBtn.innerText = "Publish Live";
                 submitBtn.disabled = false;
             }
         }
 
-        // Real-time listener from Firebase Firestore
+        // ---------- Real-time listener ----------
         const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
             posts = [];
-            snapshot.forEach((doc) => {
-                posts.push({ id: doc.id, ...doc.data() });
+            snapshot.forEach((docSnap) => {
+                posts.push({ id: docSnap.id, ...docSnap.data() });
             });
             renderAll();
         }, (error) => {
             console.error("Error listening to Firestore:", error);
             document.getElementById('posts-grid').innerHTML = `
                 <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-brand-border text-brand-geranium font-semibold text-sm">
-                    Cloud database connection error. Make sure you replaced your Firebase config keys in the code!
+                    Cloud database connection error. Check your Firebase config and security rules.
                 </div>
             `;
         });
@@ -385,20 +393,23 @@
         function updateCounters() {
             const uniqueAuthors = new Set(posts.map(p => p.author)).size;
             document.getElementById('active-count').innerText = uniqueAuthors;
-            
+
             const secretsCount = posts.filter(p => p.category === 'spot').length;
             document.getElementById('secrets-count').innerText = secretsCount;
 
             const articlesCount = posts.filter(p => p.category === 'article').length;
             document.getElementById('articles-count').innerText = articlesCount;
 
-            document.getElementById('post-count').innerText = posts.filter(p => p.category === 'lifehack' || p.category === 'spot').length;
+            document.getElementById('post-count').innerText =
+                posts.filter(p => p.category === 'lifehack' || p.category === 'spot').length;
         }
 
         function renderPosts() {
             const grid = document.getElementById('posts-grid');
             const mainFeedPosts = posts.filter(p => p.category === 'lifehack' || p.category === 'spot');
-            const filtered = currentFilter === 'all' ? mainFeedPosts : mainFeedPosts.filter(p => p.category === currentFilter);
+            const filtered = currentFilter === 'all'
+                ? mainFeedPosts
+                : mainFeedPosts.filter(p => p.category === currentFilter);
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
@@ -419,10 +430,7 @@
                             <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${p.category === 'spot' ? 'bg-brand-orange/10 text-brand-orange' : 'bg-brand-light text-brand-dark'}">
                                 ${p.category === 'spot' ? 'Secret Spot' : 'Lifehack'}
                             </span>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-brand-muted">Just now</span>
-                                <button onclick="deletePost('${p.id}')" title="Delete post" class="text-brand-muted hover:text-brand-geranium transition-colors p-1 text-xs">🗑️</button>
-                            </div>
+                            <span class="text-xs text-brand-muted">${formatTime(p.createdAt)}</span>
                         </div>
                         <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                         <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -452,10 +460,7 @@
                 <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
                     <div class="flex items-center justify-between text-xs text-brand-muted">
                         <span class="text-brand-lime font-bold uppercase tracking-wider">Article</span>
-                        <div class="flex items-center gap-2">
-                            <span>Just now</span>
-                            <button onclick="deletePost('${p.id}')" title="Delete article" class="text-brand-muted hover:text-brand-geranium transition-colors p-1 text-xs">🗑️</button>
-                        </div>
+                        <span>${formatTime(p.createdAt)}</span>
                     </div>
                     <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -481,10 +486,7 @@
                 <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
                     <div class="flex items-center justify-between text-xs text-brand-geranium font-bold uppercase tracking-wider">
                         <span>Liuzhou Anon</span>
-                        <div class="flex items-center gap-2">
-                            <span>Just now</span>
-                            <button onclick="deletePost('${p.id}')" title="Delete post" class="text-brand-muted hover:text-brand-geranium transition-colors p-1 text-xs">🗑️</button>
-                        </div>
+                        <span class="font-normal text-brand-muted normal-case tracking-normal">${formatTime(p.createdAt)}</span>
                     </div>
                     <h3 class="font-heading font-bold text-lg text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -509,10 +511,7 @@
                 <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-3 relative">
                     <div class="flex items-center justify-between text-xs text-brand-orange font-bold uppercase tracking-wider">
                         <span>English Corner</span>
-                        <div class="flex items-center gap-2">
-                            <span>Just now</span>
-                            <button onclick="deletePost('${p.id}')" title="Delete meetup" class="text-brand-muted hover:text-brand-geranium transition-colors p-1 text-xs">🗑️</button>
-                        </div>
+                        <span class="font-normal text-brand-muted normal-case tracking-normal">${formatTime(p.createdAt)}</span>
                     </div>
                     <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                     <p class="text-sm text-brand-muted leading-relaxed">${escapeHtml(p.content)}</p>
@@ -520,12 +519,6 @@
                     <div class="text-xs font-semibold text-brand-muted">Host: ${escapeHtml(p.author)}</div>
                 </div>
             `).join('');
-        }
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-            return text.replace(/[&<>"']/g, m => map[m]);
         }
     </script>
 </body>
