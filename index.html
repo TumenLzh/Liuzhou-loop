@@ -298,12 +298,6 @@
                     <textarea id="postContent" required rows="4" placeholder="Write your full tip, story, or question here..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></textarea>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Photo (optional)</label>
-                    <input type="file" id="postImage" accept="image/*" class="w-full text-sm text-brand-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-orange/10 file:text-brand-orange hover:file:bg-brand-orange/20">
-                    <p class="text-xs text-brand-muted mt-1">JPG, PNG or WebP • max ~5 MB recommended</p>
-                </div>
-
                 <div id="author-field-wrapper" class="hidden">
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Your Alias</label>
                     <input type="text" id="postAuthor" placeholder="Optional alias (shown instead of Anonymous)" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
@@ -343,13 +337,11 @@
                 <button onclick="closeSettings()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
 
-            <!-- PFP -->
+            <!-- Avatar initial (no photo upload) -->
             <div class="flex flex-col items-center gap-3">
-                <div id="settings-pfp-preview" class="w-24 h-24 rounded-full bg-brand-orange/20 flex items-center justify-center overflow-hidden border-2 border-brand-border cursor-pointer" onclick="document.getElementById('settingsPfpInput').click()">
+                <div id="settings-pfp-preview" class="w-24 h-24 rounded-full bg-brand-orange/20 flex items-center justify-center border-2 border-brand-border">
                     <span class="text-2xl font-bold text-brand-orange" id="settings-pfp-initial">?</span>
                 </div>
-                <input type="file" id="settingsPfpInput" accept="image/*" class="hidden" onchange="openCropper(event)">
-                <button onclick="document.getElementById('settingsPfpInput').click()" class="text-xs font-bold uppercase tracking-wider text-brand-orange hover:underline">Change photo</button>
             </div>
 
             <div>
@@ -377,25 +369,6 @@
         </div>
     </div>
 
-    <!-- PFP Cropper Modal -->
-    <div id="cropperModal" class="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-brand-card rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-brand-border space-y-4">
-            <div class="flex items-center justify-between">
-                <h3 class="font-heading font-extrabold text-xl text-brand-dark">Crop Profile Picture</h3>
-                <button onclick="closeCropper()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
-            </div>
-            <div class="relative mx-auto" style="width:280px;height:280px;">
-                <canvas id="cropCanvas" width="280" height="280" class="rounded-2xl cursor-move border border-brand-border"></canvas>
-                <div class="pointer-events-none absolute inset-0 rounded-full border-2 border-brand-orange" style="box-shadow:0 0 0 9999px rgba(0,0,0,0.45); margin:auto; width:200px; height:200px; top:40px; left:40px;"></div>
-            </div>
-            <p class="text-xs text-center text-brand-muted">Drag to reposition · Scroll to zoom</p>
-            <div class="flex gap-3 justify-end">
-                <button onclick="closeCropper()" class="px-5 py-2.5 rounded-full text-sm font-semibold text-brand-muted hover:text-brand-dark">Cancel</button>
-                <button onclick="applyCrop()" class="bg-brand-orange hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-full text-sm">Apply</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Footer -->
     <footer class="bg-brand-card border-t border-brand-border py-8 mt-20 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted font-semibold transition-colors">
@@ -411,7 +384,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, setDoc, getDoc, onSnapshot, query, orderBy, serverTimestamp, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDIG8J6EcBIAzepPWxFq0jgG9SgBeLUmaA",
@@ -426,7 +398,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const storage = getStorage(app);
 
         let posts = [];
         let currentUser = null;
@@ -458,9 +429,7 @@
 
             if (currentUser) {
                 const name = currentUser.displayName || currentUser.email.split('@')[0];
-                const pfp = currentUser.photoURL
-                    ? `<img src="${escapeHtml(currentUser.photoURL)}" alt="" class="w-8 h-8 rounded-full object-cover border border-brand-border">`
-                    : `<div class="w-8 h-8 rounded-full bg-brand-orange text-white text-xs font-bold flex items-center justify-center">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
+                const pfp = `<div class="w-8 h-8 rounded-full bg-brand-orange text-white text-xs font-bold flex items-center justify-center">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
                 authArea.innerHTML = `
                     <button onclick="toggleAccountMenu(event)" id="account-menu-btn" class="flex items-center gap-2 group">
                         ${pfp}
@@ -608,15 +577,12 @@
             }
         });
 
-        let pendingCroppedBlob = null;
-
         window.openSettings = async function() {
             if (!currentUser) return;
             document.getElementById('settingsName').value = currentUser.displayName || '';
             document.getElementById('settingsAge').value = '';
             document.getElementById('settingsHobbies').value = '';
             document.getElementById('settings-error').classList.add('hidden');
-            pendingCroppedBlob = null;
 
             try {
                 const snap = await getDoc(doc(db, "users", currentUser.uid));
@@ -627,13 +593,9 @@
                 }
             } catch (e) { console.error(e); }
 
-            const preview = document.getElementById('settings-pfp-preview');
-            if (currentUser.photoURL) {
-                preview.innerHTML = `<img src="${escapeHtml(currentUser.photoURL)}" class="w-full h-full object-cover">`;
-            } else {
-                const name = currentUser.displayName || currentUser.email.split('@')[0];
-                preview.innerHTML = `<span class="text-2xl font-bold text-brand-orange">${escapeHtml(name.charAt(0).toUpperCase())}</span>`;
-            }
+            const name = currentUser.displayName || currentUser.email.split('@')[0];
+            document.getElementById('settings-pfp-preview').innerHTML =
+                `<span class="text-2xl font-bold text-brand-orange">${escapeHtml(name.charAt(0).toUpperCase())}</span>`;
 
             document.getElementById('settingsModal').classList.remove('hidden');
             document.getElementById('settingsModal').classList.add('flex');
@@ -642,7 +604,6 @@
         window.closeSettings = function() {
             document.getElementById('settingsModal').classList.add('hidden');
             document.getElementById('settingsModal').classList.remove('flex');
-            pendingCroppedBlob = null;
         }
 
         window.saveSettings = async function() {
@@ -658,18 +619,8 @@
                 const ageVal = document.getElementById('settingsAge').value;
                 const hobbies = document.getElementById('settingsHobbies').value.trim();
 
-                let photoURL = currentUser.photoURL || '';
-                if (pendingCroppedBlob) {
-                    const storageRef = ref(storage, `avatars/${currentUser.uid}_${Date.now()}.jpg`);
-                    await uploadBytes(storageRef, pendingCroppedBlob);
-                    photoURL = await getDownloadURL(storageRef);
-                }
-
-                const profileUpdate = {};
-                if (newName) profileUpdate.displayName = newName;
-                if (photoURL) profileUpdate.photoURL = photoURL;
-                if (Object.keys(profileUpdate).length) {
-                    await updateProfile(currentUser, profileUpdate);
+                if (newName) {
+                    await updateProfile(currentUser, { displayName: newName });
                 }
 
                 await setDoc(doc(db, "users", currentUser.uid), {
@@ -677,12 +628,10 @@
                     displayName: newName || currentUser.displayName || '',
                     age: ageVal ? parseInt(ageVal, 10) : null,
                     hobbies: hobbies || '',
-                    photoURL: photoURL || '',
                     updatedAt: serverTimestamp()
                 }, { merge: true });
 
                 currentUser = auth.currentUser;
-                pendingCroppedBlob = null;
                 updateAuthUI();
                 closeSettings();
             } catch (err) {
@@ -725,119 +674,6 @@
         const CROP_SIZE = 280;
         const CIRCLE_SIZE = 200;
         const CIRCLE_PAD = 40;
-
-        window.openCropper = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                cropImg = new Image();
-                cropImg.onload = () => {
-                    const minDim = Math.min(cropImg.width, cropImg.height);
-                    cropScale = CIRCLE_SIZE / minDim * 1.1;
-                    cropOffsetX = (CROP_SIZE - cropImg.width * cropScale) / 2;
-                    cropOffsetY = (CROP_SIZE - cropImg.height * cropScale) / 2;
-                    drawCrop();
-                    document.getElementById('cropperModal').classList.remove('hidden');
-                    document.getElementById('cropperModal').classList.add('flex');
-                };
-                cropImg.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            event.target.value = '';
-        }
-
-        window.closeCropper = function() {
-            document.getElementById('cropperModal').classList.add('hidden');
-            document.getElementById('cropperModal').classList.remove('flex');
-            cropImg = null;
-        }
-
-        function drawCrop() {
-            const canvas = document.getElementById('cropCanvas');
-            if (!canvas || !cropImg) return;
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, CROP_SIZE, CROP_SIZE);
-            ctx.fillStyle = '#1A1A1A';
-            ctx.fillRect(0, 0, CROP_SIZE, CROP_SIZE);
-            ctx.drawImage(cropImg, cropOffsetX, cropOffsetY, cropImg.width * cropScale, cropImg.height * cropScale);
-        }
-
-        setTimeout(() => {
-            const canvas = document.getElementById('cropCanvas');
-            if (!canvas) return;
-
-            canvas.addEventListener('mousedown', (e) => {
-                cropDragging = true;
-                cropLastX = e.clientX;
-                cropLastY = e.clientY;
-            });
-            window.addEventListener('mousemove', (e) => {
-                if (!cropDragging) return;
-                cropOffsetX += e.clientX - cropLastX;
-                cropOffsetY += e.clientY - cropLastY;
-                cropLastX = e.clientX;
-                cropLastY = e.clientY;
-                drawCrop();
-            });
-            window.addEventListener('mouseup', () => { cropDragging = false; });
-
-            canvas.addEventListener('touchstart', (e) => {
-                cropDragging = true;
-                cropLastX = e.touches[0].clientX;
-                cropLastY = e.touches[0].clientY;
-            }, { passive: true });
-            window.addEventListener('touchmove', (e) => {
-                if (!cropDragging) return;
-                cropOffsetX += e.touches[0].clientX - cropLastX;
-                cropOffsetY += e.touches[0].clientY - cropLastY;
-                cropLastX = e.touches[0].clientX;
-                cropLastY = e.touches[0].clientY;
-                drawCrop();
-            }, { passive: true });
-            window.addEventListener('touchend', () => { cropDragging = false; });
-
-            canvas.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                const delta = e.deltaY > 0 ? 0.92 : 1.08;
-                const cx = CROP_SIZE / 2;
-                const cy = CROP_SIZE / 2;
-                cropOffsetX = cx - (cx - cropOffsetX) * delta;
-                cropOffsetY = cy - (cy - cropOffsetY) * delta;
-                cropScale *= delta;
-                cropScale = Math.max(0.1, Math.min(cropScale, 8));
-                drawCrop();
-            }, { passive: false });
-        }, 500);
-
-        window.applyCrop = function() {
-            if (!cropImg) return;
-            const out = document.createElement('canvas');
-            out.width = CIRCLE_SIZE;
-            out.height = CIRCLE_SIZE;
-            const ctx = out.getContext('2d');
-            ctx.beginPath();
-            ctx.arc(CIRCLE_SIZE / 2, CIRCLE_SIZE / 2, CIRCLE_SIZE / 2, 0, Math.PI * 2);
-            ctx.closePath();
-            ctx.clip();
-            ctx.drawImage(
-                document.getElementById('cropCanvas'),
-                CIRCLE_PAD, CIRCLE_PAD, CIRCLE_SIZE, CIRCLE_SIZE,
-                0, 0, CIRCLE_SIZE, CIRCLE_SIZE
-            );
-            out.toBlob((blob) => {
-                pendingCroppedBlob = blob;
-                const url = URL.createObjectURL(blob);
-                document.getElementById('settings-pfp-preview').innerHTML =
-                    `<img src="${url}" class="w-full h-full object-cover">`;
-                closeCropper();
-            }, 'image/jpeg', 0.92);
-        }
-
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            updateAuthUI();
-        });
 
         function populateCategoryOptions(forcedCategory) {
             const select = document.getElementById('postCategory');
@@ -1055,7 +891,6 @@
             const content = document.getElementById('postContent').value.trim();
             const authorInput = document.getElementById('postAuthor').value.trim();
             const location = document.getElementById('postLocation').value.trim();
-            const imageFile = document.getElementById('postImage').files[0];
 
             let author;
             if (category === 'anon' || category.startsWith('anon-')) {
@@ -1065,31 +900,20 @@
             }
 
             try {
-                let imageUrl = '';
-                if (imageFile) {
-                    submitBtn.innerText = "Uploading photo...";
-                    const storageRef = ref(storage, `posts/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
-                    await uploadBytes(storageRef, imageFile);
-                    imageUrl = await getDownloadURL(storageRef);
-                }
-
                 submitBtn.innerText = "Publishing...";
-                const isAnon = category === 'anon' || (category && category.startsWith('anon-'));
                 await addDoc(collection(db, "posts"), {
                     category,
                     title,
                     content,
                     author,
                     location: location || '',
-                    imageUrl: imageUrl || '',
-                    authorPhoto: isAnon ? '' : (currentUser.photoURL || ''),
                     userId: currentUser.uid,
                     createdAt: serverTimestamp()
                 });
                 window.closeModal();
             } catch (error) {
                 console.error("Error adding document: ", error);
-                alert("Failed to publish. Check Firebase console (Auth, Storage rules, and Firestore rules).");
+                alert("Failed to publish. Check Firebase console (Auth and Firestore rules).");
             } finally {
                 submitBtn.innerText = "Publish Live";
                 submitBtn.disabled = false;
@@ -1132,16 +956,11 @@
                         <span class="text-brand-muted">${formatTime(post.createdAt)}</span>
                     </div>
                     <h2 class="font-heading font-extrabold text-2xl text-brand-dark">${escapeHtml(post.title)}</h2>
-                    ${post.imageUrl ? `<img src="${escapeHtml(post.imageUrl)}" alt="Post image" class="w-full rounded-2xl object-cover max-h-80">` : ''}
-                    <p class="text-brand-muted leading-relaxed whitespace-pre-wrap">${escapeHtml(post.content)}</p>
+                                        <p class="text-brand-muted leading-relaxed whitespace-pre-wrap">${escapeHtml(post.content)}</p>
                     ${post.location ? `<div class="bg-brand-light p-3 rounded-xl text-sm font-semibold text-brand-dark">📍 ${escapeHtml(post.location)}</div>` : ''}
                     <div class="flex items-center justify-between text-sm">
                         <div class="flex items-center gap-2 font-semibold text-brand-dark">
-                            ${!isAnonCategory(post.category) ? (
-                                post.authorPhoto
-                                    ? `<img src="${escapeHtml(post.authorPhoto)}" alt="" class="w-7 h-7 rounded-full object-cover border border-brand-border">`
-                                    : `<div class="w-7 h-7 rounded-full bg-brand-orange/20 text-brand-orange text-xs font-bold flex items-center justify-center">${escapeHtml((post.author || '?').charAt(0).toUpperCase())}</div>`
-                            ) : ''}
+                            ${!isAnonCategory(post.category) ? `<div class="w-7 h-7 rounded-full bg-brand-orange/20 text-brand-orange text-xs font-bold flex items-center justify-center">${escapeHtml((post.author || '?').charAt(0).toUpperCase())}</div>` : ''}
                             <span>${isAnonCategory(post.category) ? escapeHtml(post.author) : 'By ' + escapeHtml(post.author)}</span>
                         </div>
                         ${currentUser && currentUser.uid === post.userId ? `
@@ -1372,17 +1191,12 @@
                             </span>
                             <span class="text-xs text-brand-muted">${formatTime(p.createdAt)}</span>
                         </div>
-                        ${p.imageUrl ? `<img src="${escapeHtml(p.imageUrl)}" alt="" class="w-full h-40 object-cover rounded-2xl">` : ''}
-                        <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
+                                                <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
                         <p class="text-sm text-brand-muted leading-relaxed line-clamp-3">${escapeHtml(p.content)}</p>
                     </div>
                     <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
                         <div class="flex items-center gap-2 min-w-0">
-                            ${!isAnon ? (
-                                p.authorPhoto
-                                    ? `<img src="${escapeHtml(p.authorPhoto)}" alt="" class="w-6 h-6 rounded-full object-cover flex-shrink-0 border border-brand-border">`
-                                    : `<div class="w-6 h-6 rounded-full bg-brand-orange/20 text-brand-orange text-[10px] font-bold flex items-center justify-center flex-shrink-0">${escapeHtml((p.author || '?').charAt(0).toUpperCase())}</div>`
-                            ) : ''}
+                            ${!isAnon ? `<div class="w-6 h-6 rounded-full bg-brand-orange/20 text-brand-orange text-[10px] font-bold flex items-center justify-center flex-shrink-0">${escapeHtml((p.author || '?').charAt(0).toUpperCase())}</div>` : ''}
                             <span class="truncate">${isAnon ? escapeHtml(p.author) : 'By ' + escapeHtml(p.author)}</span>
                         </div>
                         <div class="flex items-center gap-3 flex-shrink-0">
