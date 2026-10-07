@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Liuzhou Loop — Expat & Youth Insider</title>
     <!-- Custom Favicon (Letter L Brand Icon) -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='12' fill='%23FF5722'/><text x='50%' y='54%' font-family='Outfit, sans-serif' font-weight='800' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'>L</text></svg>">
-    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='12' fill='%23FF5722'/><text x='50%' y='54%' font-family='Syne, sans-serif' font-weight='800' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'>L</text></svg>">
+    <!-- Google Fonts: Syne (display) + Plus Jakarta Sans (body) + Playfair Display (accent) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -19,63 +19,89 @@
                     colors: {
                         brand: {
                             orange: '#FF5722',
-                            geranium: '#E63946',
-                            yellow: '#FFB703',
-                            lime: '#2A9D8F',
-                            dark: '#1D1E2C',
-                            light: '#F8F9FA',
-                            card: '#FFFFFF',
-                            border: '#E5E7EB',
-                            muted: '#6B7280'
+                            phthalo: '#123524',
+                            ruby: '#9B1E2E',
+                            ultra: '#120A8F',
+                            mikado: '#FFC40C',
+                            cream: '#F8F1E0',
+                            dark: '#1A1A1A',
+                            light: '#FDF8EF',
+                            card: '#FFFEF9',
+                            border: '#E8DFD0',
+                            muted: '#6B6560'
                         }
                     },
                     fontFamily: {
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        heading: ['"Outfit"', 'sans-serif']
+                        heading: ['"Syne"', 'sans-serif'],
+                        display: ['"Playfair Display"', 'serif']
                     }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #F8F9FA; color: #1D1E2C; }
+        body { 
+            background-color: #F8F1E0; 
+            color: #1A1A1A; 
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        
+        /* Dynamic Theme Background Shifts */
+        body.theme-feed { background-color: #F8F1E0; color: #1A1A1A; }
+        body.theme-articles { background-color: #EBF2ED; color: #123524; }
+        body.theme-anon { background-color: #121013; color: #F8F1E0; }
+        body.theme-corner { background-color: #EBF0FF; color: #0D1B40; }
+
+        /* Theme Card Adaptations for Dark/Light transitions */
+        body.theme-anon .bg-brand-card { background-color: #1C181E; border-color: #2E2633; color: #F8F1E0; }
+        body.theme-anon .text-brand-dark { color: #F8F1E0; }
+        body.theme-anon .text-brand-muted { color: #A39B93; }
+        body.theme-anon .bg-brand-light { background-color: #26202A; border-color: #3B3142; color: #F8F1E0; }
+        body.theme-anon header { background-color: rgba(18, 16, 19, 0.9); border-color: #2E2633; }
+        body.theme-anon footer { background-color: #1C181E; border-color: #2E2633; }
+        body.theme-anon .border-brand-border { border-color: #2E2633; }
+
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #F8F9FA; }
-        ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D4CBB8; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #B8AE9A; }
         .line-clamp-3 {
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+        .slogan-line {
+            display: block;
+            line-height: 1.05;
+        }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white relative">
+<body id="main-body" class="theme-feed font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white relative">
 
     <!-- Top Navigation Bar -->
-    <header class="sticky top-0 z-50 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-brand-border">
+    <header class="sticky top-0 z-50 bg-[#F8F1E0]/90 backdrop-blur-md border-b border-brand-border transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-transform">
+                <div id="brand-logo" class="w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all">
                     L
                 </div>
                 <div>
-                    <span class="font-heading font-extrabold text-xl tracking-tight text-brand-dark">LIUZHOU.LOOP</span>
-                    <span class="block text-[10px] uppercase tracking-widest text-brand-muted font-semibold">Expat & Youth Insider</span>
+                    <span class="font-heading font-extrabold text-xl tracking-tight text-brand-dark transition-colors">LIUZHOU.LOOP</span>
+                    <span class="block text-[10px] uppercase tracking-[0.2em] text-brand-muted font-semibold transition-colors">Expat & Youth Insider</span>
                 </div>
             </a>
 
-            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-brand-dark">
-                <a href="#feed" class="hover:text-brand-orange transition-colors">Feed</a>
-                <a href="#articles" class="hover:text-brand-orange transition-colors">Articles</a>
-                <a href="#secrets" class="hover:text-brand-orange transition-colors">Secret Spots</a>
-                <a href="#anon" class="hover:text-brand-orange transition-colors">Liuzhou Anon</a>
-                <a href="#english-corner" class="hover:text-brand-orange transition-colors">English Corner</a>
+            <nav class="hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
+                <button onclick="switchMainTab('feed')" id="nav-feed" class="nav-tab px-5 py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all">Feed</button>
+                <button onclick="switchMainTab('articles')" id="nav-articles" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Articles</button>
+                <button onclick="switchMainTab('anon')" id="nav-anon" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Liuzhou Anon</button>
+                <button onclick="switchMainTab('corner')" id="nav-corner" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">English Corner</button>
             </nav>
 
             <div class="flex items-center gap-3">
-                <!-- Auth status (Log in / Sign up or Name & Log out) -->
+                <!-- Auth status -->
                 <div id="auth-area" class="flex items-center gap-3">
                     <button onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
                     <button onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
@@ -84,124 +110,137 @@
         </div>
     </header>
 
-    <!-- Floating Bottom-Right Drop a Post Button (Visible only when logged in) -->
+    <!-- Floating Bottom-Right Drop a Post Button -->
     <div id="floating-drop-btn-container" class="fixed bottom-6 right-6 z-40 hidden">
-        <button onclick="openModal()" class="bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20">
+        <button onclick="openModal()" id="floating-post-btn" class="bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20">
             <span class="text-lg leading-none">+</span> Drop a Post
         </button>
     </div>
 
     <!-- Main Hero Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div class="lg:col-span-8 space-y-6">
-                <div class="inline-flex items-center gap-2 bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full">
-                    <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div class="lg:col-span-8 space-y-8">
+                <div id="hero-badge" class="inline-flex items-center gap-2 bg-brand-phthalo/10 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors">
+                    <span id="hero-badge-dot" class="w-2 h-2 rounded-full bg-brand-phthalo animate-pulse"></span>
                     Liuzhou Open Cloud Community • 2026
                 </div>
-                <h1 class="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.08] text-brand-dark">
-                    Your City. <span class="text-brand-orange">Your Rules.</span> No Bullshit.
+                
+                <h1 class="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl tracking-tight text-brand-dark pt-2 transition-colors">
+                    <span class="slogan-line">Your City.</span>
+                    <span class="slogan-line">Your Rules.</span>
+                    <span id="slogan-accent" class="slogan-line text-brand-orange transition-colors">No Bullshit.</span>
                 </h1>
-                <p class="text-lg text-brand-muted max-w-2xl font-normal leading-relaxed">
+                
+                <p class="text-lg text-brand-muted max-w-2xl font-normal leading-relaxed pt-2 transition-colors">
                     A clean, cloud-synced platform built for the youth and expats of Liuzhou. Real-time posts, independent articles, anonymous boards, and English corners — visible to everyone instantly.
                 </p>
 
                 <!-- Live Counters -->
-                <div class="pt-4 grid grid-cols-3 gap-4 max-w-lg border-t border-brand-border">
+                <div class="pt-6 grid grid-cols-3 gap-4 max-w-lg border-t border-brand-border transition-colors">
                     <div>
-                        <span id="active-count" class="block font-heading font-extrabold text-3xl text-brand-dark">0</span>
-                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold">Active Insiders</span>
+                        <span id="active-count" class="block font-heading font-extrabold text-3xl text-brand-dark transition-colors">0</span>
+                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Active Insiders</span>
                     </div>
                     <div>
-                        <span id="secrets-count" class="block font-heading font-extrabold text-3xl text-brand-orange">0</span>
-                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold">Secret Spots</span>
+                        <span id="secrets-count" class="block font-heading font-extrabold text-3xl text-brand-mikado">0</span>
+                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Secret Spots</span>
                     </div>
                     <div>
-                        <span id="articles-count" class="block font-heading font-extrabold text-3xl text-brand-lime">0</span>
-                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold">Live Articles</span>
+                        <span id="articles-count" class="block font-heading font-extrabold text-3xl text-brand-phthalo transition-colors">0</span>
+                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Live Articles</span>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-4 bg-white p-6 rounded-3xl border border-brand-border shadow-sm space-y-4">
+            <div class="lg:col-span-4 bg-brand-card p-7 rounded-3xl border border-brand-border shadow-sm space-y-5 mt-4 transition-all">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Cloud Status</span>
-                    <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-600 text-xs font-semibold px-2.5 py-1 rounded-full">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Real-time Sync
+                    <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-muted transition-colors">Cloud Status</span>
+                    <span class="inline-flex items-center gap-1.5 bg-brand-phthalo/10 text-brand-phthalo text-xs font-semibold px-2.5 py-1 rounded-full">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-phthalo animate-ping"></span> Real-time Sync
                     </span>
                 </div>
-                <h3 class="font-heading font-bold text-xl text-brand-dark">Got something to put out there?</h3>
-                <p class="text-sm text-brand-muted leading-relaxed">
-                    Create a free account to post, upload photos, comment, and delete your own content. Liuzhou Anon stays fully anonymous.
-                </p>
-                <button onclick="heroActionClick()" id="hero-post-btn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl shadow-sm transition-colors text-center block">
-                    Create a Post / Tip
+                <h3 class="font-heading font-bold text-xl text-brand-dark transition-colors">Got something to put out there?</h3>
+                <button onclick="heroActionClick()" id="hero-post-btn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block">
+                    Sign up to Post
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Main Content Feed Section -->
-    <main id="feed" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full space-y-16">
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full">
 
-        <!-- Feed Filtering Tabs -->
-        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6">
-            <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-                <button onclick="filterCategory('all')" id="btn-all" class="tab-btn bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
-                <button onclick="filterCategory('lifehack')" id="btn-lifehack" class="tab-btn bg-white hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
-                <button onclick="filterCategory('spot')" id="btn-spot" class="tab-btn bg-white hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
-            </div>
-            <div class="text-xs text-brand-muted font-semibold">
-                Showing <span id="post-count">0</span> contributions
-            </div>
-        </div>
-
-        <!-- Dynamic Post Grid -->
-        <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="col-span-full py-16 text-center text-sm text-brand-muted">Connecting to cloud database...</div>
-        </div>
-
-        <!-- Independent Articles Section -->
-        <section id="articles" class="pt-8">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-brand-lime">Journalism & Opinions</span>
-                    <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark">Independent Articles</h2>
+        <!-- ========== FEED TAB ========== -->
+        <section id="panel-feed" class="main-panel space-y-8">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6 transition-colors">
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+                    <button onclick="filterFeed('all')" id="feed-btn-all" class="feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
+                    <button onclick="filterFeed('lifehack')" id="feed-btn-lifehack" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
+                    <button onclick="filterFeed('spot')" id="feed-btn-spot" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
+                    <button onclick="filterFeed('inquiry')" id="feed-btn-inquiry" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Inquiry</button>
                 </div>
-                <button onclick="openModalCustom('article')" class="text-xs font-bold uppercase tracking-wider bg-brand-lime/10 text-brand-lime hover:bg-brand-lime hover:text-white px-4 py-2 rounded-full transition-colors">+ Write Article</button>
+                <div class="text-xs text-brand-muted font-semibold transition-colors">
+                    Showing <span id="post-count">0</span> contributions
+                </div>
+            </div>
+            <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-full py-16 text-center text-sm text-brand-muted">Connecting to cloud database...</div>
+            </div>
+        </section>
+
+        <!-- ========== ARTICLES TAB ========== -->
+        <section id="panel-articles" class="main-panel hidden space-y-8">
+            <div class="flex items-center justify-between border-b border-brand-border pb-6 transition-colors">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-phthalo">Liuzhou News</span>
+                    <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark mt-1 transition-colors">Independent Articles</h2>
+                </div>
+                <button onclick="openModalCustom('article')" class="text-xs font-bold uppercase tracking-wider bg-brand-phthalo/10 text-brand-phthalo hover:bg-brand-phthalo hover:text-white px-4 py-2 rounded-full transition-colors">+ Write Article</button>
             </div>
             <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
 
-        <!-- Liuzhou Anon Section -->
-        <section id="anon" class="pt-8">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-brand-geranium">No Names, Just Noise</span>
-                    <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark">Liuzhou Anon</h2>
+        <!-- ========== LIUZHOU ANON TAB ========== -->
+        <section id="panel-anon" class="main-panel hidden space-y-8">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6 transition-colors">
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+                    <button onclick="filterAnon('all')" id="anon-btn-all" class="anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
+                    <button onclick="filterAnon('lifehack')" id="anon-btn-lifehack" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
+                    <button onclick="filterAnon('spot')" id="anon-btn-spot" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
+                    <button onclick="filterAnon('inquiry')" id="anon-btn-inquiry" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Inquiry</button>
                 </div>
-                <button onclick="openModalCustom('anon')" class="text-xs font-bold uppercase tracking-wider bg-brand-geranium/10 text-brand-geranium hover:bg-brand-geranium hover:text-white px-4 py-2 rounded-full transition-colors">+ Post Anonymously</button>
+                <button onclick="openModalCustom('anon')" class="text-xs font-bold uppercase tracking-wider bg-brand-ruby/20 text-red-400 hover:bg-brand-ruby hover:text-white px-4 py-2 rounded-full transition-colors">+ Post Anonymously</button>
             </div>
-            <div id="anon-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            <div id="anon-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- English Corner Section -->
-        <section id="english-corner" class="pt-8 pb-12">
-            <div class="flex items-center justify-between mb-8">
+        <!-- ========== ENGLISH CORNER TAB ========== -->
+        <section id="panel-corner" class="main-panel hidden space-y-8">
+            <div class="flex items-center justify-between border-b border-brand-border pb-6 transition-colors">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-brand-orange">Weekly Meetups</span>
-                    <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark">English Corner Schedule</h2>
+                    <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-ultra">Weekly Meetups</span>
+                    <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark mt-1 transition-colors">English Corner Schedule</h2>
                 </div>
-                <button onclick="openModalCustom('corner')" class="text-xs font-bold uppercase tracking-wider bg-brand-orange/10 text-brand-orange hover:bg-brand-orange hover:text-white px-4 py-2 rounded-full transition-colors">+ Host Session</button>
+                <button onclick="openModalCustom('corner')" class="text-xs font-bold uppercase tracking-wider bg-brand-ultra/10 text-brand-ultra hover:bg-brand-ultra hover:text-white px-4 py-2 rounded-full transition-colors">+ Host Session</button>
             </div>
-            <div id="corner-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+            <!-- Week Calendar -->
+            <div class="grid grid-cols-7 gap-2 sm:gap-3" id="week-calendar"></div>
+
+            <!-- Selected day sessions -->
+            <div id="corner-day-detail" class="mt-6">
+                <div class="text-center py-12 text-sm text-brand-muted bg-brand-card rounded-3xl border border-dashed border-brand-border transition-colors">
+                    Select a day above to see English Corner sessions.
+                </div>
+            </div>
         </section>
 
     </main>
 
     <!-- Auth Modal -->
-    <div id="authModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-6 relative">
+    <div id="authModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-brand-card rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-6 relative">
             <div class="flex items-center justify-between">
                 <h3 id="auth-title" class="font-heading font-extrabold text-2xl text-brand-dark">Create Account</h3>
                 <button onclick="closeAuthModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
@@ -219,7 +258,7 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Password</label>
                     <input type="password" id="authPassword" required minlength="6" placeholder="At least 6 characters" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
                 </div>
-                <p id="auth-error" class="text-sm text-brand-geranium hidden"></p>
+                <p id="auth-error" class="text-sm text-brand-ruby hidden"></p>
                 <button type="submit" id="authSubmitBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Create Account</button>
             </form>
             <p class="text-center text-sm text-brand-muted">
@@ -230,8 +269,8 @@
     </div>
 
     <!-- Submission Modal -->
-    <div id="postModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-6 relative animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+    <div id="postModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-6 relative animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
                 <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Drop to Liuzhou Loop</h3>
                 <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
@@ -241,11 +280,6 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Category</label>
                     <select id="postCategory" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-semibold text-brand-dark focus:outline-none focus:border-brand-orange">
-                        <option value="lifehack">Lifehack</option>
-                        <option value="spot">Secret Spot</option>
-                        <option value="article">Independent Article</option>
-                        <option value="anon">Liuzhou Anon (Anonymous)</option>
-                        <option value="corner">English Corner Session</option>
                     </select>
                 </div>
 
@@ -256,7 +290,7 @@
 
                 <div id="locationFieldWrapper" class="hidden">
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Location / Venue</label>
-                    <input type="text" id="postLocation" placeholder="e.g. Riverside Park, Saturday 4 PM" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                    <input type="text" id="postLocation" placeholder="e.g. Riverside Park, Saturday 4 PM (include the day name!)" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
                 </div>
 
                 <div>
@@ -264,17 +298,16 @@
                     <textarea id="postContent" required rows="4" placeholder="Write your full tip, story, or question here..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></textarea>
                 </div>
 
-                <!-- Image upload (optional) -->
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Photo (optional)</label>
                     <input type="file" id="postImage" accept="image/*" class="w-full text-sm text-brand-muted file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-orange/10 file:text-brand-orange hover:file:bg-brand-orange/20">
                     <p class="text-xs text-brand-muted mt-1">JPG, PNG or WebP • max ~5 MB recommended</p>
                 </div>
 
-                <div id="author-field-wrapper">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Your Name / Alias</label>
-                    <input type="text" id="postAuthor" placeholder="Will use your display name if left blank" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-                    <p id="anon-note" class="hidden text-xs text-brand-geranium mt-1">Liuzhou Anon posts are always shown as “Anonymous Insider” — your real name is never displayed.</p>
+                <div id="author-field-wrapper" class="hidden">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Your Alias</label>
+                    <input type="text" id="postAuthor" placeholder="Optional alias (shown instead of Anonymous)" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                    <p id="anon-note" class="text-xs text-brand-ruby mt-1">Only for Liuzhou Anon. Your real account name is never shown.</p>
                 </div>
 
                 <div class="pt-2 flex items-center justify-end gap-3">
@@ -286,24 +319,89 @@
     </div>
 
     <!-- Post Detail + Comments Modal -->
-    <div id="detailModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-2xl w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
+    <div id="detailModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-brand-card rounded-3xl max-w-2xl w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-brand-border">
                 <h3 class="font-heading font-extrabold text-xl text-brand-dark">Post & Comments</h3>
                 <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
-            <div id="detail-content" class="overflow-y-auto flex-1 p-6 space-y-6">
-                <!-- Filled by JS -->
+            <div id="detail-content" class="overflow-y-auto flex-1 p-6 space-y-6"></div>
+        </div>
+    </div>
+
+    <!-- Account Menu Dropdown -->
+    <div id="accountMenu" class="fixed z-50 hidden bg-brand-card border border-brand-border rounded-2xl shadow-xl py-2 min-w-[200px]">
+        <button onclick="openSettings(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors">Settings</button>
+        <button onclick="handleLogout(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-ruby hover:bg-brand-light transition-colors">Log out</button>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-brand-card rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-6 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between">
+                <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Settings</h3>
+                <button onclick="closeSettings()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+            </div>
+
+            <!-- PFP -->
+            <div class="flex flex-col items-center gap-3">
+                <div id="settings-pfp-preview" class="w-24 h-24 rounded-full bg-brand-orange/20 flex items-center justify-center overflow-hidden border-2 border-brand-border cursor-pointer" onclick="document.getElementById('settingsPfpInput').click()">
+                    <span class="text-2xl font-bold text-brand-orange" id="settings-pfp-initial">?</span>
+                </div>
+                <input type="file" id="settingsPfpInput" accept="image/*" class="hidden" onchange="openCropper(event)">
+                <button onclick="document.getElementById('settingsPfpInput').click()" class="text-xs font-bold uppercase tracking-wider text-brand-orange hover:underline">Change photo</button>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Display Name</label>
+                <input type="text" id="settingsName" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Age <span class="font-normal normal-case tracking-normal">(optional)</span></label>
+                <input type="number" id="settingsAge" min="13" max="120" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Hobbies <span class="font-normal normal-case tracking-normal">(optional)</span></label>
+                <input type="text" id="settingsHobbies" placeholder="e.g. photography, hiking, coding" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+            </div>
+
+            <p id="settings-error" class="text-sm text-brand-ruby hidden"></p>
+
+            <button onclick="saveSettings()" id="settingsSaveBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Save Changes</button>
+
+            <div class="border-t border-brand-border pt-4">
+                <button onclick="confirmDeleteAccount()" class="w-full text-sm font-semibold text-brand-ruby hover:bg-brand-ruby/10 py-3 rounded-2xl transition-colors">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PFP Cropper Modal -->
+    <div id="cropperModal" class="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-brand-card rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-brand-border space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-heading font-extrabold text-xl text-brand-dark">Crop Profile Picture</h3>
+                <button onclick="closeCropper()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+            </div>
+            <div class="relative mx-auto" style="width:280px;height:280px;">
+                <canvas id="cropCanvas" width="280" height="280" class="rounded-2xl cursor-move border border-brand-border"></canvas>
+                <div class="pointer-events-none absolute inset-0 rounded-full border-2 border-brand-orange" style="box-shadow:0 0 0 9999px rgba(0,0,0,0.45); margin:auto; width:200px; height:200px; top:40px; left:40px;"></div>
+            </div>
+            <p class="text-xs text-center text-brand-muted">Drag to reposition · Scroll to zoom</p>
+            <div class="flex gap-3 justify-end">
+                <button onclick="closeCropper()" class="px-5 py-2.5 rounded-full text-sm font-semibold text-brand-muted hover:text-brand-dark">Cancel</button>
+                <button onclick="applyCrop()" class="bg-brand-orange hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-full text-sm">Apply</button>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-brand-border py-8 mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted font-semibold">
-            <p>© 2026 The Liuzhou Loop. Cloud-powered global feed.</p>
+    <footer class="bg-brand-card border-t border-brand-border py-8 mt-20 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted font-semibold transition-colors">
+            <p>© 2026 The Liuzhou Loop. By Timofeev Ivan-T.</p>
             <div class="flex items-center gap-6">
-                <a href="#feed" class="hover:text-brand-orange transition-colors">Back to Top ↑</a>
+                <a href="#" class="hover:text-brand-orange transition-colors">Back to Top ↑</a>
             </div>
         </div>
     </footer>
@@ -311,13 +409,10 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, query, orderBy, serverTimestamp, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, setDoc, getDoc, onSnapshot, query, orderBy, serverTimestamp, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-        // ==========================================
-        // YOUR FIREBASE CONFIG KEYS
-        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyDIG8J6EcBIAzepPWxFq0jgG9SgBeLUmaA",
             authDomain: "liuzhou-loop.firebaseapp.com",
@@ -328,19 +423,16 @@
             measurementId: "G-6V7ZCCKTR6"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
         const storage = getStorage(app);
 
         let posts = [];
-        let currentFilter = 'all';
         let currentUser = null;
-        let authMode = 'signup'; // 'signup' | 'login'
+        let authMode = 'signup';
         let currentDetailPostId = null;
 
-        // ---------- Helpers ----------
         function escapeHtml(text) {
             if (!text) return '';
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
@@ -359,7 +451,6 @@
             return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
         }
 
-        // ---------- Auth UI ----------
         function updateAuthUI() {
             const authArea = document.getElementById('auth-area');
             const floatingBtnContainer = document.getElementById('floating-drop-btn-container');
@@ -367,11 +458,21 @@
 
             if (currentUser) {
                 const name = currentUser.displayName || currentUser.email.split('@')[0];
+                const pfp = currentUser.photoURL
+                    ? `<img src="${escapeHtml(currentUser.photoURL)}" alt="" class="w-8 h-8 rounded-full object-cover border border-brand-border">`
+                    : `<div class="w-8 h-8 rounded-full bg-brand-orange text-white text-xs font-bold flex items-center justify-center">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
                 authArea.innerHTML = `
-                    <span class="text-sm font-semibold text-brand-dark hidden sm:inline">Hi, ${escapeHtml(name)}</span>
-                    <button onclick="handleLogout()" class="text-sm font-semibold text-brand-muted hover:text-brand-geranium transition-colors">Log out</button>
+                    <button onclick="toggleAccountMenu(event)" id="account-menu-btn" class="flex items-center gap-2 group">
+                        ${pfp}
+                        <span class="text-sm font-semibold text-brand-dark hidden sm:inline group-hover:text-brand-orange transition-colors">Hi, ${escapeHtml(name)}</span>
+                        <svg class="w-3.5 h-3.5 text-brand-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
                 `;
-                floatingBtnContainer.classList.remove('hidden');
+                if (currentMainTab !== 'corner') {
+                    floatingBtnContainer.classList.remove('hidden');
+                } else {
+                    floatingBtnContainer.classList.add('hidden');
+                }
                 heroBtn.onclick = () => openModal();
                 heroBtn.innerText = 'Create a Post / Tip';
             } else {
@@ -383,7 +484,6 @@
                 heroBtn.onclick = () => openAuthModal('signup');
                 heroBtn.innerText = 'Sign up to Post';
             }
-            // Re-render posts so delete buttons appear/disappear
             renderAll();
         }
 
@@ -449,6 +549,13 @@
                     if (displayName) {
                         await updateProfile(cred.user, { displayName });
                     }
+                    await setDoc(doc(db, "users", cred.user.uid), {
+                        uid: cred.user.uid,
+                        displayName: displayName || cred.user.email.split('@')[0],
+                        age: null,
+                        hobbies: '',
+                        createdAt: serverTimestamp()
+                    });
                 } else {
                     await signInWithEmailAndPassword(auth, email, password);
                 }
@@ -470,6 +577,261 @@
 
         window.handleLogout = async function() {
             await signOut(auth);
+            closeAccountMenu();
+        }
+
+        window.toggleAccountMenu = function(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('accountMenu');
+            const btn = document.getElementById('account-menu-btn');
+            if (!menu || !btn) return;
+            if (!menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+                return;
+            }
+            const rect = btn.getBoundingClientRect();
+            menu.style.top = (rect.bottom + 8) + 'px';
+            menu.style.right = (window.innerWidth - rect.right) + 'px';
+            menu.style.left = 'auto';
+            menu.classList.remove('hidden');
+        }
+
+        window.closeAccountMenu = function() {
+            document.getElementById('accountMenu').classList.add('hidden');
+        }
+
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('accountMenu');
+            const btn = document.getElementById('account-menu-btn');
+            if (menu && !menu.classList.contains('hidden') && !menu.contains(e.target) && (!btn || !btn.contains(e.target))) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        let pendingCroppedBlob = null;
+
+        window.openSettings = async function() {
+            if (!currentUser) return;
+            document.getElementById('settingsName').value = currentUser.displayName || '';
+            document.getElementById('settingsAge').value = '';
+            document.getElementById('settingsHobbies').value = '';
+            document.getElementById('settings-error').classList.add('hidden');
+            pendingCroppedBlob = null;
+
+            try {
+                const snap = await getDoc(doc(db, "users", currentUser.uid));
+                if (snap.exists()) {
+                    const d = snap.data();
+                    if (d.age) document.getElementById('settingsAge').value = d.age;
+                    if (d.hobbies) document.getElementById('settingsHobbies').value = d.hobbies;
+                }
+            } catch (e) { console.error(e); }
+
+            const preview = document.getElementById('settings-pfp-preview');
+            if (currentUser.photoURL) {
+                preview.innerHTML = `<img src="${escapeHtml(currentUser.photoURL)}" class="w-full h-full object-cover">`;
+            } else {
+                const name = currentUser.displayName || currentUser.email.split('@')[0];
+                preview.innerHTML = `<span class="text-2xl font-bold text-brand-orange">${escapeHtml(name.charAt(0).toUpperCase())}</span>`;
+            }
+
+            document.getElementById('settingsModal').classList.remove('hidden');
+            document.getElementById('settingsModal').classList.add('flex');
+        }
+
+        window.closeSettings = function() {
+            document.getElementById('settingsModal').classList.add('hidden');
+            document.getElementById('settingsModal').classList.remove('flex');
+            pendingCroppedBlob = null;
+        }
+
+        window.saveSettings = async function() {
+            if (!currentUser) return;
+            const btn = document.getElementById('settingsSaveBtn');
+            const errEl = document.getElementById('settings-error');
+            btn.disabled = true;
+            btn.innerText = 'Saving...';
+            errEl.classList.add('hidden');
+
+            try {
+                const newName = document.getElementById('settingsName').value.trim();
+                const ageVal = document.getElementById('settingsAge').value;
+                const hobbies = document.getElementById('settingsHobbies').value.trim();
+
+                let photoURL = currentUser.photoURL || '';
+                if (pendingCroppedBlob) {
+                    const storageRef = ref(storage, `avatars/${currentUser.uid}_${Date.now()}.jpg`);
+                    await uploadBytes(storageRef, pendingCroppedBlob);
+                    photoURL = await getDownloadURL(storageRef);
+                }
+
+                const profileUpdate = {};
+                if (newName) profileUpdate.displayName = newName;
+                if (photoURL) profileUpdate.photoURL = photoURL;
+                if (Object.keys(profileUpdate).length) {
+                    await updateProfile(currentUser, profileUpdate);
+                }
+
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    uid: currentUser.uid,
+                    displayName: newName || currentUser.displayName || '',
+                    age: ageVal ? parseInt(ageVal, 10) : null,
+                    hobbies: hobbies || '',
+                    photoURL: photoURL || '',
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                currentUser = auth.currentUser;
+                pendingCroppedBlob = null;
+                updateAuthUI();
+                closeSettings();
+            } catch (err) {
+                console.error(err);
+                errEl.innerText = err.message || 'Could not save settings.';
+                errEl.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Save Changes';
+            }
+        }
+
+        window.confirmDeleteAccount = async function() {
+            if (!currentUser) return;
+            if (!confirm('Permanently delete your account? This cannot be undone.')) return;
+            if (!confirm('Are you absolutely sure? All account data will be removed.')) return;
+            try {
+                const uid = currentUser.uid;
+                try { await deleteDoc(doc(db, "users", uid)); } catch(e) {}
+                await deleteUser(currentUser);
+                closeSettings();
+                closeAccountMenu();
+            } catch (err) {
+                console.error(err);
+                if (err.code === 'auth/requires-recent-login') {
+                    alert('For security, please log out, log back in, then delete your account.');
+                } else {
+                    alert('Could not delete account: ' + (err.message || 'unknown error'));
+                }
+            }
+        }
+
+        let cropImg = null;
+        let cropScale = 1;
+        let cropOffsetX = 0;
+        let cropOffsetY = 0;
+        let cropDragging = false;
+        let cropLastX = 0;
+        let cropLastY = 0;
+        const CROP_SIZE = 280;
+        const CIRCLE_SIZE = 200;
+        const CIRCLE_PAD = 40;
+
+        window.openCropper = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                cropImg = new Image();
+                cropImg.onload = () => {
+                    const minDim = Math.min(cropImg.width, cropImg.height);
+                    cropScale = CIRCLE_SIZE / minDim * 1.1;
+                    cropOffsetX = (CROP_SIZE - cropImg.width * cropScale) / 2;
+                    cropOffsetY = (CROP_SIZE - cropImg.height * cropScale) / 2;
+                    drawCrop();
+                    document.getElementById('cropperModal').classList.remove('hidden');
+                    document.getElementById('cropperModal').classList.add('flex');
+                };
+                cropImg.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        window.closeCropper = function() {
+            document.getElementById('cropperModal').classList.add('hidden');
+            document.getElementById('cropperModal').classList.remove('flex');
+            cropImg = null;
+        }
+
+        function drawCrop() {
+            const canvas = document.getElementById('cropCanvas');
+            if (!canvas || !cropImg) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, CROP_SIZE, CROP_SIZE);
+            ctx.fillStyle = '#1A1A1A';
+            ctx.fillRect(0, 0, CROP_SIZE, CROP_SIZE);
+            ctx.drawImage(cropImg, cropOffsetX, cropOffsetY, cropImg.width * cropScale, cropImg.height * cropScale);
+        }
+
+        setTimeout(() => {
+            const canvas = document.getElementById('cropCanvas');
+            if (!canvas) return;
+
+            canvas.addEventListener('mousedown', (e) => {
+                cropDragging = true;
+                cropLastX = e.clientX;
+                cropLastY = e.clientY;
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (!cropDragging) return;
+                cropOffsetX += e.clientX - cropLastX;
+                cropOffsetY += e.clientY - cropLastY;
+                cropLastX = e.clientX;
+                cropLastY = e.clientY;
+                drawCrop();
+            });
+            window.addEventListener('mouseup', () => { cropDragging = false; });
+
+            canvas.addEventListener('touchstart', (e) => {
+                cropDragging = true;
+                cropLastX = e.touches[0].clientX;
+                cropLastY = e.touches[0].clientY;
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                if (!cropDragging) return;
+                cropOffsetX += e.touches[0].clientX - cropLastX;
+                cropOffsetY += e.touches[0].clientY - cropLastY;
+                cropLastX = e.touches[0].clientX;
+                cropLastY = e.touches[0].clientY;
+                drawCrop();
+            }, { passive: true });
+            window.addEventListener('touchend', () => { cropDragging = false; });
+
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? 0.92 : 1.08;
+                const cx = CROP_SIZE / 2;
+                const cy = CROP_SIZE / 2;
+                cropOffsetX = cx - (cx - cropOffsetX) * delta;
+                cropOffsetY = cy - (cy - cropOffsetY) * delta;
+                cropScale *= delta;
+                cropScale = Math.max(0.1, Math.min(cropScale, 8));
+                drawCrop();
+            }, { passive: false });
+        }, 500);
+
+        window.applyCrop = function() {
+            if (!cropImg) return;
+            const out = document.createElement('canvas');
+            out.width = CIRCLE_SIZE;
+            out.height = CIRCLE_SIZE;
+            const ctx = out.getContext('2d');
+            ctx.beginPath();
+            ctx.arc(CIRCLE_SIZE / 2, CIRCLE_SIZE / 2, CIRCLE_SIZE / 2, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+            ctx.drawImage(
+                document.getElementById('cropCanvas'),
+                CIRCLE_PAD, CIRCLE_PAD, CIRCLE_SIZE, CIRCLE_SIZE,
+                0, 0, CIRCLE_SIZE, CIRCLE_SIZE
+            );
+            out.toBlob((blob) => {
+                pendingCroppedBlob = blob;
+                const url = URL.createObjectURL(blob);
+                document.getElementById('settings-pfp-preview').innerHTML =
+                    `<img src="${url}" class="w-full h-full object-cover">`;
+                closeCropper();
+            }, 'image/jpeg', 0.92);
         }
 
         onAuthStateChanged(auth, (user) => {
@@ -477,15 +839,57 @@
             updateAuthUI();
         });
 
-        // ---------- UI Handlers ----------
+        function populateCategoryOptions(forcedCategory) {
+            const select = document.getElementById('postCategory');
+            const locWrapper = document.getElementById('locationFieldWrapper');
+            let options = [];
+
+            if (currentMainTab === 'feed') {
+                options = [
+                    { value: 'lifehack', label: 'Lifehack' },
+                    { value: 'spot', label: 'Secret Spot' },
+                    { value: 'inquiry', label: 'Inquiry' }
+                ];
+                locWrapper.classList.add('hidden');
+            } else if (currentMainTab === 'articles') {
+                options = [
+                    { value: 'article', label: 'Independent Article' }
+                ];
+                locWrapper.classList.add('hidden');
+            } else if (currentMainTab === 'anon') {
+                options = [
+                    { value: 'anon', label: 'Liuzhou Anon' },
+                    { value: 'anon-lifehack', label: 'Anon · Lifehack' },
+                    { value: 'anon-spot', label: 'Anon · Secret Spot' },
+                    { value: 'anon-inquiry', label: 'Anon · Inquiry' }
+                ];
+                locWrapper.classList.add('hidden');
+            } else if (currentMainTab === 'corner') {
+                options = [
+                    { value: 'corner', label: 'English Corner Session' }
+                ];
+                locWrapper.classList.remove('hidden');
+            }
+
+            select.innerHTML = options.map(o =>
+                `<option value="${o.value}">${o.label}</option>`
+            ).join('');
+
+            if (forcedCategory && options.some(o => o.value === forcedCategory)) {
+                select.value = forcedCategory;
+            }
+
+            updateAnonNote();
+        }
+
         window.openModal = function() {
             if (!currentUser) {
                 openAuthModal('signup');
                 return;
             }
+            populateCategoryOptions();
             document.getElementById('postModal').classList.remove('hidden');
             document.getElementById('postModal').classList.add('flex');
-            // prefill author with display name
             document.getElementById('postAuthor').value = currentUser.displayName || '';
             updateAnonNote();
         }
@@ -495,10 +899,16 @@
                 openAuthModal('signup');
                 return;
             }
-            document.getElementById('postCategory').value = category;
-            const event = new Event('change');
-            document.getElementById('postCategory').dispatchEvent(event);
-            window.openModal();
+            if (category === 'article') currentMainTab = 'articles';
+            if (category === 'anon' || (category && category.startsWith('anon-'))) currentMainTab = 'anon';
+            if (category === 'corner') currentMainTab = 'corner';
+            if (['lifehack','spot','inquiry'].includes(category)) currentMainTab = 'feed';
+
+            populateCategoryOptions(category);
+            document.getElementById('postModal').classList.remove('hidden');
+            document.getElementById('postModal').classList.add('flex');
+            document.getElementById('postAuthor').value = currentUser.displayName || '';
+            updateAnonNote();
         }
 
         window.closeModal = function() {
@@ -506,44 +916,130 @@
             document.getElementById('postModal').classList.remove('flex');
             document.getElementById('submissionForm').reset();
             document.getElementById('locationFieldWrapper').classList.add('hidden');
-            document.getElementById('anon-note').classList.add('hidden');
+            document.getElementById('author-field-wrapper').classList.add('hidden');
         }
 
-        document.getElementById('postCategory').addEventListener('change', function(e) {
-            const locWrapper = document.getElementById('locationFieldWrapper');
-            if (e.target.value === 'corner') {
-                locWrapper.classList.remove('hidden');
-            } else {
-                locWrapper.classList.add('hidden');
-            }
+        document.getElementById('postCategory').addEventListener('change', function() {
             updateAnonNote();
         });
 
         function updateAnonNote() {
             const cat = document.getElementById('postCategory').value;
-            const note = document.getElementById('anon-note');
-            if (cat === 'anon') {
-                note.classList.remove('hidden');
+            const wrapper = document.getElementById('author-field-wrapper');
+            if (cat === 'anon' || (cat && cat.startsWith('anon-'))) {
+                wrapper.classList.remove('hidden');
             } else {
-                note.classList.add('hidden');
+                wrapper.classList.add('hidden');
             }
         }
 
-        window.filterCategory = function(cat) {
-            currentFilter = cat;
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-brand-dark', 'text-white');
-                btn.classList.add('bg-white', 'text-brand-muted', 'border', 'border-brand-border');
+        // ---------- Main Tab & Color Theme Switcher ----------
+        let currentMainTab = 'feed';
+        let feedFilter = 'all';
+        let anonFilter = 'all';
+        let selectedDay = null;
+
+        window.switchMainTab = function(tab) {
+            currentMainTab = tab;
+            
+            // 1. Hide all panels
+            document.querySelectorAll('.main-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`panel-${tab}`).classList.remove('hidden');
+
+            // 2. Update Theme Class on Body
+            const body = document.getElementById('main-body');
+            body.className = `theme-${tab} font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white relative`;
+
+            // 3. Dynamic Accent Colors for Hero & Floating Buttons
+            const accent = document.getElementById('slogan-accent');
+            const heroBadge = document.getElementById('hero-badge');
+            const heroBadgeDot = document.getElementById('hero-badge-dot');
+            const heroBtn = document.getElementById('hero-post-btn');
+            const floatBtn = document.getElementById('floating-post-btn');
+            const logo = document.getElementById('brand-logo');
+
+            if (tab === 'feed') {
+                accent.className = "slogan-line text-brand-orange transition-colors";
+                accent.innerText = "No Bullshit.";
+                heroBadge.className = "inline-flex items-center gap-2 bg-brand-phthalo/10 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
+                heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-phthalo animate-pulse";
+                heroBtn.className = "w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block";
+                floatBtn.className = "bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
+                logo.className = "w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
+            } else if (tab === 'articles') {
+                accent.className = "slogan-line text-brand-phthalo transition-colors";
+                accent.innerText = "Verified News.";
+                heroBadge.className = "inline-flex items-center gap-2 bg-brand-phthalo/20 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
+                heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-phthalo animate-pulse";
+                heroBtn.className = "w-full bg-brand-phthalo hover:bg-emerald-900 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block";
+                floatBtn.className = "bg-brand-phthalo hover:bg-emerald-900 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
+                logo.className = "w-10 h-10 bg-brand-phthalo rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
+            } else if (tab === 'anon') {
+                accent.className = "slogan-line text-brand-ruby transition-colors";
+                accent.innerText = "Off The Record.";
+                heroBadge.className = "inline-flex items-center gap-2 bg-brand-ruby/20 text-red-400 text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
+                heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-ruby animate-pulse";
+                heroBtn.className = "w-full bg-brand-ruby hover:bg-red-800 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block";
+                floatBtn.className = "bg-brand-ruby hover:bg-red-800 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
+                logo.className = "w-10 h-10 bg-brand-ruby rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
+            } else if (tab === 'corner') {
+                accent.className = "slogan-line text-brand-ultra transition-colors";
+                accent.innerText = "Connect Live.";
+                heroBadge.className = "inline-flex items-center gap-2 bg-brand-ultra/10 text-brand-ultra text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
+                heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-ultra animate-pulse";
+                heroBtn.className = "w-full bg-brand-ultra hover:bg-blue-900 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block";
+                floatBtn.className = "bg-brand-ultra hover:bg-blue-900 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
+                logo.className = "w-10 h-10 bg-brand-ultra rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
+            }
+
+            // 4. Update Nav Pill Badges
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.className = 'nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all';
             });
-            const activeBtn = document.getElementById(`btn-${cat}`);
+            const activeNav = document.getElementById(`nav-${tab}`);
+            if (tab === 'feed') activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all';
+            if (tab === 'articles') activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-phthalo text-white shadow-sm transition-all';
+            if (tab === 'anon') activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-ruby text-white shadow-sm transition-all';
+            if (tab === 'corner') activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-ultra text-white shadow-sm transition-all';
+
+            if (tab === 'corner') renderWeekCalendar();
+
+            const floatingBtn = document.getElementById('floating-drop-btn-container');
+            if (floatingBtn) {
+                if (tab === 'corner' || !currentUser) {
+                    floatingBtn.classList.add('hidden');
+                } else {
+                    floatingBtn.classList.remove('hidden');
+                }
+            }
+
+            renderAll();
+        }
+
+        window.filterFeed = function(cat) {
+            feedFilter = cat;
+            document.querySelectorAll('.feed-tab').forEach(btn => {
+                btn.className = 'feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all';
+            });
+            const activeBtn = document.getElementById(`feed-btn-${cat}`);
             if (activeBtn) {
-                activeBtn.classList.remove('bg-white', 'text-brand-muted', 'border', 'border-brand-border');
-                activeBtn.classList.add('bg-brand-dark', 'text-white');
+                activeBtn.className = 'feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all';
             }
             renderPosts();
         }
 
-        // ---------- Form Submission (with optional image) ----------
+        window.filterAnon = function(cat) {
+            anonFilter = cat;
+            document.querySelectorAll('.anon-tab').forEach(btn => {
+                btn.className = 'anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all';
+            });
+            const activeBtn = document.getElementById(`anon-btn-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = 'anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all';
+            }
+            renderAnon();
+        }
+
         window.handleSubmission = async function(event) {
             event.preventDefault();
             if (!currentUser) {
@@ -561,10 +1057,12 @@
             const location = document.getElementById('postLocation').value.trim();
             const imageFile = document.getElementById('postImage').files[0];
 
-            // Anon always shows as Anonymous Insider
-            let author = category === 'anon'
-                ? 'Anonymous Insider'
-                : (authorInput || currentUser.displayName || currentUser.email.split('@')[0] || 'Liuzhou Resident');
+            let author;
+            if (category === 'anon' || category.startsWith('anon-')) {
+                author = authorInput || 'Anonymous Insider';
+            } else {
+                author = currentUser.displayName || currentUser.email.split('@')[0] || 'Liuzhou Resident';
+            }
 
             try {
                 let imageUrl = '';
@@ -576,6 +1074,7 @@
                 }
 
                 submitBtn.innerText = "Publishing...";
+                const isAnon = category === 'anon' || (category && category.startsWith('anon-'));
                 await addDoc(collection(db, "posts"), {
                     category,
                     title,
@@ -583,7 +1082,8 @@
                     author,
                     location: location || '',
                     imageUrl: imageUrl || '',
-                    userId: currentUser.uid,          // for ownership / delete
+                    authorPhoto: isAnon ? '' : (currentUser.photoURL || ''),
+                    userId: currentUser.uid,
                     createdAt: serverTimestamp()
                 });
                 window.closeModal();
@@ -596,7 +1096,6 @@
             }
         }
 
-        // ---------- Delete own post ----------
         window.deletePost = async function(postId, postUserId) {
             if (!currentUser || currentUser.uid !== postUserId) {
                 alert("You can only delete your own posts.");
@@ -605,7 +1104,6 @@
             if (!confirm("Delete this post permanently?")) return;
             try {
                 await deleteDoc(doc(db, "posts", postId));
-                // also delete its comments
                 const commentsSnap = await getDocs(query(collection(db, "comments"), where("postId", "==", postId)));
                 const deletes = commentsSnap.docs.map(d => deleteDoc(d.ref));
                 await Promise.all(deletes);
@@ -615,7 +1113,6 @@
             }
         }
 
-        // ---------- Detail modal + Comments ----------
         window.openDetailModal = async function(postId) {
             currentDetailPostId = postId;
             const post = posts.find(p => p.id === postId);
@@ -626,11 +1123,12 @@
                 <div class="space-y-4">
                     <div class="flex items-center justify-between text-xs">
                         <span class="font-bold uppercase tracking-wider ${
-                            post.category === 'spot' ? 'text-brand-orange' :
-                            post.category === 'article' ? 'text-brand-lime' :
-                            post.category === 'anon' ? 'text-brand-geranium' :
-                            post.category === 'corner' ? 'text-brand-orange' : 'text-brand-dark'
-                        }">${post.category === 'spot' ? 'Secret Spot' : post.category === 'article' ? 'Article' : post.category === 'anon' ? 'Liuzhou Anon' : post.category === 'corner' ? 'English Corner' : 'Lifehack'}</span>
+                            (post.category === 'spot' || post.category === 'anon-spot') ? 'text-brand-mikado' :
+                            post.category === 'article' ? 'text-brand-phthalo' :
+                            isAnonCategory(post.category) ? 'text-brand-ruby' :
+                            (post.category === 'inquiry' || post.category === 'anon-inquiry') ? 'text-brand-ultra' :
+                            post.category === 'corner' ? 'text-brand-ultra' : 'text-brand-dark'
+                        }">${getCategoryLabel(post.category)}</span>
                         <span class="text-brand-muted">${formatTime(post.createdAt)}</span>
                     </div>
                     <h2 class="font-heading font-extrabold text-2xl text-brand-dark">${escapeHtml(post.title)}</h2>
@@ -638,9 +1136,16 @@
                     <p class="text-brand-muted leading-relaxed whitespace-pre-wrap">${escapeHtml(post.content)}</p>
                     ${post.location ? `<div class="bg-brand-light p-3 rounded-xl text-sm font-semibold text-brand-dark">📍 ${escapeHtml(post.location)}</div>` : ''}
                     <div class="flex items-center justify-between text-sm">
-                        <span class="font-semibold text-brand-dark">${post.category === 'anon' ? 'Anonymous Insider' : 'By ' + escapeHtml(post.author)}</span>
+                        <div class="flex items-center gap-2 font-semibold text-brand-dark">
+                            ${!isAnonCategory(post.category) ? (
+                                post.authorPhoto
+                                    ? `<img src="${escapeHtml(post.authorPhoto)}" alt="" class="w-7 h-7 rounded-full object-cover border border-brand-border">`
+                                    : `<div class="w-7 h-7 rounded-full bg-brand-orange/20 text-brand-orange text-xs font-bold flex items-center justify-center">${escapeHtml((post.author || '?').charAt(0).toUpperCase())}</div>`
+                            ) : ''}
+                            <span>${isAnonCategory(post.category) ? escapeHtml(post.author) : 'By ' + escapeHtml(post.author)}</span>
+                        </div>
                         ${currentUser && currentUser.uid === post.userId ? `
-                            <button onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-geranium text-xs font-bold hover:underline">Delete my post</button>
+                            <button onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-ruby text-xs font-bold hover:underline">Delete my post</button>
                         ` : ''}
                     </div>
                 </div>
@@ -656,15 +1161,13 @@
                             <button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2 rounded-full">Post Comment</button>
                         </form>
                     ` : `
-                        <p class="text-sm text-brand-muted"> <button onclick="closeDetailModal(); openAuthModal('login');" class="text-brand-orange font-semibold hover:underline">Log in</button> to leave a comment.</p>
+                        <p class="text-sm text-brand-muted"><button onclick="closeDetailModal(); openAuthModal('login');" class="text-brand-orange font-semibold hover:underline">Log in</button> to leave a comment.</p>
                     `}
                 </div>
             `;
 
             document.getElementById('detailModal').classList.remove('hidden');
             document.getElementById('detailModal').classList.add('flex');
-
-            // Load comments
             loadComments(postId);
         }
 
@@ -695,7 +1198,7 @@
                                     <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
                                     ${isOwner ? `
                                         <button onclick="startEditComment('${cid}')" class="text-brand-orange hover:underline font-semibold">Edit</button>
-                                        <button onclick="deleteComment('${cid}', '${c.userId}')" class="text-brand-geranium hover:underline font-semibold">Delete</button>
+                                        <button onclick="deleteComment('${cid}', '${c.userId}')" class="text-brand-ruby hover:underline font-semibold">Delete</button>
                                     ` : ''}
                                 </div>
                             </div>
@@ -712,7 +1215,7 @@
                 }).join('');
             } catch (err) {
                 console.error(err);
-                listEl.innerHTML = `<p class="text-sm text-brand-geranium">Could not load comments. You may need a composite index or check rules.</p>`;
+                listEl.innerHTML = `<p class="text-sm text-brand-ruby">Could not load comments. Check rules or index.</p>`;
             }
         }
 
@@ -727,7 +1230,7 @@
                 if (currentDetailPostId) loadComments(currentDetailPostId);
             } catch (err) {
                 console.error(err);
-                alert("Could not delete comment. Check your Firestore security rules.");
+                alert("Could not delete comment.");
             }
         }
 
@@ -786,7 +1289,6 @@
             }
         }
 
-        // ---------- Real-time listener ----------
         const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
             posts = [];
@@ -797,8 +1299,8 @@
         }, (error) => {
             console.error("Error listening to Firestore:", error);
             document.getElementById('posts-grid').innerHTML = `
-                <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-brand-border text-brand-geranium font-semibold text-sm">
-                    Cloud database connection error. Check your Firebase config and security rules.
+                <div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-brand-border text-brand-ruby font-semibold text-sm">
+                    Cloud database connection error.
                 </div>
             `;
         });
@@ -807,41 +1309,66 @@
             renderPosts();
             renderArticles();
             renderAnon();
-            renderCorner();
+            if (currentMainTab === 'corner') {
+                renderWeekCalendar();
+                if (selectedDay !== null) showDaySessions(selectedDay);
+            }
             updateCounters();
         }
 
         function updateCounters() {
-            const uniqueAuthors = new Set(posts.map(p => p.author)).size;
-            document.getElementById('active-count').innerText = uniqueAuthors;
-
-            const secretsCount = posts.filter(p => p.category === 'spot').length;
+            const secretsCount = posts.filter(p => p.category === 'spot' || p.category === 'anon-spot').length;
             document.getElementById('secrets-count').innerText = secretsCount;
 
             const articlesCount = posts.filter(p => p.category === 'article').length;
             document.getElementById('articles-count').innerText = articlesCount;
 
-            document.getElementById('post-count').innerText =
-                posts.filter(p => p.category === 'lifehack' || p.category === 'spot').length;
+            const feedPosts = posts.filter(p => ['lifehack','spot','inquiry'].includes(p.category));
+            document.getElementById('post-count').innerText = feedFilter === 'all'
+                ? feedPosts.length
+                : feedPosts.filter(p => p.category === feedFilter).length;
+        }
+
+        onSnapshot(collection(db, "users"), (snapshot) => {
+            document.getElementById('active-count').innerText = snapshot.size;
+        }, (error) => {
+            console.error("Error listening to users:", error);
+        });
+
+        function getCategoryLabel(cat) {
+            if (cat === 'spot' || cat === 'anon-spot') return 'Secret Spot';
+            if (cat === 'article') return 'Article';
+            if (cat === 'anon') return 'Liuzhou Anon';
+            if (cat === 'anon-lifehack') return 'Anon · Lifehack';
+            if (cat === 'anon-inquiry') return 'Anon · Inquiry';
+            if (cat === 'inquiry') return 'Inquiry';
+            if (cat === 'corner') return 'English Corner';
+            return 'Lifehack';
+        }
+
+        function getCategoryColor(cat) {
+            if (cat === 'spot' || cat === 'anon-spot') return 'bg-brand-mikado/15 text-brand-mikado';
+            if (cat === 'article') return 'bg-brand-phthalo/10 text-brand-phthalo';
+            if (cat === 'anon' || cat.startsWith('anon-')) return 'bg-brand-ruby/20 text-red-400';
+            if (cat === 'inquiry' || cat === 'anon-inquiry') return 'bg-brand-ultra/10 text-brand-ultra';
+            if (cat === 'corner') return 'bg-brand-ultra/10 text-brand-ultra';
+            return 'bg-brand-light text-brand-dark';
+        }
+
+        function isAnonCategory(cat) {
+            return cat === 'anon' || (cat && cat.startsWith('anon-'));
         }
 
         function makePostCard(p, extraClass = '') {
             const canDelete = currentUser && p.userId && currentUser.uid === p.userId;
+            const isAnon = isAnonCategory(p.category);
             return `
-                <div class="bg-white p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/50 transition-all relative group cursor-pointer ${extraClass}"
+                <div class="bg-brand-card p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/40 transition-all relative group cursor-pointer ${extraClass}"
                      onclick="openDetailModal('${p.id}')">
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${
-                                p.category === 'spot' ? 'bg-brand-orange/10 text-brand-orange' :
-                                p.category === 'article' ? 'bg-brand-lime/10 text-brand-lime' :
-                                p.category === 'anon' ? 'bg-brand-geranium/10 text-brand-geranium' :
-                                'bg-brand-light text-brand-dark'
-                            }">
-                                ${p.category === 'spot' ? 'Secret Spot' :
-                                  p.category === 'article' ? 'Article' :
-                                  p.category === 'anon' ? 'Liuzhou Anon' :
-                                  p.category === 'corner' ? 'English Corner' : 'Lifehack'}
+                            <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${getCategoryColor(p.category)}">
+                                ${getCategoryLabel(p.category)}
                             </span>
                             <span class="text-xs text-brand-muted">${formatTime(p.createdAt)}</span>
                         </div>
@@ -850,9 +1377,16 @@
                         <p class="text-sm text-brand-muted leading-relaxed line-clamp-3">${escapeHtml(p.content)}</p>
                     </div>
                     <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
-                        <span>${p.category === 'anon' ? 'Anonymous Insider' : 'By ' + escapeHtml(p.author)}</span>
-                        <div class="flex items-center gap-3">
-                            ${canDelete ? `<button onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-geranium hover:underline">Delete</button>` : ''}
+                        <div class="flex items-center gap-2 min-w-0">
+                            ${!isAnon ? (
+                                p.authorPhoto
+                                    ? `<img src="${escapeHtml(p.authorPhoto)}" alt="" class="w-6 h-6 rounded-full object-cover flex-shrink-0 border border-brand-border">`
+                                    : `<div class="w-6 h-6 rounded-full bg-brand-orange/20 text-brand-orange text-[10px] font-bold flex items-center justify-center flex-shrink-0">${escapeHtml((p.author || '?').charAt(0).toUpperCase())}</div>`
+                            ) : ''}
+                            <span class="truncate">${isAnon ? escapeHtml(p.author) : 'By ' + escapeHtml(p.author)}</span>
+                        </div>
+                        <div class="flex items-center gap-3 flex-shrink-0">
+                            ${canDelete ? `<button onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-ruby hover:underline">Delete</button>` : ''}
                             <span class="text-brand-orange">View →</span>
                         </div>
                     </div>
@@ -862,72 +1396,131 @@
 
         function renderPosts() {
             const grid = document.getElementById('posts-grid');
-            const mainFeedPosts = posts.filter(p => p.category === 'lifehack' || p.category === 'spot');
-            const filtered = currentFilter === 'all'
+            if (!grid) return;
+            const mainFeedPosts = posts.filter(p => ['lifehack','spot','inquiry'].includes(p.category));
+            const filtered = feedFilter === 'all'
                 ? mainFeedPosts
-                : mainFeedPosts.filter(p => p.category === currentFilter);
+                : mainFeedPosts.filter(p => p.category === feedFilter);
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-16 text-center space-y-3 bg-white rounded-3xl border border-dashed border-brand-border">
+                    <div class="col-span-full py-16 text-center space-y-3 bg-brand-card rounded-3xl border border-dashed border-brand-border">
                         <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
-                        <h4 class="font-heading font-bold text-lg text-brand-dark">No posts in the cloud feed yet</h4>
-                        <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to drop a lifehack or secret spot!</p>
+                        <h4 class="font-heading font-bold text-lg text-brand-dark">No posts in the feed yet</h4>
+                        <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to drop a lifehack, secret spot or inquiry!</p>
                         <button onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Drop a Post</button>
                     </div>
                 `;
                 return;
             }
-
             grid.innerHTML = filtered.map(p => makePostCard(p)).join('');
         }
 
         function renderArticles() {
             const grid = document.getElementById('articles-grid');
+            if (!grid) return;
             const articles = posts.filter(p => p.category === 'article');
 
             if (articles.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                    <div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
                         No independent articles published yet.
                     </div>
                 `;
                 return;
             }
-
             grid.innerHTML = articles.map(p => makePostCard(p)).join('');
         }
 
         function renderAnon() {
             const grid = document.getElementById('anon-grid');
-            const anons = posts.filter(p => p.category === 'anon');
+            if (!grid) return;
+            let anons = posts.filter(p => isAnonCategory(p.category));
+
+            if (anonFilter === 'lifehack') {
+                anons = anons.filter(p => p.category === 'anon-lifehack' || p.category === 'anon');
+            } else if (anonFilter === 'spot') {
+                anons = anons.filter(p => p.category === 'anon-spot');
+            } else if (anonFilter === 'inquiry') {
+                anons = anons.filter(p => p.category === 'anon-inquiry');
+            }
 
             if (anons.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
+                    <div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
                         The anonymous board is clean.
                     </div>
                 `;
                 return;
             }
-
             grid.innerHTML = anons.map(p => makePostCard(p)).join('');
         }
 
-        function renderCorner() {
-            const grid = document.getElementById('corner-grid');
+        const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+        function getDayFromLocation(location) {
+            if (!location) return -1;
+            const lower = location.toLowerCase();
+            for (let i = 0; i < DAY_NAMES.length; i++) {
+                if (lower.includes(DAY_NAMES[i].toLowerCase()) || lower.includes(['monday','tuesday','wednesday','thursday','friday','saturday','sunday'][i])) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        function renderWeekCalendar() {
+            const cal = document.getElementById('week-calendar');
+            if (!cal) return;
             const corners = posts.filter(p => p.category === 'corner');
 
+            cal.innerHTML = DAY_NAMES.map((day, idx) => {
+                const daySessions = corners.filter(p => getDayFromLocation(p.location) === idx);
+                const hasSessions = daySessions.length > 0;
+                const isSelected = selectedDay === idx;
+                return `
+                    <button onclick="selectDay(${idx})" class="flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl border transition-all ${
+                        isSelected
+                            ? 'bg-brand-ultra text-white border-brand-ultra shadow-md'
+                            : hasSessions
+                                ? 'bg-brand-ultra/10 border-brand-ultra/30 text-brand-ultra hover:bg-brand-ultra/20'
+                                : 'bg-brand-card border-brand-border text-brand-muted hover:border-brand-ultra/40'
+                    }">
+                        <span class="text-xs font-bold uppercase tracking-wider">${day}</span>
+                        <span class="font-heading font-extrabold text-lg">${hasSessions ? daySessions.length : '—'}</span>
+                        <span class="text-[10px] ${isSelected ? 'text-white/80' : 'text-brand-muted'}">${hasSessions ? 'session' + (daySessions.length > 1 ? 's' : '') : 'free'}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        window.selectDay = function(dayIdx) {
+            selectedDay = dayIdx;
+            renderWeekCalendar();
+            showDaySessions(dayIdx);
+        }
+
+        function showDaySessions(dayIdx) {
+            const detail = document.getElementById('corner-day-detail');
+            if (!detail) return;
+            const corners = posts.filter(p => p.category === 'corner' && getDayFromLocation(p.location) === dayIdx);
+
             if (corners.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">
-                        No English corners scheduled yet.
+                detail.innerHTML = `
+                    <div class="text-center py-12 space-y-3 bg-brand-card rounded-3xl border border-dashed border-brand-border">
+                        <h4 class="font-heading font-bold text-lg text-brand-dark">No sessions on ${DAY_NAMES[dayIdx]}</h4>
+                        <p class="text-sm text-brand-muted">Be the first to host one!</p>
+                        <button onclick="openModalCustom('corner')" class="mt-2 inline-block bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">+ Host Session</button>
                     </div>
                 `;
                 return;
             }
-
-            grid.innerHTML = corners.map(p => makePostCard(p)).join('');
+            detail.innerHTML = `
+                <h3 class="font-heading font-bold text-xl text-brand-dark mb-4">${DAY_NAMES[dayIdx]} — ${corners.length} session${corners.length > 1 ? 's' : ''}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${corners.map(p => makePostCard(p)).join('')}
+                </div>
+            `;
         }
     </script>
 </body>
