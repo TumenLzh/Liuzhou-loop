@@ -403,6 +403,10 @@
         let currentUser = null;
         let authMode = 'signup';
         let currentDetailPostId = null;
+        let currentMainTab = 'feed';
+        let feedFilter = 'all';
+        let anonFilter = 'all';
+        let selectedDay = null;
 
         function escapeHtml(text) {
             if (!text) return '';
@@ -536,6 +540,9 @@
                 if (error.code === 'auth/weak-password') msg = 'Password should be at least 6 characters.';
                 if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = 'Wrong email or password.';
                 if (error.code === 'auth/user-not-found') msg = 'No account found with that email.';
+                if (error.code === 'auth/operation-not-allowed') msg = 'Email/Password sign-in is not enabled in Firebase Console → Authentication → Sign-in method.';
+                if (error.code === 'auth/too-many-requests') msg = 'Too many attempts. Wait a moment and try again.';
+                if (error.code === 'auth/invalid-email') msg = 'Please enter a valid email address.';
                 errEl.innerText = msg;
                 errEl.classList.remove('hidden');
             } finally {
@@ -548,6 +555,12 @@
             await signOut(auth);
             closeAccountMenu();
         }
+
+        // Keep UI in sync with Firebase Auth state
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            updateAuthUI();
+        });
 
         window.toggleAccountMenu = function(e) {
             e.stopPropagation();
@@ -770,11 +783,6 @@
         }
 
         // ---------- Main Tab & Color Theme Switcher ----------
-        let currentMainTab = 'feed';
-        let feedFilter = 'all';
-        let anonFilter = 'all';
-        let selectedDay = null;
-
         window.switchMainTab = function(tab) {
             currentMainTab = tab;
             
