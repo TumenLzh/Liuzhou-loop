@@ -325,23 +325,44 @@
 
     <!-- Account Menu Dropdown -->
     <div id="accountMenu" class="fixed z-50 hidden bg-brand-card border border-brand-border rounded-2xl shadow-xl py-2 min-w-[200px]">
+        <button onclick="openFriends(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors flex items-center justify-between gap-3">
+            <span>Friends</span>
+            <span id="friends-badge" class="hidden bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
+        </button>
         <button onclick="openSettings(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors">Settings</button>
         <button onclick="handleLogout(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-ruby hover:bg-brand-light transition-colors">Log out</button>
     </div>
 
     <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-brand-card rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-6 relative max-h-[90vh] overflow-y-auto">
+        <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
-                <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Settings</h3>
+                <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Edit Profile</h3>
                 <button onclick="closeSettings()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
 
-            <!-- Avatar initial (no photo upload) -->
             <div class="flex flex-col items-center gap-3">
-                <div id="settings-pfp-preview" class="w-24 h-24 rounded-full bg-brand-orange/20 flex items-center justify-center border-2 border-brand-border">
-                    <span class="text-2xl font-bold text-brand-orange" id="settings-pfp-initial">?</span>
+                <div id="settings-pfp-preview" class="w-24 h-24 rounded-full flex items-center justify-center border-2 border-brand-border" style="background-color: rgba(255,87,34,0.15)">
+                    <span class="text-2xl font-bold" id="settings-pfp-initial" style="color:#FF5722">?</span>
                 </div>
+                <p class="text-[10px] uppercase tracking-wider text-brand-muted font-semibold">Your color · initials only</p>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Profile Color</label>
+                <div class="flex flex-wrap gap-2" id="color-picker">
+                    <button type="button" data-color="#FF5722" onclick="pickColor('#FF5722')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#FF5722"></button>
+                    <button type="button" data-color="#123524" onclick="pickColor('#123524')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#123524"></button>
+                    <button type="button" data-color="#9B1E2E" onclick="pickColor('#9B1E2E')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#9B1E2E"></button>
+                    <button type="button" data-color="#120A8F" onclick="pickColor('#120A8F')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#120A8F"></button>
+                    <button type="button" data-color="#FFC40C" onclick="pickColor('#FFC40C')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#FFC40C"></button>
+                    <button type="button" data-color="#2A9D8F" onclick="pickColor('#2A9D8F')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#2A9D8F"></button>
+                    <button type="button" data-color="#E76F51" onclick="pickColor('#E76F51')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#E76F51"></button>
+                    <button type="button" data-color="#7B2D8E" onclick="pickColor('#7B2D8E')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#7B2D8E"></button>
+                    <button type="button" data-color="#264653" onclick="pickColor('#264653')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#264653"></button>
+                    <button type="button" data-color="#F4A261" onclick="pickColor('#F4A261')" class="color-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#F4A261"></button>
+                </div>
+                <input type="hidden" id="settingsColor" value="#FF5722">
             </div>
 
             <div>
@@ -349,22 +370,113 @@
                 <input type="text" id="settingsName" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
             </div>
 
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Age <span class="font-normal normal-case tracking-normal">(optional)</span></label>
-                <input type="number" id="settingsAge" min="13" max="120" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Age</label>
+                    <input type="number" id="settingsAge" min="13" max="120" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Gender</label>
+                    <input type="text" id="settingsGender" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Birthday</label>
+                    <input type="text" id="settingsBirthday" placeholder="e.g. March 15" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">MBTI</label>
+                    <input type="text" id="settingsMbti" placeholder="e.g. INFP" maxlength="4" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange uppercase">
+                </div>
             </div>
 
             <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Hobbies <span class="font-normal normal-case tracking-normal">(optional)</span></label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Romantic Status</label>
+                <select id="settingsStatus" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                    <option value="">— Prefer not to say —</option>
+                    <option value="Single">Single</option>
+                    <option value="Dating">Dating</option>
+                    <option value="In a relationship">In a relationship</option>
+                    <option value="Engaged">Engaged</option>
+                    <option value="Married">Married</option>
+                    <option value="Open for relationship">Open for relationship</option>
+                    <option value="Not looking">Not looking</option>
+                    <option value="It's complicated">It's complicated</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Orientation</label>
+                <input type="text" id="settingsOrientation" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">About yourself</label>
+                <textarea id="settingsAbout" rows="3" placeholder="A short intro..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Hobbies</label>
                 <input type="text" id="settingsHobbies" placeholder="e.g. photography, hiking, coding" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
             </div>
 
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Likes</label>
+                    <input type="text" id="settingsLikes" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Dislikes</label>
+                    <input type="text" id="settingsDislikes" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">WeChat ID</label>
+                <input type="text" id="settingsWechat" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+            </div>
+
+            <p class="text-[10px] text-brand-muted">All fields except name are optional. Empty fields stay hidden on your public profile.</p>
             <p id="settings-error" class="text-sm text-brand-ruby hidden"></p>
 
-            <button onclick="saveSettings()" id="settingsSaveBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Save Changes</button>
+            <button onclick="saveSettings()" id="settingsSaveBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Save Profile</button>
 
             <div class="border-t border-brand-border pt-4">
                 <button onclick="confirmDeleteAccount()" class="w-full text-sm font-semibold text-brand-ruby hover:bg-brand-ruby/10 py-3 rounded-2xl transition-colors">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Friends Modal -->
+    <div id="friendsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-brand-card rounded-3xl max-w-md w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between p-6 border-b border-brand-border">
+                <h3 class="font-heading font-extrabold text-xl text-brand-dark">Friends</h3>
+                <button onclick="closeFriends()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+            </div>
+            <div class="flex border-b border-brand-border px-4 gap-1 pt-2">
+                <button onclick="switchFriendsTab('list')" id="ftab-list" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all">Friends</button>
+                <button onclick="switchFriendsTab('incoming')" id="ftab-incoming" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all">Requests <span id="incoming-count" class="text-brand-orange"></span></button>
+                <button onclick="switchFriendsTab('outgoing')" id="ftab-outgoing" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all">Sent</button>
+            </div>
+            <div id="friends-content" class="overflow-y-auto flex-1 p-4 space-y-2 min-h-[240px]">
+                <p class="text-sm text-brand-muted text-center py-8">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Public Profile View Modal -->
+    <div id="profileModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-brand-card rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between">
+                <h3 class="font-heading font-extrabold text-xl text-brand-dark">Profile</h3>
+                <button onclick="closeProfile()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+            </div>
+            <div id="profile-content">
+                <!-- Filled by JS -->
             </div>
         </div>
     </div>
@@ -433,7 +545,7 @@
 
             if (currentUser) {
                 const name = currentUser.displayName || currentUser.email.split('@')[0];
-                const pfp = `<div class="w-8 h-8 rounded-full bg-brand-orange text-white text-xs font-bold flex items-center justify-center">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
+                const pfp = `<div class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background-color:${myProfileColor}">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
                 authArea.innerHTML = `
                     <button onclick="toggleAccountMenu(event)" id="account-menu-btn" class="flex items-center gap-2 group">
                         ${pfp}
@@ -556,10 +668,22 @@
             closeAccountMenu();
         }
 
+        let myProfileColor = '#FF5722';
+
         // Keep UI in sync with Firebase Auth state
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             currentUser = user;
+            if (user) {
+                try {
+                    const snap = await getDoc(doc(db, "users", user.uid));
+                    if (snap.exists() && snap.data().color) myProfileColor = snap.data().color;
+                    else myProfileColor = '#FF5722';
+                } catch (e) { myProfileColor = '#FF5722'; }
+            } else {
+                myProfileColor = '#FF5722';
+            }
             updateAuthUI();
+            if (typeof watchIncomingRequests === 'function') watchIncomingRequests();
         });
 
         window.toggleAccountMenu = function(e) {
@@ -590,26 +714,59 @@
             }
         });
 
+        let selectedProfileColor = '#FF5722';
+
+        window.pickColor = function(color) {
+            selectedProfileColor = color;
+            document.getElementById('settingsColor').value = color;
+            document.querySelectorAll('.color-swatch').forEach(b => {
+                b.style.borderColor = b.dataset.color === color ? '#1A1A1A' : 'transparent';
+                b.style.transform = b.dataset.color === color ? 'scale(1.15)' : 'scale(1)';
+            });
+            const name = (document.getElementById('settingsName').value || currentUser?.displayName || '?').charAt(0).toUpperCase();
+            const preview = document.getElementById('settings-pfp-preview');
+            preview.style.backgroundColor = color + '26';
+            preview.innerHTML = `<span class="text-2xl font-bold" style="color:${color}">${escapeHtml(name)}</span>`;
+        }
+
         window.openSettings = async function() {
             if (!currentUser) return;
             document.getElementById('settingsName').value = currentUser.displayName || '';
             document.getElementById('settingsAge').value = '';
+            document.getElementById('settingsGender').value = '';
+            document.getElementById('settingsBirthday').value = '';
+            document.getElementById('settingsMbti').value = '';
+            document.getElementById('settingsStatus').value = '';
+            document.getElementById('settingsOrientation').value = '';
+            document.getElementById('settingsAbout').value = '';
             document.getElementById('settingsHobbies').value = '';
+            document.getElementById('settingsLikes').value = '';
+            document.getElementById('settingsDislikes').value = '';
+            document.getElementById('settingsWechat').value = '';
             document.getElementById('settings-error').classList.add('hidden');
+            selectedProfileColor = '#FF5722';
 
             try {
                 const snap = await getDoc(doc(db, "users", currentUser.uid));
                 if (snap.exists()) {
                     const d = snap.data();
                     if (d.age) document.getElementById('settingsAge').value = d.age;
+                    if (d.gender) document.getElementById('settingsGender').value = d.gender;
+                    if (d.birthday) document.getElementById('settingsBirthday').value = d.birthday;
+                    if (d.mbti) document.getElementById('settingsMbti').value = d.mbti;
+                    if (d.status) document.getElementById('settingsStatus').value = d.status;
+                    if (d.orientation) document.getElementById('settingsOrientation').value = d.orientation;
+                    if (d.about) document.getElementById('settingsAbout').value = d.about;
                     if (d.hobbies) document.getElementById('settingsHobbies').value = d.hobbies;
+                    if (d.likes) document.getElementById('settingsLikes').value = d.likes;
+                    if (d.dislikes) document.getElementById('settingsDislikes').value = d.dislikes;
+                    if (d.wechat) document.getElementById('settingsWechat').value = d.wechat;
+                    if (d.color) selectedProfileColor = d.color;
+                    if (d.displayName) document.getElementById('settingsName').value = d.displayName;
                 }
             } catch (e) { console.error(e); }
 
-            const name = currentUser.displayName || currentUser.email.split('@')[0];
-            document.getElementById('settings-pfp-preview').innerHTML =
-                `<span class="text-2xl font-bold text-brand-orange">${escapeHtml(name.charAt(0).toUpperCase())}</span>`;
-
+            pickColor(selectedProfileColor);
             document.getElementById('settingsModal').classList.remove('hidden');
             document.getElementById('settingsModal').classList.add('flex');
         }
@@ -630,7 +787,6 @@
             try {
                 const newName = document.getElementById('settingsName').value.trim();
                 const ageVal = document.getElementById('settingsAge').value;
-                const hobbies = document.getElementById('settingsHobbies').value.trim();
 
                 if (newName) {
                     await updateProfile(currentUser, { displayName: newName });
@@ -639,12 +795,23 @@
                 await setDoc(doc(db, "users", currentUser.uid), {
                     uid: currentUser.uid,
                     displayName: newName || currentUser.displayName || '',
+                    color: selectedProfileColor || '#FF5722',
                     age: ageVal ? parseInt(ageVal, 10) : null,
-                    hobbies: hobbies || '',
+                    gender: document.getElementById('settingsGender').value.trim() || '',
+                    birthday: document.getElementById('settingsBirthday').value.trim() || '',
+                    mbti: document.getElementById('settingsMbti').value.trim().toUpperCase() || '',
+                    status: document.getElementById('settingsStatus').value || '',
+                    orientation: document.getElementById('settingsOrientation').value.trim() || '',
+                    about: document.getElementById('settingsAbout').value.trim() || '',
+                    hobbies: document.getElementById('settingsHobbies').value.trim() || '',
+                    likes: document.getElementById('settingsLikes').value.trim() || '',
+                    dislikes: document.getElementById('settingsDislikes').value.trim() || '',
+                    wechat: document.getElementById('settingsWechat').value.trim() || '',
                     updatedAt: serverTimestamp()
                 }, { merge: true });
 
                 currentUser = auth.currentUser;
+                myProfileColor = selectedProfileColor || '#FF5722';
                 updateAuthUI();
                 closeSettings();
             } catch (err) {
@@ -653,8 +820,371 @@
                 errEl.classList.remove('hidden');
             } finally {
                 btn.disabled = false;
-                btn.innerText = 'Save Changes';
+                btn.innerText = 'Save Profile';
             }
+        }
+
+        // ---------- Public Profile View ----------
+        window.openProfile = async function(userId) {
+            if (!userId) return;
+            const content = document.getElementById('profile-content');
+            content.innerHTML = `<p class="text-sm text-brand-muted text-center py-8">Loading profile...</p>`;
+            document.getElementById('profileModal').classList.remove('hidden');
+            document.getElementById('profileModal').classList.add('flex');
+
+            try {
+                const snap = await getDoc(doc(db, "users", userId));
+                if (!snap.exists()) {
+                    content.innerHTML = `<p class="text-sm text-brand-muted text-center py-8">This user hasn't set up a profile yet.</p>`;
+                    return;
+                }
+                const d = snap.data();
+                const name = d.displayName || 'Insider';
+                const color = d.color || '#FF5722';
+                const initial = name.charAt(0).toUpperCase();
+
+                const rows = [];
+                if (d.age) rows.push(['Age', d.age]);
+                if (d.gender) rows.push(['Gender', d.gender]);
+                if (d.birthday) rows.push(['Birthday', d.birthday]);
+                if (d.mbti) rows.push(['MBTI', d.mbti]);
+                if (d.status) rows.push(['Status', d.status]);
+                if (d.orientation) rows.push(['Orientation', d.orientation]);
+                if (d.hobbies) rows.push(['Hobbies', d.hobbies]);
+                if (d.likes) rows.push(['Likes', d.likes]);
+                if (d.dislikes) rows.push(['Dislikes', d.dislikes]);
+                if (d.wechat) rows.push(['WeChat', d.wechat]);
+
+                let html = `
+                    <div class="flex flex-col items-center gap-3 pb-4">
+                        <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background-color:${color}26">
+                            <span class="text-3xl font-bold" style="color:${color}">${escapeHtml(initial)}</span>
+                        </div>
+                        <h2 class="font-heading font-extrabold text-2xl text-brand-dark">${escapeHtml(name)}</h2>
+                        <div id="profile-friend-action" class="w-full pt-1"></div>
+                    </div>
+                `;
+
+                if (d.about) {
+                    html += `<p class="text-sm text-brand-muted leading-relaxed text-center italic border-b border-brand-border pb-4">"${escapeHtml(d.about)}"</p>`;
+                }
+
+                if (rows.length > 0) {
+                    html += `<div class="space-y-3 pt-2">`;
+                    rows.forEach(([label, value]) => {
+                        html += `
+                            <div class="flex justify-between gap-4 text-sm">
+                                <span class="font-bold uppercase tracking-wider text-[10px] text-brand-muted pt-0.5">${escapeHtml(label)}</span>
+                                <span class="text-brand-dark font-medium text-right">${escapeHtml(String(value))}</span>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                } else if (!d.about) {
+                    html += `<p class="text-sm text-brand-muted text-center py-4">No public details yet.</p>`;
+                }
+
+                content.innerHTML = html;
+                renderProfileFriendAction(userId, name);
+            } catch (err) {
+                console.error(err);
+                content.innerHTML = `<p class="text-sm text-brand-ruby text-center py-8">Could not load profile.</p>`;
+            }
+        }
+
+        window.closeProfile = function() {
+            document.getElementById('profileModal').classList.add('hidden');
+            document.getElementById('profileModal').classList.remove('flex');
+        }
+
+        // ---------- Friends system ----------
+        let friendsTab = 'list';
+        let friendsUnsub = null;
+        let requestsUnsub = null;
+
+        async function getFriendshipStatus(otherUid) {
+            if (!currentUser || !otherUid || currentUser.uid === otherUid) return 'self';
+            // Check if already friends
+            const friendDoc = await getDoc(doc(db, "friends", currentUser.uid, "list", otherUid));
+            if (friendDoc.exists()) return 'friends';
+            // Pending outgoing
+            const outQ = query(collection(db, "friendRequests"), where("from", "==", currentUser.uid), where("to", "==", otherUid), where("status", "==", "pending"));
+            const outSnap = await getDocs(outQ);
+            if (!outSnap.empty) return 'outgoing';
+            // Pending incoming
+            const inQ = query(collection(db, "friendRequests"), where("from", "==", otherUid), where("to", "==", currentUser.uid), where("status", "==", "pending"));
+            const inSnap = await getDocs(inQ);
+            if (!inSnap.empty) return { type: 'incoming', requestId: inSnap.docs[0].id };
+            return 'none';
+        }
+
+        async function renderProfileFriendAction(userId, displayName) {
+            const el = document.getElementById('profile-friend-action');
+            if (!el) return;
+            if (!currentUser) {
+                el.innerHTML = `<p class="text-xs text-brand-muted text-center"><button onclick="closeProfile(); openAuthModal('login');" class="text-brand-orange font-semibold hover:underline">Log in</button> to add friends</p>`;
+                return;
+            }
+            if (currentUser.uid === userId) {
+                el.innerHTML = `<p class="text-xs text-brand-muted text-center">This is you</p>`;
+                return;
+            }
+            el.innerHTML = `<p class="text-xs text-brand-muted text-center">Checking...</p>`;
+            try {
+                const status = await getFriendshipStatus(userId);
+                if (status === 'friends') {
+                    el.innerHTML = `
+                        <div class="flex gap-2 justify-center">
+                            <span class="text-xs font-semibold text-brand-phthalo bg-brand-phthalo/10 px-4 py-2 rounded-full">✓ Friends</span>
+                            <button onclick="removeFriend('${userId}')" class="text-xs font-semibold text-brand-ruby hover:underline px-2">Remove</button>
+                        </div>`;
+                } else if (status === 'outgoing') {
+                    el.innerHTML = `<span class="block text-center text-xs font-semibold text-brand-muted bg-brand-light px-4 py-2 rounded-full">Request sent</span>`;
+                } else if (status && status.type === 'incoming') {
+                    el.innerHTML = `
+                        <div class="flex gap-2 justify-center">
+                            <button onclick="acceptRequest('${status.requestId}')" class="text-xs font-bold bg-brand-orange text-white px-4 py-2 rounded-full">Accept</button>
+                            <button onclick="declineRequest('${status.requestId}')" class="text-xs font-semibold text-brand-muted px-4 py-2 rounded-full border border-brand-border">Decline</button>
+                        </div>`;
+                } else {
+                    el.innerHTML = `<button onclick="sendFriendRequest('${userId}', '${escapeHtml(displayName).replace(/'/g, "\\'")}')" class="w-full bg-brand-orange hover:bg-orange-600 text-white text-sm font-semibold py-2.5 rounded-full transition-colors">Add Friend</button>`;
+                }
+            } catch (e) {
+                console.error(e);
+                el.innerHTML = `<p class="text-xs text-brand-ruby text-center">Could not check friendship status</p>`;
+            }
+        }
+
+        window.sendFriendRequest = async function(toUid, toName) {
+            if (!currentUser) return;
+            try {
+                const status = await getFriendshipStatus(toUid);
+                if (status !== 'none') {
+                    alert('Already friends or request pending.');
+                    return;
+                }
+                const fromName = currentUser.displayName || currentUser.email.split('@')[0];
+                await addDoc(collection(db, "friendRequests"), {
+                    from: currentUser.uid,
+                    to: toUid,
+                    fromName,
+                    toName: toName || 'Insider',
+                    status: 'pending',
+                    createdAt: serverTimestamp()
+                });
+                if (document.getElementById('profile-friend-action')) {
+                    document.getElementById('profile-friend-action').innerHTML =
+                        `<span class="block text-center text-xs font-semibold text-brand-muted bg-brand-light px-4 py-2 rounded-full">Request sent</span>`;
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Could not send request. Check Firestore rules for friendRequests.');
+            }
+        }
+
+        window.acceptRequest = async function(requestId) {
+            if (!currentUser) return;
+            try {
+                const reqRef = doc(db, "friendRequests", requestId);
+                const reqSnap = await getDoc(reqRef);
+                if (!reqSnap.exists()) return;
+                const r = reqSnap.data();
+                // Create bidirectional friendship
+                await setDoc(doc(db, "friends", r.to, "list", r.from), {
+                    uid: r.from,
+                    name: r.fromName || 'Insider',
+                    since: serverTimestamp()
+                });
+                await setDoc(doc(db, "friends", r.from, "list", r.to), {
+                    uid: r.to,
+                    name: r.toName || 'Insider',
+                    since: serverTimestamp()
+                });
+                await updateDoc(reqRef, { status: 'accepted' });
+                if (document.getElementById('friendsModal') && !document.getElementById('friendsModal').classList.contains('hidden')) {
+                    loadFriendsTab();
+                }
+                // Refresh profile action if open
+                const profileOpen = !document.getElementById('profileModal').classList.contains('hidden');
+                if (profileOpen) renderProfileFriendAction(r.from, r.fromName);
+            } catch (e) {
+                console.error(e);
+                alert('Could not accept request. Check Firestore rules.');
+            }
+        }
+
+        window.declineRequest = async function(requestId) {
+            if (!currentUser) return;
+            try {
+                await updateDoc(doc(db, "friendRequests", requestId), { status: 'declined' });
+                if (document.getElementById('friendsModal') && !document.getElementById('friendsModal').classList.contains('hidden')) {
+                    loadFriendsTab();
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Could not decline request.');
+            }
+        }
+
+        window.cancelRequest = async function(requestId) {
+            if (!currentUser) return;
+            try {
+                await deleteDoc(doc(db, "friendRequests", requestId));
+                loadFriendsTab();
+            } catch (e) {
+                console.error(e);
+                alert('Could not cancel request.');
+            }
+        }
+
+        window.removeFriend = async function(friendUid) {
+            if (!currentUser || !confirm('Remove this friend?')) return;
+            try {
+                await deleteDoc(doc(db, "friends", currentUser.uid, "list", friendUid));
+                await deleteDoc(doc(db, "friends", friendUid, "list", currentUser.uid));
+                if (document.getElementById('friendsModal') && !document.getElementById('friendsModal').classList.contains('hidden')) {
+                    loadFriendsTab();
+                }
+                closeProfile();
+            } catch (e) {
+                console.error(e);
+                alert('Could not remove friend.');
+            }
+        }
+
+        window.openFriends = function() {
+            if (!currentUser) {
+                openAuthModal('login');
+                return;
+            }
+            friendsTab = 'list';
+            switchFriendsTab('list');
+            document.getElementById('friendsModal').classList.remove('hidden');
+            document.getElementById('friendsModal').classList.add('flex');
+        }
+
+        window.closeFriends = function() {
+            document.getElementById('friendsModal').classList.add('hidden');
+            document.getElementById('friendsModal').classList.remove('flex');
+        }
+
+        window.switchFriendsTab = function(tab) {
+            friendsTab = tab;
+            document.querySelectorAll('.friends-tab').forEach(b => {
+                b.classList.remove('bg-brand-dark', 'text-white');
+                b.classList.add('text-brand-muted');
+            });
+            const active = document.getElementById(`ftab-${tab}`);
+            if (active) {
+                active.classList.add('bg-brand-dark', 'text-white');
+                active.classList.remove('text-brand-muted');
+            }
+            loadFriendsTab();
+        }
+
+        async function loadFriendsTab() {
+            const content = document.getElementById('friends-content');
+            if (!content || !currentUser) return;
+            content.innerHTML = `<p class="text-sm text-brand-muted text-center py-8">Loading...</p>`;
+
+            try {
+                if (friendsTab === 'list') {
+                    const snap = await getDocs(collection(db, "friends", currentUser.uid, "list"));
+                    if (snap.empty) {
+                        content.innerHTML = `<p class="text-sm text-brand-muted text-center py-8">No friends yet. Visit profiles and send requests!</p>`;
+                        return;
+                    }
+                    content.innerHTML = snap.docs.map(d => {
+                        const f = d.data();
+                        const name = f.name || 'Insider';
+                        const initial = name.charAt(0).toUpperCase();
+                        return `
+                            <div class="flex items-center justify-between gap-3 bg-brand-light rounded-2xl p-3">
+                                <button onclick="closeFriends(); openProfile('${f.uid || d.id}')" class="flex items-center gap-3 min-w-0 hover:opacity-80">
+                                    <div class="w-10 h-10 rounded-full bg-brand-orange/20 text-brand-orange font-bold text-sm flex items-center justify-center flex-shrink-0">${escapeHtml(initial)}</div>
+                                    <span class="font-semibold text-sm text-brand-dark truncate">${escapeHtml(name)}</span>
+                                </button>
+                                <button onclick="removeFriend('${f.uid || d.id}')" class="text-xs text-brand-ruby font-semibold hover:underline flex-shrink-0">Remove</button>
+                            </div>
+                        `;
+                    }).join('');
+                } else if (friendsTab === 'incoming') {
+                    const q = query(collection(db, "friendRequests"), where("to", "==", currentUser.uid), where("status", "==", "pending"));
+                    const snap = await getDocs(q);
+                    document.getElementById('incoming-count').innerText = snap.size ? `(${snap.size})` : '';
+                    updateFriendsBadge(snap.size);
+                    if (snap.empty) {
+                        content.innerHTML = `<p class="text-sm text-brand-muted text-center py-8">No pending requests</p>`;
+                        return;
+                    }
+                    content.innerHTML = snap.docs.map(d => {
+                        const r = d.data();
+                        const name = r.fromName || 'Insider';
+                        return `
+                            <div class="flex items-center justify-between gap-3 bg-brand-light rounded-2xl p-3">
+                                <button onclick="closeFriends(); openProfile('${r.from}')" class="flex items-center gap-3 min-w-0 hover:opacity-80">
+                                    <div class="w-10 h-10 rounded-full bg-brand-orange/20 text-brand-orange font-bold text-sm flex items-center justify-center flex-shrink-0">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                                    <span class="font-semibold text-sm text-brand-dark truncate">${escapeHtml(name)}</span>
+                                </button>
+                                <div class="flex gap-2 flex-shrink-0">
+                                    <button onclick="acceptRequest('${d.id}')" class="text-xs font-bold bg-brand-orange text-white px-3 py-1.5 rounded-full">Accept</button>
+                                    <button onclick="declineRequest('${d.id}')" class="text-xs font-semibold text-brand-muted px-2">Decline</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    // outgoing
+                    const q = query(collection(db, "friendRequests"), where("from", "==", currentUser.uid), where("status", "==", "pending"));
+                    const snap = await getDocs(q);
+                    if (snap.empty) {
+                        content.innerHTML = `<p class="text-sm text-brand-muted text-center py-8">No sent requests</p>`;
+                        return;
+                    }
+                    content.innerHTML = snap.docs.map(d => {
+                        const r = d.data();
+                        const name = r.toName || 'Insider';
+                        return `
+                            <div class="flex items-center justify-between gap-3 bg-brand-light rounded-2xl p-3">
+                                <button onclick="closeFriends(); openProfile('${r.to}')" class="flex items-center gap-3 min-w-0 hover:opacity-80">
+                                    <div class="w-10 h-10 rounded-full bg-brand-orange/20 text-brand-orange font-bold text-sm flex items-center justify-center flex-shrink-0">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                                    <span class="font-semibold text-sm text-brand-dark truncate">${escapeHtml(name)}</span>
+                                </button>
+                                <button onclick="cancelRequest('${d.id}')" class="text-xs text-brand-muted font-semibold hover:underline flex-shrink-0">Cancel</button>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (e) {
+                console.error(e);
+                content.innerHTML = `<p class="text-sm text-brand-ruby text-center py-8">Could not load. Check Firestore rules for friends & friendRequests.</p>`;
+            }
+        }
+
+        function updateFriendsBadge(count) {
+            const badge = document.getElementById('friends-badge');
+            if (!badge) return;
+            if (count > 0) {
+                badge.innerText = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // Listen for incoming requests badge when logged in
+        function watchIncomingRequests() {
+            if (requestsUnsub) { requestsUnsub(); requestsUnsub = null; }
+            if (!currentUser) {
+                updateFriendsBadge(0);
+                return;
+            }
+            const q = query(collection(db, "friendRequests"), where("to", "==", currentUser.uid), where("status", "==", "pending"));
+            requestsUnsub = onSnapshot(q, (snap) => {
+                updateFriendsBadge(snap.size);
+                const ic = document.getElementById('incoming-count');
+                if (ic) ic.innerText = snap.size ? `(${snap.size})` : '';
+            }, (err) => console.error('friendRequests listener:', err));
         }
 
         window.confirmDeleteAccount = async function() {
@@ -909,6 +1439,13 @@
 
             try {
                 submitBtn.innerText = "Publishing...";
+                // Grab profile color if available
+                let authorColor = '#FF5722';
+                try {
+                    const usnap = await getDoc(doc(db, "users", currentUser.uid));
+                    if (usnap.exists() && usnap.data().color) authorColor = usnap.data().color;
+                } catch (e) {}
+
                 await addDoc(collection(db, "posts"), {
                     category,
                     title,
@@ -916,6 +1453,7 @@
                     author,
                     location: location || '',
                     userId: currentUser.uid,
+                    authorColor: (category === 'anon' || category.startsWith('anon-')) ? '' : authorColor,
                     createdAt: serverTimestamp()
                 });
                 window.closeModal();
@@ -967,8 +1505,11 @@
                                         <p class="text-brand-muted leading-relaxed whitespace-pre-wrap">${escapeHtml(post.content)}</p>
                     ${post.location ? `<div class="bg-brand-light p-3 rounded-xl text-sm font-semibold text-brand-dark">📍 ${escapeHtml(post.location)}</div>` : ''}
                     <div class="flex items-center justify-between text-sm">
-                        <div class="flex items-center gap-2 font-semibold text-brand-dark">
-                            ${!isAnonCategory(post.category) ? `<div class="w-7 h-7 rounded-full bg-brand-orange/20 text-brand-orange text-xs font-bold flex items-center justify-center">${escapeHtml((post.author || '?').charAt(0).toUpperCase())}</div>` : ''}
+                        <div class="flex items-center gap-2 font-semibold text-brand-dark ${!isAnonCategory(post.category) && post.userId ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnonCategory(post.category) && post.userId ? `onclick="openProfile('${post.userId}')"` : ''}>
+                            ${!isAnonCategory(post.category) ? (() => {
+                                const c = post.authorColor || '#FF5722';
+                                return `<div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background-color:${c}26;color:${c}">${escapeHtml((post.author || '?').charAt(0).toUpperCase())}</div>`;
+                            })() : ''}
                             <span>${isAnonCategory(post.category) ? escapeHtml(post.author) : 'By ' + escapeHtml(post.author)}</span>
                         </div>
                         ${currentUser && currentUser.uid === post.userId ? `
@@ -1020,7 +1561,7 @@
                     return `
                         <div class="bg-brand-light rounded-2xl p-4 space-y-1" id="comment-${cid}">
                             <div class="flex items-center justify-between text-xs">
-                                <span class="font-semibold text-brand-dark">${escapeHtml(c.author)}</span>
+                                <span class="font-semibold text-brand-dark ${c.userId ? 'hover:text-brand-orange cursor-pointer' : ''}" ${c.userId ? `onclick="openProfile('${c.userId}')"` : ''}>${escapeHtml(c.author)}</span>
                                 <div class="flex items-center gap-3">
                                     <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
                                     ${isOwner ? `
@@ -1203,8 +1744,11 @@
                         <p class="text-sm text-brand-muted leading-relaxed line-clamp-3">${escapeHtml(p.content)}</p>
                     </div>
                     <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
-                        <div class="flex items-center gap-2 min-w-0">
-                            ${!isAnon ? `<div class="w-6 h-6 rounded-full bg-brand-orange/20 text-brand-orange text-[10px] font-bold flex items-center justify-center flex-shrink-0">${escapeHtml((p.author || '?').charAt(0).toUpperCase())}</div>` : ''}
+                        <div class="flex items-center gap-2 min-w-0 ${!isAnon && p.userId ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && p.userId ? `onclick="event.stopPropagation(); openProfile('${p.userId}')"` : ''}>
+                            ${!isAnon ? (() => {
+                                const c = p.authorColor || '#FF5722';
+                                return `<div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold" style="background-color:${c}26;color:${c}">${escapeHtml((p.author || '?').charAt(0).toUpperCase())}</div>`;
+                            })() : ''}
                             <span class="truncate">${isAnon ? escapeHtml(p.author) : 'By ' + escapeHtml(p.author)}</span>
                         </div>
                         <div class="flex items-center gap-3 flex-shrink-0">
