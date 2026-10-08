@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E6%9F%B3%E5%B7%9E&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -48,35 +49,194 @@
         ::-webkit-scrollbar-thumb:hover { background: #B8AE9A; }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .slogan-line { display: block; line-height: 1.05; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* ============================================
+           Decorative background layers (scroll with page)
+           ============================================ */
+        .decor-root {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .decor-layer {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            will-change: opacity, transform;
+        }
+        body.theme-feed .decor-feed,
+        body.theme-articles .decor-articles,
+        body.theme-anon .decor-anon,
+        body.theme-activities .decor-activities {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s,
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+        }
+
+        /* FEED — huge 柳州 */
+        .decor-feed { color: #1A1A1A; }
+        .decor-lz {
+            position: absolute;
+            top: 8vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+            font-weight: 900;
+            font-size: clamp(180px, 46vw, 760px);
+            line-height: 0.82;
+            letter-spacing: -0.09em;
+            white-space: nowrap;
+            opacity: 0.045;
+            user-select: none;
+        }
+
+        /* ARTICLES — city skyline */
+        .decor-articles { color: #123524; }
+        .decor-skyline {
+            position: absolute;
+            top: 30vh;
+            left: 0;
+            width: 100%;
+            height: auto;
+            opacity: 0.055;
+        }
+
+        /* ANON — twinkling stars */
+        .decor-anon { color: #F8F1E0; }
+        .decor-stars { position: absolute; inset: 0; overflow: hidden; }
+        .decor-star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+            animation: starTwinkle 4s ease-in-out infinite;
+            will-change: opacity, transform;
+        }
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.12; transform: scale(0.85); }
+            50%      { opacity: 0.85; transform: scale(1.15); }
+        }
+
+        /* ACTIVITIES — people chatting */
+        .decor-activities { color: #120A8F; }
+        .decor-people {
+            position: absolute;
+            top: 32vh;
+            left: 0;
+            width: 100%;
+            height: auto;
+            opacity: 0.05;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .decor-star { animation: none; opacity: 0.5; }
+            .decor-layer { transition: opacity 0.3s ease; transform: none !important; }
+        }
     </style>
 </head>
 <body id="main-body" class="theme-feed font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white relative">
 
+    <!-- Decorative background layers -->
+    <div class="decor-root" aria-hidden="true">
+
+        <div class="decor-layer decor-feed">
+            <span class="decor-lz">柳州</span>
+        </div>
+
+        <div class="decor-layer decor-articles">
+            <svg class="decor-skyline" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+                <g fill="currentColor">
+                    <rect x="0"    y="260" width="60"  height="140"/>
+                    <rect x="60"   y="200" width="40"  height="200"/>
+                    <rect x="100"  y="300" width="80"  height="100"/>
+                    <rect x="180"  y="160" width="50"  height="240"/>
+                    <rect x="230"  y="240" width="70"  height="160"/>
+                    <rect x="300"  y="200" width="45"  height="200"/>
+                    <rect x="345"  y="280" width="90"  height="120"/>
+                    <rect x="435"  y="140" width="55"  height="260"/>
+                    <rect x="456"  y="100" width="2"   height="40"/>
+                    <rect x="490"  y="220" width="60"  height="180"/>
+                    <rect x="550"  y="300" width="100" height="100"/>
+                    <rect x="650"  y="120" width="50"  height="280"/>
+                    <rect x="671"  y="80"  width="2"   height="40"/>
+                    <rect x="700"  y="200" width="70"  height="200"/>
+                    <rect x="770"  y="160" width="45"  height="240"/>
+                    <rect x="815"  y="260" width="90"  height="140"/>
+                    <rect x="905"  y="180" width="55"  height="220"/>
+                    <rect x="960"  y="280" width="80"  height="120"/>
+                    <rect x="1040" y="140" width="60"  height="260"/>
+                    <rect x="1066" y="100" width="2"   height="40"/>
+                    <rect x="1100" y="220" width="45"  height="180"/>
+                    <rect x="1145" y="260" width="55"  height="140"/>
+                </g>
+            </svg>
+        </div>
+
+        <div class="decor-layer decor-anon">
+            <div id="decor-stars" class="decor-stars"></div>
+        </div>
+
+        <div class="decor-layer decor-activities">
+            <svg class="decor-people" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+                <g fill="currentColor">
+                    <circle cx="180" cy="200" r="30"/>
+                    <path d="M 120 400 L 120 280 Q 120 240 180 240 Q 240 240 240 280 L 240 400 Z"/>
+                    <circle cx="340" cy="220" r="26"/>
+                    <path d="M 286 400 L 286 295 Q 286 260 340 260 Q 394 260 394 295 L 394 400 Z"/>
+                    <circle cx="520" cy="190" r="34"/>
+                    <path d="M 452 400 L 452 275 Q 452 235 520 235 Q 588 235 588 275 L 588 400 Z"/>
+                    <circle cx="700" cy="230" r="24"/>
+                    <path d="M 650 400 L 650 300 Q 650 268 700 268 Q 750 268 750 300 L 750 400 Z"/>
+                    <circle cx="860" cy="210" r="30"/>
+                    <path d="M 800 400 L 800 285 Q 800 245 860 245 Q 920 245 920 285 L 920 400 Z"/>
+                    <circle cx="1040" cy="225" r="26"/>
+                    <path d="M 986 400 L 986 295 Q 986 262 1040 262 Q 1094 262 1094 295 L 1094 400 Z"/>
+                </g>
+            </svg>
+        </div>
+
+    </div>
+
+    <!-- Top Navigation Bar (mobile-friendly) -->
     <header class="sticky top-0 z-50 bg-[#F8F1E0]/90 backdrop-blur-md border-b border-brand-border transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-3 group">
-                <div id="brand-logo" class="w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all">L</div>
-                <div>
-                    <span class="font-heading font-extrabold text-xl tracking-tight text-brand-dark transition-colors">LIUZHOU.LOOP</span>
-                    <span class="block text-[10px] uppercase tracking-[0.2em] text-brand-muted font-semibold transition-colors">Expat & Youth Insider</span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 py-2.5 md:h-20 md:py-0 md:flex-nowrap">
+
+                <a href="#" class="flex items-center gap-2 sm:gap-3 group order-1 flex-shrink-0">
+                    <div id="brand-logo" class="w-9 h-9 sm:w-10 sm:h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-lg sm:text-xl shadow-sm group-hover:scale-105 transition-all">L</div>
+                    <div>
+                        <span class="font-heading font-extrabold text-base sm:text-xl tracking-tight text-brand-dark transition-colors">LIUZHOU.LOOP</span>
+                        <span class="block text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-muted font-semibold transition-colors">Expat & Youth Insider</span>
+                    </div>
+                </a>
+
+                <div class="flex items-center gap-3 order-2 md:order-3 flex-shrink-0">
+                    <div id="auth-area" class="flex items-center gap-3">
+                        <button type="button" onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
+                        <button type="button" onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
+                    </div>
                 </div>
-            </a>
-            <nav class="hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                <button type="button" onclick="switchMainTab('feed')" id="nav-feed" class="nav-tab px-5 py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all">Feed</button>
-                <button type="button" onclick="switchMainTab('articles')" id="nav-articles" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Articles</button>
-                <button type="button" onclick="switchMainTab('anon')" id="nav-anon" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Liuzhou Anon</button>
-                <button type="button" onclick="switchMainTab('activities')" id="nav-activities" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Activities</button>
-            </nav>
-            <div class="flex items-center gap-3">
-                <div id="auth-area" class="flex items-center gap-3">
-                    <button type="button" onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
-                    <button type="button" onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
-                </div>
+
+                <nav class="order-3 md:order-2 w-full md:w-auto flex items-center gap-1.5 md:gap-2 text-[10px] md:text-xs font-bold uppercase tracking-wider overflow-x-auto pb-1 md:pb-0 md:overflow-visible scrollbar-hide">
+                    <button type="button" onclick="switchMainTab('feed')" id="nav-feed" class="nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap">Feed</button>
+                    <button type="button" onclick="switchMainTab('articles')" id="nav-articles" class="nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap">Articles</button>
+                    <button type="button" onclick="switchMainTab('anon')" id="nav-anon" class="nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap">Liuzhou Anon</button>
+                    <button type="button" onclick="switchMainTab('activities')" id="nav-activities" class="nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap">Activities</button>
+                </nav>
+
             </div>
         </div>
     </header>
 
-    <div id="floating-drop-btn-container" class="fixed bottom-6 right-6 z-40 hidden">
+    <div id="floating-drop-btn-container" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 hidden">
         <button type="button" onclick="openModal()" id="floating-post-btn" class="bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20">
             <span class="text-lg leading-none">+</span> Drop a Post
         </button>
@@ -115,11 +275,11 @@
 
         <section id="panel-feed" class="main-panel space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6 transition-colors">
-                <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-                    <button type="button" onclick="filterFeed('all')" id="feed-btn-all" class="feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
-                    <button type="button" onclick="filterFeed('lifehack')" id="feed-btn-lifehack" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
-                    <button type="button" onclick="filterFeed('spot')" id="feed-btn-spot" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
-                    <button type="button" onclick="filterFeed('inquiry')" id="feed-btn-inquiry" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Inquiry</button>
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
+                    <button type="button" onclick="filterFeed('all')" id="feed-btn-all" class="feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all flex-shrink-0">All Posts</button>
+                    <button type="button" onclick="filterFeed('lifehack')" id="feed-btn-lifehack" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0">Lifehacks</button>
+                    <button type="button" onclick="filterFeed('spot')" id="feed-btn-spot" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0">Secret Spots</button>
+                    <button type="button" onclick="filterFeed('inquiry')" id="feed-btn-inquiry" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0">Inquiry</button>
                 </div>
                 <div class="text-xs text-brand-muted font-semibold transition-colors">Showing <span id="post-count">0</span> contributions</div>
             </div>
@@ -141,11 +301,11 @@
 
         <section id="panel-anon" class="main-panel hidden space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6 transition-colors">
-                <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-                    <button type="button" onclick="filterAnon('all')" id="anon-btn-all" class="anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
-                    <button type="button" onclick="filterAnon('lifehack')" id="anon-btn-lifehack" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
-                    <button type="button" onclick="filterAnon('spot')" id="anon-btn-spot" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
-                    <button type="button" onclick="filterAnon('inquiry')" id="anon-btn-inquiry" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Inquiry</button>
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
+                    <button type="button" onclick="filterAnon('all')" id="anon-btn-all" class="anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all flex-shrink-0">All Posts</button>
+                    <button type="button" onclick="filterAnon('lifehack')" id="anon-btn-lifehack" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0">Lifehacks</button>
+                    <button type="button" onclick="filterAnon('spot')" id="anon-btn-spot" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0">Secret Spots</button>
+                    <button type="button" onclick="filterAnon('inquiry')" id="anon-btn-inquiry" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0">Inquiry</button>
                 </div>
                 <button type="button" onclick="openModalCustom('anon')" class="text-xs font-bold uppercase tracking-wider bg-brand-ruby/20 text-red-400 hover:bg-brand-ruby hover:text-white px-4 py-2 rounded-full transition-colors">+ Post Anonymously</button>
             </div>
@@ -1373,35 +1533,35 @@
                 heroBadge.className = "inline-flex items-center gap-2 bg-brand-phthalo/10 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
                 heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-phthalo animate-pulse";
                 floatBtn.className = "bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
-                logo.className = "w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
+                logo.className = "w-9 h-9 sm:w-10 sm:h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-lg sm:text-xl shadow-sm group-hover:scale-105 transition-all";
             } else if (tab === 'articles') {
                 accent.className = "slogan-line text-brand-phthalo transition-colors"; accent.innerText = "Verified News.";
                 heroBadge.className = "inline-flex items-center gap-2 bg-brand-phthalo/20 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
                 heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-phthalo animate-pulse";
                 floatBtn.className = "bg-brand-phthalo hover:bg-emerald-900 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
-                logo.className = "w-10 h-10 bg-brand-phthalo rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
+                logo.className = "w-9 h-9 sm:w-10 sm:h-10 bg-brand-phthalo rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-lg sm:text-xl shadow-sm group-hover:scale-105 transition-all";
             } else if (tab === 'anon') {
                 accent.className = "slogan-line text-brand-ruby transition-colors"; accent.innerText = "Off The Record.";
                 heroBadge.className = "inline-flex items-center gap-2 bg-brand-ruby/20 text-red-400 text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
                 heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-ruby animate-pulse";
                 floatBtn.className = "bg-brand-ruby hover:bg-red-800 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
-                logo.className = "w-10 h-10 bg-brand-ruby rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
+                logo.className = "w-9 h-9 sm:w-10 sm:h-10 bg-brand-ruby rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-lg sm:text-xl shadow-sm group-hover:scale-105 transition-all";
             } else if (tab === 'activities') {
                 accent.className = "slogan-line text-brand-ultra transition-colors"; accent.innerText = "Connect Live.";
                 heroBadge.className = "inline-flex items-center gap-2 bg-brand-ultra/10 text-brand-ultra text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
                 heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-ultra animate-pulse";
                 floatBtn.className = "bg-brand-ultra hover:bg-blue-900 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
-                logo.className = "w-10 h-10 bg-brand-ultra rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
+                logo.className = "w-9 h-9 sm:w-10 sm:h-10 bg-brand-ultra rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-lg sm:text-xl shadow-sm group-hover:scale-105 transition-all";
             }
 
             document.querySelectorAll('.nav-tab').forEach(btn => {
-                btn.className = 'nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all';
+                btn.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap';
             });
             const activeNav = document.getElementById(`nav-${tab}`);
-            if (tab === 'feed' && activeNav) activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all';
-            if (tab === 'articles' && activeNav) activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-phthalo text-white shadow-sm transition-all';
-            if (tab === 'anon' && activeNav) activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-ruby text-white shadow-sm transition-all';
-            if (tab === 'activities' && activeNav) activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-ultra text-white shadow-sm transition-all';
+            if (tab === 'feed' && activeNav) activeNav.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap';
+            if (tab === 'articles' && activeNav) activeNav.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-phthalo text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap';
+            if (tab === 'anon' && activeNav) activeNav.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-ruby text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap';
+            if (tab === 'activities' && activeNav) activeNav.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-ultra text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap';
 
             const floatingBtn = document.getElementById('floating-drop-btn-container');
             if (floatingBtn) {
@@ -1414,19 +1574,19 @@
         window.filterFeed = function(cat) {
             feedFilter = cat;
             document.querySelectorAll('.feed-tab').forEach(btn => {
-                btn.className = 'feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all';
+                btn.className = 'feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0';
             });
             const activeBtn = document.getElementById(`feed-btn-${cat}`);
-            if (activeBtn) activeBtn.className = 'feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all';
+            if (activeBtn) activeBtn.className = 'feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all flex-shrink-0';
             renderPosts();
         };
         window.filterAnon = function(cat) {
             anonFilter = cat;
             document.querySelectorAll('.anon-tab').forEach(btn => {
-                btn.className = 'anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all';
+                btn.className = 'anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0';
             });
             const activeBtn = document.getElementById(`anon-btn-${cat}`);
-            if (activeBtn) activeBtn.className = 'anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all';
+            if (activeBtn) activeBtn.className = 'anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all flex-shrink-0';
             renderAnon();
         };
         window.filterActivities = function(type) {
@@ -2284,7 +2444,26 @@
             grid.innerHTML = acts.map(p => makePostCard(p)).join('');
         }
 
+        function generateStars() {
+            const container = document.getElementById('decor-stars');
+            if (!container || container.dataset.generated) return;
+            container.dataset.generated = '1';
+            for (let i = 0; i < 90; i++) {
+                const s = document.createElement('span');
+                s.className = 'decor-star';
+                const size = (Math.random() * 2 + 1).toFixed(2);
+                s.style.left = (Math.random() * 100).toFixed(2) + '%';
+                s.style.top = (Math.random() * 100).toFixed(2) + '%';
+                s.style.width = size + 'px';
+                s.style.height = size + 'px';
+                s.style.animationDelay = (-Math.random() * 4).toFixed(2) + 's';
+                s.style.animationDuration = (2.5 + Math.random() * 3.5).toFixed(2) + 's';
+                container.appendChild(s);
+            }
+        }
+
         function boot() {
+            generateStars();
             try {
                 const catSelect = document.getElementById('postCategory');
                 if (catSelect) catSelect.addEventListener('change', updateAnonNote);
