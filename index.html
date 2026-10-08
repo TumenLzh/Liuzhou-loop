@@ -83,44 +83,32 @@
     </div>
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div class="lg:col-span-8 space-y-8">
-                <div id="hero-badge" class="inline-flex items-center gap-2 bg-brand-phthalo/10 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors">
-                    <span id="hero-badge-dot" class="w-2 h-2 rounded-full bg-brand-phthalo animate-pulse"></span>
-                    Liuzhou Open Cloud Community • 2026
-                </div>
-                <h1 class="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl tracking-tight text-brand-dark pt-2 transition-colors">
-                    <span class="slogan-line">Your City.</span>
-                    <span class="slogan-line">Your Rules.</span>
-                    <span id="slogan-accent" class="slogan-line text-brand-orange transition-colors">No Bullshit.</span>
-                </h1>
-                <p class="text-lg text-brand-muted max-w-2xl font-normal leading-relaxed pt-2 transition-colors">
-                    A clean, cloud-synced platform built for the youth and expats of Liuzhou. Real-time posts, independent articles, anonymous boards, and city activities — visible to everyone instantly.
-                </p>
-                <div class="pt-6 grid grid-cols-3 gap-4 max-w-lg border-t border-brand-border transition-colors">
-                    <div>
-                        <span id="active-count" class="block font-heading font-extrabold text-3xl text-brand-dark transition-colors">0</span>
-                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Active Insiders</span>
-                    </div>
-                    <div>
-                        <span id="secrets-count" class="block font-heading font-extrabold text-3xl text-brand-mikado">0</span>
-                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Secret Spots</span>
-                    </div>
-                    <div>
-                        <span id="articles-count" class="block font-heading font-extrabold text-3xl text-brand-phthalo transition-colors">0</span>
-                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Live Articles</span>
-                    </div>
-                </div>
+        <div class="space-y-8 max-w-4xl">
+            <div id="hero-badge" class="inline-flex items-center gap-2 bg-brand-phthalo/10 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors">
+                <span id="hero-badge-dot" class="w-2 h-2 rounded-full bg-brand-phthalo animate-pulse"></span>
+                Liuzhou Open Cloud Community • 2026
             </div>
-            <div id="hero-side-card" class="lg:col-span-4 bg-brand-card p-7 rounded-3xl border border-brand-border shadow-sm space-y-5 mt-4 transition-all">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-muted transition-colors">Cloud Status</span>
-                    <span class="inline-flex items-center gap-1.5 bg-brand-phthalo/10 text-brand-phthalo text-xs font-semibold px-2.5 py-1 rounded-full">
-                        <span class="w-1.5 h-1.5 rounded-full bg-brand-phthalo animate-ping"></span> Real-time Sync
-                    </span>
+            <h1 class="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl tracking-tight text-brand-dark pt-2 transition-colors">
+                <span class="slogan-line">Your City.</span>
+                <span class="slogan-line">Your Rules.</span>
+                <span id="slogan-accent" class="slogan-line text-brand-orange transition-colors">No Bullshit.</span>
+            </h1>
+            <p class="text-lg text-brand-muted max-w-2xl font-normal leading-relaxed pt-2 transition-colors">
+                A clean, cloud-synced platform built for the youth and expats of Liuzhou. Real-time posts, independent articles, anonymous boards, and city activities — visible to everyone instantly.
+            </p>
+            <div class="pt-6 grid grid-cols-3 gap-4 max-w-lg border-t border-brand-border transition-colors">
+                <div>
+                    <span id="active-count" class="block font-heading font-extrabold text-3xl text-brand-dark transition-colors">0</span>
+                    <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Active Insiders</span>
                 </div>
-                <h3 class="font-heading font-bold text-xl text-brand-dark transition-colors">Got something to put out there?</h3>
-                <button type="button" onclick="heroActionClick()" id="hero-post-btn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block">Sign up to Post</button>
+                <div>
+                    <span id="secrets-count" class="block font-heading font-extrabold text-3xl text-brand-mikado">0</span>
+                    <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Secret Spots</span>
+                </div>
+                <div>
+                    <span id="articles-count" class="block font-heading font-extrabold text-3xl text-brand-phthalo transition-colors">0</span>
+                    <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Live Articles</span>
+                </div>
             </div>
         </div>
     </section>
@@ -251,7 +239,7 @@
         </div>
     </div>
 
-    <!-- ACTIVITY MODAL -->
+    <!-- Activity Modal -->
     <div id="activityModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[92vh] overflow-y-auto">
             <div class="flex items-center justify-between">
@@ -291,8 +279,6 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Location / Venue</label>
                     <input type="text" id="actLocation" required placeholder="e.g. Riverside Park, Starbucks near Wanda Plaza..." class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">
                 </div>
-
-                <!-- Schedule (dynamic list of date/time entries) -->
                 <div>
                     <div class="flex items-center justify-between mb-2">
                         <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted">Schedule</label>
@@ -303,12 +289,10 @@
                         <span class="text-lg leading-none">+</span> Add another time
                     </button>
                 </div>
-
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Description</label>
                     <textarea id="actContent" required rows="3" placeholder="What happens at this activity? Who is it for? Any level required?" class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra"></textarea>
                 </div>
-
                 <div class="bg-brand-ultra/5 border border-brand-ultra/20 rounded-2xl p-4">
                     <label class="flex items-start gap-3 cursor-pointer">
                         <input type="checkbox" id="actBeHost" checked class="mt-1 w-4 h-4 rounded accent-brand-ultra">
@@ -318,7 +302,6 @@
                         </div>
                     </label>
                 </div>
-
                 <div class="pt-2 flex items-center justify-end gap-3">
                     <button type="button" onclick="closeActivityModal()" class="px-6 py-3 rounded-full text-sm font-semibold text-brand-muted hover:text-brand-dark">Cancel</button>
                     <button type="submit" id="actSubmitBtn" class="bg-brand-ultra hover:bg-blue-900 text-white font-semibold px-6 py-3 rounded-full text-sm shadow-sm transition-colors">Publish Activity</button>
@@ -327,7 +310,7 @@
         </div>
     </div>
 
-    <!-- Post Detail Modal -->
+    <!-- Detail Modal -->
     <div id="detailModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-2xl w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-brand-border">
@@ -338,7 +321,12 @@
         </div>
     </div>
 
-    <div id="accountMenu" class="fixed z-50 hidden bg-brand-card border border-brand-border rounded-2xl shadow-xl py-2 min-w-[200px]">
+    <!-- Account Menu -->
+    <div id="accountMenu" class="fixed z-50 hidden bg-brand-card border border-brand-border rounded-2xl shadow-xl py-2 min-w-[220px]">
+        <div class="px-4 py-2 border-b border-brand-border">
+            <p class="text-[10px] uppercase tracking-wider text-brand-muted font-bold">Your friend code</p>
+            <p id="menu-friend-code" class="font-heading font-extrabold text-brand-dark text-sm">—</p>
+        </div>
         <button type="button" onclick="openMessages(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors flex items-center justify-between gap-3">
             <span>Messages</span>
             <span id="messages-badge" class="hidden bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
@@ -351,12 +339,23 @@
         <button type="button" onclick="handleLogout(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-ruby hover:bg-brand-light transition-colors">Log out</button>
     </div>
 
+    <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
                 <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Edit Profile</h3>
                 <button type="button" onclick="closeSettings()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
+
+            <div class="bg-brand-ultra/5 border border-brand-ultra/20 rounded-2xl p-4">
+                <p class="text-[10px] uppercase tracking-wider text-brand-muted font-bold mb-1">Your friend code</p>
+                <div class="flex items-center gap-3">
+                    <p id="settingsFriendCode" class="font-heading font-extrabold text-2xl text-brand-ultra tracking-widest">—</p>
+                    <button type="button" onclick="copyFriendCode()" class="ml-auto text-xs font-bold uppercase tracking-wider bg-brand-ultra text-white hover:bg-blue-900 px-4 py-2 rounded-full transition-colors">Copy</button>
+                </div>
+                <p class="text-[10px] text-brand-muted mt-2">Share this code with anyone so they can add you instantly — no need for them to find you in a post first.</p>
+            </div>
+
             <div class="flex flex-col items-center gap-3">
                 <div id="settings-pfp-preview" class="w-24 h-24 rounded-full flex items-center justify-center border-2 border-brand-border" style="background-color: rgba(255,87,34,0.15)">
                     <span class="text-2xl font-bold" id="settings-pfp-initial" style="color:#FF5722">?</span>
@@ -452,12 +451,25 @@
         </div>
     </div>
 
+    <!-- Friends Modal (redesigned) -->
     <div id="friendsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-md w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-brand-border">
                 <h3 class="font-heading font-extrabold text-xl text-brand-dark">Friends</h3>
                 <button type="button" onclick="closeFriends()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
+
+            <!-- Add by code -->
+            <div class="p-4 border-b border-brand-border bg-brand-ultra/5">
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-2">Add friend by code</label>
+                <div class="flex gap-2">
+                    <input type="text" id="friend-code-input" placeholder="6-digit code" maxlength="6" inputmode="numeric" autocomplete="off"
+                        class="flex-1 bg-white border border-brand-border rounded-2xl px-4 py-2.5 text-sm font-bold tracking-widest text-brand-dark focus:outline-none focus:border-brand-ultra">
+                    <button type="button" onclick="addFriendByCode()" class="bg-brand-ultra hover:bg-blue-900 text-white text-sm font-bold px-4 py-2.5 rounded-2xl transition-colors">Add</button>
+                </div>
+                <p id="friend-code-status" class="text-xs mt-2 hidden"></p>
+            </div>
+
             <div class="flex border-b border-brand-border px-4 gap-1 pt-2">
                 <button type="button" onclick="switchFriendsTab('list')" id="ftab-list" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all">Friends</button>
                 <button type="button" onclick="switchFriendsTab('incoming')" id="ftab-incoming" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all">Requests <span id="incoming-count" class="text-brand-orange"></span></button>
@@ -469,6 +481,7 @@
         </div>
     </div>
 
+    <!-- Messages Modal (stub) -->
     <div id="messagesModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-md w-full shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col" style="height:min(640px,90vh)">
             <div id="dm-list-view" class="flex flex-col h-full">
@@ -477,26 +490,13 @@
                     <button type="button" onclick="closeMessages()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
                 </div>
                 <div id="dm-chat-list" class="overflow-y-auto flex-1 p-3 space-y-1">
-                    <p class="text-sm text-brand-muted text-center py-10">Loading...</p>
+                    <p class="text-sm text-brand-muted text-center py-10">Pick a friend from the Friends list to start chatting.</p>
                 </div>
-                <p class="text-[10px] text-brand-muted text-center px-4 pb-3">You can only message friends. Add friends from their profiles.</p>
-            </div>
-            <div id="dm-thread-view" class="hidden flex flex-col h-full">
-                <div class="flex items-center gap-3 p-4 border-b border-brand-border">
-                    <button type="button" onclick="showDmList()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark text-lg">&larr;</button>
-                    <div id="dm-thread-header" class="flex-1 min-w-0">
-                        <p class="font-heading font-bold text-brand-dark truncate" id="dm-thread-name">Chat</p>
-                    </div>
-                </div>
-                <div id="dm-messages" class="overflow-y-auto flex-1 p-4 space-y-3"></div>
-                <form id="dm-send-form" onsubmit="sendDm(event)" class="p-3 border-t border-brand-border flex gap-2">
-                    <input type="text" id="dm-input" placeholder="Type a message..." class="flex-1 bg-brand-light border border-brand-border rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-brand-orange" autocomplete="off">
-                    <button type="submit" class="bg-brand-orange text-white rounded-full px-4 py-2.5 text-sm font-semibold">Send</button>
-                </form>
             </div>
         </div>
     </div>
 
+    <!-- Profile Modal -->
     <div id="profileModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
@@ -536,7 +536,16 @@
         let activityFilter = 'all';
         let currentDetailPostId = null;
         let currentDmPartner = null;
-        let editingActivityId = null;  // NEW: track which activity is being edited
+        let editingActivityId = null;
+
+        // Friends system state
+        let myFriends = [];
+        let incomingRequests = [];
+        let outgoingRequests = [];
+        let currentFriendsTab = 'list';
+        let friendsListenerUnsub = null;
+        let incomingListenerUnsub = null;
+        let outgoingListenerUnsub = null;
 
         function escapeHtml(str) {
             if (!str) return '';
@@ -555,28 +564,24 @@
             return d.toLocaleDateString();
         }
 
-        // NEW: Normalize activity schedules — handles both old (single scheduleData) and new (schedules array)
         function getActivitySchedules(post) {
-            if (post.schedules && Array.isArray(post.schedules) && post.schedules.length > 0) {
-                return post.schedules;
-            }
-            if (post.scheduleData) {
-                return [{ ...post.scheduleData, type: post.eventType || post.scheduleData.type || 'weekly' }];
-            }
+            if (post.schedules && Array.isArray(post.schedules) && post.schedules.length > 0) return post.schedules;
+            if (post.scheduleData) return [{ ...post.scheduleData, type: post.eventType || post.scheduleData.type || 'weekly' }];
             return [];
         }
 
-        // NEW: Format an array of schedules into a human-readable string
+        function scheduleEntryDisplay(s) {
+            const monthNames = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+            if (s.type === 'one-time') return (s.date || '') + (s.time ? ' at ' + s.time : '');
+            if (s.type === 'weekly') return 'Every ' + (s.weekday || '') + (s.time ? ' at ' + s.time : '');
+            if (s.type === 'monthly') return 'Every month on the ' + (s.monthDay || '') + (s.time ? ' at ' + s.time : '');
+            if (s.type === 'yearly') return 'Every year on ' + (monthNames[s.month] || '') + ' ' + (s.day || '') + (s.time ? ' at ' + s.time : '');
+            return '';
+        }
+
         function formatScheduleString(schedules) {
             if (!schedules || schedules.length === 0) return '';
-            const monthNames = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
-            return schedules.map(s => {
-                if (s.type === 'one-time') return (s.date || '') + (s.time ? ' at ' + s.time : '');
-                if (s.type === 'weekly') return 'Every ' + (s.weekday || '') + (s.time ? ' at ' + s.time : '');
-                if (s.type === 'monthly') return 'Every month on the ' + (s.monthDay || '') + (s.time ? ' at ' + s.time : '');
-                if (s.type === 'yearly') return 'Every year on ' + (monthNames[s.month] || '') + ' ' + (s.day || '') + (s.time ? ' at ' + s.time : '');
-                return '';
-            }).filter(Boolean).join(' · ');
+            return schedules.map(scheduleEntryDisplay).filter(Boolean).join(' · ');
         }
 
         function getPostAuthorInfo(post) {
@@ -591,10 +596,42 @@
             return { name: post.author || 'User', color: post.authorColor || '#FF5722' };
         }
 
+        // ---------- Friend code generation ----------
+        async function generateUniqueFriendCode() {
+            for (let attempt = 0; attempt < 20; attempt++) {
+                const code = String(Math.floor(100000 + Math.random() * 900000));
+                try {
+                    const q = query(collection(db, "users"), where("friendCode", "==", code));
+                    const snap = await getDocs(q);
+                    if (snap.empty) return code;
+                } catch (e) {
+                    console.warn('Friend code uniqueness check failed:', e);
+                }
+            }
+            // Fallback: derived from timestamp
+            return String(Date.now()).slice(-6);
+        }
+
+        async function ensureFriendCode(uid) {
+            try {
+                const snap = await getDoc(doc(db, "users", uid));
+                if (!snap.exists()) return null;
+                const data = snap.data();
+                if (data.friendCode) return data.friendCode;
+                const code = await generateUniqueFriendCode();
+                await setDoc(doc(db, "users", uid), { friendCode: code }, { merge: true });
+                return code;
+            } catch (e) {
+                console.error('ensureFriendCode failed:', e);
+                return null;
+            }
+        }
+
+        // ---------- Auth UI ----------
         function updateAuthUI() {
             const area = document.getElementById('auth-area');
             const floating = document.getElementById('floating-drop-btn-container');
-            const heroBtn = document.getElementById('hero-post-btn');
+            const menuCode = document.getElementById('menu-friend-code');
             if (!area) return;
             if (currentUser) {
                 const name = currentUserProfile?.displayName || currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'Insider');
@@ -608,21 +645,16 @@
                     </button>
                 `;
                 if (floating && currentMainTab !== 'activities') floating.classList.remove('hidden');
-                if (heroBtn) heroBtn.innerText = 'Drop a Post';
+                if (menuCode) menuCode.textContent = '#' + (currentUserProfile?.friendCode || '—');
             } else {
                 area.innerHTML = `
                     <button type="button" onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
                     <button type="button" onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
                 `;
                 if (floating) floating.classList.add('hidden');
-                if (heroBtn) heroBtn.innerText = 'Sign up to Post';
+                if (menuCode) menuCode.textContent = '—';
             }
         }
-
-        window.heroActionClick = function() {
-            if (currentUser) openModal();
-            else openAuthModal('signup');
-        };
 
         let authMode = 'signup';
         window.openAuthModal = function(mode) {
@@ -664,7 +696,14 @@
                 if (authMode === 'signup') {
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(cred.user, { displayName: displayName || email.split('@')[0] });
-                    const newProfile = { displayName: displayName || email.split('@')[0], email, color: '#FF5722', createdAt: serverTimestamp() };
+                    const friendCode = await generateUniqueFriendCode();
+                    const newProfile = {
+                        displayName: displayName || email.split('@')[0],
+                        email,
+                        color: '#FF5722',
+                        friendCode,
+                        createdAt: serverTimestamp()
+                    };
                     await setDoc(doc(db, "users", cred.user.uid), newProfile);
                     currentUserProfile = newProfile;
                 } else {
@@ -685,6 +724,11 @@
                 try {
                     const snap = await getDoc(doc(db, "users", user.uid));
                     currentUserProfile = snap.exists() ? snap.data() : { displayName: user.displayName, color: '#FF5722' };
+                    // Ensure friend code exists for this account
+                    if (!currentUserProfile.friendCode) {
+                        const code = await ensureFriendCode(user.uid);
+                        if (code) currentUserProfile.friendCode = code;
+                    }
                 } catch (e) {
                     currentUserProfile = { displayName: user.displayName, color: '#FF5722' };
                 }
@@ -692,9 +736,345 @@
                 currentUserProfile = null;
             }
             updateAuthUI();
+            setupFriendsListeners();
             renderAll();
         });
 
+        // ---------- Friends listeners ----------
+        function setupFriendsListeners() {
+            if (friendsListenerUnsub) { friendsListenerUnsub(); friendsListenerUnsub = null; }
+            if (incomingListenerUnsub) { incomingListenerUnsub(); incomingListenerUnsub = null; }
+            if (outgoingListenerUnsub) { outgoingListenerUnsub(); outgoingListenerUnsub = null; }
+
+            myFriends = [];
+            incomingRequests = [];
+            outgoingRequests = [];
+
+            if (!currentUser) {
+                renderFriendsContent();
+                updateFriendsBadges();
+                return;
+            }
+            const uid = currentUser.uid;
+
+            friendsListenerUnsub = onSnapshot(
+                query(collection(db, "friends"), where("users", "array-contains", uid)),
+                (snap) => {
+                    myFriends = [];
+                    snap.forEach(d => {
+                        const data = d.data();
+                        if (Array.isArray(data.users)) {
+                            const friendUid = data.users.find(u => u !== uid);
+                            if (friendUid) myFriends.push({ friendshipId: d.id, uid: friendUid });
+                        }
+                    });
+                    renderFriendsContent();
+                    updateFriendsBadges();
+                },
+                (error) => { console.warn('Friends listener error:', error); }
+            );
+
+            incomingListenerUnsub = onSnapshot(
+                query(collection(db, "friendRequests"), where("to", "==", uid)),
+                (snap) => {
+                    incomingRequests = [];
+                    snap.forEach(d => {
+                        const data = d.data();
+                        if (data.status === 'pending') incomingRequests.push({ id: d.id, ...data });
+                    });
+                    renderFriendsContent();
+                    updateFriendsBadges();
+                },
+                (error) => { console.warn('Incoming requests listener error:', error); }
+            );
+
+            outgoingListenerUnsub = onSnapshot(
+                query(collection(db, "friendRequests"), where("from", "==", uid)),
+                (snap) => {
+                    outgoingRequests = [];
+                    snap.forEach(d => {
+                        const data = d.data();
+                        if (data.status === 'pending') outgoingRequests.push({ id: d.id, ...data });
+                    });
+                    renderFriendsContent();
+                },
+                (error) => { console.warn('Outgoing requests listener error:', error); }
+            );
+        }
+
+        function updateFriendsBadges() {
+            const badge = document.getElementById('friends-badge');
+            if (!badge) return;
+            const count = incomingRequests.length;
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // ---------- Friends modal ----------
+        window.openFriends = function() {
+            if (!currentUser) { openAuthModal('signup'); return; }
+            document.getElementById('friendsModal').classList.remove('hidden');
+            document.getElementById('friendsModal').classList.add('flex');
+            document.getElementById('friend-code-status').classList.add('hidden');
+            document.getElementById('friend-code-input').value = '';
+            switchFriendsTab('list');
+        };
+        window.closeFriends = function() {
+            document.getElementById('friendsModal').classList.add('hidden');
+            document.getElementById('friendsModal').classList.remove('flex');
+        };
+
+        window.switchFriendsTab = function(tab) {
+            currentFriendsTab = tab;
+            ['list', 'incoming', 'outgoing'].forEach(t => {
+                const btn = document.getElementById(`ftab-${t}`);
+                if (!btn) return;
+                btn.className = (t === tab)
+                    ? 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all'
+                    : 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all';
+            });
+            renderFriendsContent();
+        };
+
+        function renderFriendsContent() {
+            const content = document.getElementById('friends-content');
+            if (!content) return;
+
+            const countEl = document.getElementById('incoming-count');
+            if (countEl) countEl.textContent = incomingRequests.length > 0 ? `(${incomingRequests.length})` : '';
+
+            if (!currentUser) {
+                content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">Log in to see friends.</p>';
+                return;
+            }
+
+            if (currentFriendsTab === 'list') {
+                if (myFriends.length === 0) {
+                    content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No friends yet. Add someone using their 6-digit friend code above!</p>';
+                    return;
+                }
+                content.innerHTML = myFriends.map(f => {
+                    const u = usersMap[f.uid] || {};
+                    const name = u.displayName || 'User';
+                    const color = u.color || '#FF5722';
+                    return `
+                        <div class="flex items-center justify-between gap-2 p-2 rounded-2xl hover:bg-brand-light transition-colors">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
+                                    ${u.friendCode ? `<p class="text-[10px] text-brand-muted font-bold tracking-wider">#${escapeHtml(u.friendCode)}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="openProfile('${f.uid}')" class="text-xs font-bold text-brand-orange hover:underline">View</button>
+                                <button type="button" onclick="removeFriend('${f.friendshipId}')" class="text-xs font-bold text-brand-ruby hover:underline">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else if (currentFriendsTab === 'incoming') {
+                if (incomingRequests.length === 0) {
+                    content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No incoming requests.</p>';
+                    return;
+                }
+                content.innerHTML = incomingRequests.map(r => {
+                    const u = usersMap[r.from] || {};
+                    const name = u.displayName || r.fromName || 'User';
+                    const color = u.color || r.fromColor || '#FF5722';
+                    const code = u.friendCode ? `#${u.friendCode}` : '';
+                    return `
+                        <div class="bg-brand-light rounded-2xl p-3 space-y-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
+                                    ${code ? `<p class="text-[10px] text-brand-muted font-bold tracking-wider">${escapeHtml(code)}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="acceptFriendRequest('${r.id}', '${r.from}')" class="flex-1 bg-brand-orange hover:bg-orange-600 text-white text-xs font-bold py-2 rounded-full transition-colors">Accept</button>
+                                <button type="button" onclick="declineFriendRequest('${r.id}')" class="flex-1 border border-brand-border text-brand-muted text-xs font-bold py-2 rounded-full hover:bg-white transition-colors">Decline</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else if (currentFriendsTab === 'outgoing') {
+                if (outgoingRequests.length === 0) {
+                    content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No pending outgoing requests.</p>';
+                    return;
+                }
+                content.innerHTML = outgoingRequests.map(r => {
+                    const u = usersMap[r.to] || {};
+                    const name = u.displayName || r.toName || 'User';
+                    const color = u.color || r.toColor || '#FF5722';
+                    const code = u.friendCode ? `#${u.friendCode}` : '';
+                    return `
+                        <div class="flex items-center justify-between gap-2 p-2 rounded-2xl hover:bg-brand-light transition-colors">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
+                                    ${code ? `<p class="text-[10px] text-brand-muted font-bold tracking-wider">${code} · Pending</p>` : '<p class="text-[10px] text-brand-muted">Pending</p>'}
+                                </div>
+                            </div>
+                            <button type="button" onclick="cancelFriendRequest('${r.id}')" class="text-xs font-bold text-brand-ruby hover:underline">Cancel</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Add friend by code
+        window.addFriendByCode = async function() {
+            const input = document.getElementById('friend-code-input');
+            const status = document.getElementById('friend-code-status');
+            const code = input.value.trim();
+            status.classList.add('hidden');
+            if (!code) return;
+            if (!currentUser) { openAuthModal('signup'); return; }
+
+            status.classList.remove('hidden');
+            status.className = 'text-xs mt-2 text-brand-muted';
+            status.textContent = 'Searching...';
+
+            try {
+                const q = query(collection(db, "users"), where("friendCode", "==", code));
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    status.className = 'text-xs mt-2 text-brand-ruby';
+                    status.textContent = 'No user found with that code.';
+                    return;
+                }
+                const targetDoc = snap.docs[0];
+                const targetUid = targetDoc.id;
+                if (targetUid === currentUser.uid) {
+                    status.className = 'text-xs mt-2 text-brand-ruby';
+                    status.textContent = "That's your own code!";
+                    return;
+                }
+                const result = await createFriendRequest(targetUid, targetDoc.data());
+                if (result.ok) {
+                    status.className = 'text-xs mt-2 text-brand-phthalo font-semibold';
+                    status.textContent = result.message;
+                    input.value = '';
+                } else {
+                    status.className = 'text-xs mt-2 text-brand-ruby';
+                    status.textContent = result.message;
+                }
+            } catch (e) {
+                console.error(e);
+                status.className = 'text-xs mt-2 text-brand-ruby';
+                status.textContent = 'Error: ' + (e.message || 'unknown');
+            }
+        };
+
+        // Core: create a friend request
+        async function createFriendRequest(targetUid, targetData) {
+            if (!currentUser) return { ok: false, message: 'Log in first.' };
+            if (targetUid === currentUser.uid) return { ok: false, message: "You can't add yourself." };
+
+            // Already friends?
+            if (myFriends.some(f => f.uid === targetUid)) {
+                return { ok: false, message: 'You are already friends.' };
+            }
+            // Outgoing request already exists?
+            if (outgoingRequests.some(r => r.to === targetUid)) {
+                return { ok: false, message: 'Request already sent — waiting for them to accept.' };
+            }
+            // Incoming request already exists? Auto-accept it!
+            const incoming = incomingRequests.find(r => r.from === targetUid);
+            if (incoming) {
+                await acceptFriendRequest(incoming.id, targetUid);
+                return { ok: true, message: 'You had a pending request from them — accepted!' };
+            }
+
+            try {
+                await addDoc(collection(db, "friendRequests"), {
+                    from: currentUser.uid,
+                    to: targetUid,
+                    fromName: currentUserProfile?.displayName || currentUser.displayName || 'User',
+                    fromColor: currentUserProfile?.color || '#FF5722',
+                    toName: targetData?.displayName || 'User',
+                    toColor: targetData?.color || '#FF5722',
+                    status: 'pending',
+                    createdAt: serverTimestamp()
+                });
+                return { ok: true, message: 'Request sent! They\'ll see it in their Requests tab.' };
+            } catch (e) {
+                console.error(e);
+                return { ok: false, message: 'Could not send request: ' + (e.message || 'unknown error') };
+            }
+        }
+
+        // Public sendFriendRequest (used by profile modal button)
+        window.sendFriendRequest = async function(targetUid) {
+            const targetSnap = await getDoc(doc(db, "users", targetUid));
+            const targetData = targetSnap.exists() ? targetSnap.data() : {};
+            const result = await createFriendRequest(targetUid, targetData);
+            if (!result.ok) {
+                alert(result.message);
+            } else {
+                // Refresh profile modal if open
+                if (!document.getElementById('profileModal').classList.contains('hidden')) {
+                    openProfile(targetUid);
+                }
+            }
+        };
+
+        window.acceptFriendRequest = async function(requestId, fromUid) {
+            if (!currentUser) return;
+            try {
+                // Create friendship doc
+                const users = [currentUser.uid, fromUid].sort();
+                await addDoc(collection(db, "friends"), {
+                    users,
+                    createdAt: serverTimestamp()
+                });
+                // Update request status
+                await updateDoc(doc(db, "friendRequests", requestId), { status: 'accepted', respondedAt: serverTimestamp() });
+            } catch (e) {
+                console.error(e);
+                alert('Could not accept request: ' + (e.message || 'unknown error'));
+            }
+        };
+
+        window.declineFriendRequest = async function(requestId) {
+            if (!currentUser) return;
+            try {
+                await updateDoc(doc(db, "friendRequests", requestId), { status: 'declined', respondedAt: serverTimestamp() });
+            } catch (e) {
+                console.error(e);
+                alert('Could not decline request.');
+            }
+        };
+
+        window.cancelFriendRequest = async function(requestId) {
+            if (!currentUser) return;
+            if (!confirm('Cancel this friend request?')) return;
+            try {
+                await deleteDoc(doc(db, "friendRequests", requestId));
+            } catch (e) {
+                console.error(e);
+                alert('Could not cancel request.');
+            }
+        };
+
+        window.removeFriend = async function(friendshipId) {
+            if (!confirm('Remove this friend?')) return;
+            try {
+                await deleteDoc(doc(db, "friends", friendshipId));
+            } catch (e) {
+                console.error(e);
+                alert('Could not remove friend.');
+            }
+        };
+
+        // ---------- Account menu ----------
         window.toggleAccountMenu = function(e) {
             e.stopPropagation();
             const menu = document.getElementById('accountMenu');
@@ -712,6 +1092,7 @@
         };
         document.addEventListener('click', () => closeAccountMenu());
 
+        // ---------- Settings ----------
         window.openSettings = async function() {
             if (!currentUser) return;
             document.getElementById('settingsModal').classList.remove('hidden');
@@ -730,6 +1111,7 @@
             document.getElementById('settingsLikes').value = data.likes || '';
             document.getElementById('settingsDislikes').value = data.dislikes || '';
             document.getElementById('settingsWechat').value = data.wechat || '';
+            document.getElementById('settingsFriendCode').textContent = data.friendCode ? '#' + data.friendCode : '—';
             const color = data.color || '#FF5722';
             document.getElementById('settingsColor').value = color;
             pickColor(color);
@@ -737,6 +1119,15 @@
         window.closeSettings = function() {
             document.getElementById('settingsModal').classList.add('hidden');
             document.getElementById('settingsModal').classList.remove('flex');
+        };
+        window.copyFriendCode = function() {
+            const code = (currentUserProfile?.friendCode || '').toString();
+            if (!code) return;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Friend code copied: #' + code);
+            }).catch(() => {
+                alert('Your friend code is #' + code);
+            });
         };
         window.pickColor = function(c) {
             document.getElementById('settingsColor').value = c;
@@ -792,6 +1183,7 @@
             }
         };
 
+        // ---------- Profile view ----------
         window.openProfile = async function(uid) {
             if (!uid) return;
             document.getElementById('profileModal').classList.remove('hidden');
@@ -807,10 +1199,13 @@
                 const u = snap.data();
                 const color = u.color || '#FF5722';
                 const name = u.displayName || 'Insider';
+                const isMe = currentUser && currentUser.uid === uid;
+
                 let html = `
                     <div class="flex flex-col items-center gap-3">
                         <div class="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
                         <h4 class="font-heading font-extrabold text-xl text-brand-dark">${escapeHtml(name)}</h4>
+                        ${u.friendCode ? `<button type="button" onclick="copyProfileFriendCode('${escapeHtml(u.friendCode)}')" class="text-xs font-bold tracking-wider text-brand-ultra bg-brand-ultra/10 px-3 py-1 rounded-full hover:bg-brand-ultra/20 transition-colors">#${escapeHtml(u.friendCode)} · Tap to copy</button>` : ''}
                     </div>
                     <div class="space-y-2 text-sm">
                 `;
@@ -824,66 +1219,56 @@
                 if (u.dislikes) html += `<p><span class="font-semibold">Dislikes:</span> ${escapeHtml(u.dislikes)}</p>`;
                 if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
                 html += `</div>`;
-                if (currentUser && currentUser.uid !== uid) {
-                    html += `<button type="button" onclick="sendFriendRequest('${uid}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Add Friend</button>`;
-                    html += `<button type="button" onclick="startDm('${uid}', '${escapeHtml(name)}')" class="w-full border border-brand-border text-brand-dark font-semibold py-2.5 rounded-full text-sm mt-2">Message</button>`;
+
+                if (!isMe) {
+                    const isFriend = myFriends.some(f => f.uid === uid);
+                    const hasOutgoing = outgoingRequests.some(r => r.to === uid);
+                    const incoming = incomingRequests.find(r => r.from === uid);
+
+                    if (isFriend) {
+                        html += `<button type="button" onclick="startDm('${uid}', '${escapeHtml(name)}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Message</button>`;
+                        html += `<p class="text-xs text-center text-brand-phthalo font-bold uppercase tracking-wider">✓ Friends</p>`;
+                    } else if (hasOutgoing) {
+                        html += `<button type="button" disabled class="w-full border border-brand-border text-brand-muted font-semibold py-2.5 rounded-full text-sm cursor-not-allowed">Request Pending…</button>`;
+                    } else if (incoming) {
+                        html += `<button type="button" onclick="acceptFriendRequest('${incoming.id}', '${uid}'); closeProfile();" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Accept Friend Request</button>`;
+                    } else {
+                        html += `<button type="button" onclick="sendFriendRequest('${uid}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Add Friend</button>`;
+                    }
+                } else {
+                    html += `<button type="button" onclick="closeProfile(); openSettings();" class="w-full border border-brand-border text-brand-dark font-semibold py-2.5 rounded-full text-sm">Edit Profile</button>`;
                 }
                 content.innerHTML = html;
             } catch (err) {
                 content.innerHTML = '<p class="text-sm text-brand-ruby">Could not load profile.</p>';
             }
         };
+        window.copyProfileFriendCode = function(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Friend code copied: #' + code);
+            }).catch(() => {
+                alert('Friend code: #' + code);
+            });
+        };
         window.closeProfile = function() {
             document.getElementById('profileModal').classList.add('hidden');
             document.getElementById('profileModal').classList.remove('flex');
         };
 
-        window.openFriends = function() {
-            document.getElementById('friendsModal').classList.remove('hidden');
-            document.getElementById('friendsModal').classList.add('flex');
-            window.switchFriendsTab('list');
-        };
-        window.closeFriends = function() {
-            document.getElementById('friendsModal').classList.add('hidden');
-            document.getElementById('friendsModal').classList.remove('flex');
-        };
-        window.switchFriendsTab = function(tab) {
-            const tabs = ['list', 'incoming', 'outgoing'];
-            tabs.forEach(t => {
-                const btn = document.getElementById(`ftab-${t}`);
-                if (btn) {
-                    btn.className = (t === tab)
-                        ? 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all'
-                        : 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all';
-                }
-            });
-            const content = document.getElementById('friends-content');
-            if (tab === 'list') content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">Friends system – keep your original implementation or expand later.</p>';
-            else if (tab === 'incoming') content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No incoming friend requests.</p>';
-            else content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No sent friend requests.</p>';
-        };
-        window.sendFriendRequest = async function(uid) {
-            alert('Friend request sent (implement full logic from original if needed).');
-        };
-
+        // ---------- Messages (stub) ----------
         window.openMessages = function() {
             document.getElementById('messagesModal').classList.remove('hidden');
             document.getElementById('messagesModal').classList.add('flex');
-            document.getElementById('dm-list-view').classList.remove('hidden');
-            document.getElementById('dm-thread-view').classList.add('hidden');
-            document.getElementById('dm-chat-list').innerHTML = '<p class="text-sm text-brand-muted text-center py-10">Messages – keep your original DM implementation.</p>';
         };
         window.closeMessages = function() {
             document.getElementById('messagesModal').classList.add('hidden');
             document.getElementById('messagesModal').classList.remove('flex');
         };
-        window.showDmList = function() {
-            document.getElementById('dm-list-view').classList.remove('hidden');
-            document.getElementById('dm-thread-view').classList.add('hidden');
-        };
+        window.showDmList = function() {};
         window.startDm = function(uid, name) { closeProfile(); openMessages(); };
         window.sendDm = async function(e) { e.preventDefault(); };
 
+        // ---------- Main Tab Switcher ----------
         window.switchMainTab = function(tab) {
             currentMainTab = tab;
             document.querySelectorAll('.main-panel').forEach(p => p.classList.add('hidden'));
@@ -896,42 +1281,31 @@
             const accent = document.getElementById('slogan-accent');
             const heroBadge = document.getElementById('hero-badge');
             const heroBadgeDot = document.getElementById('hero-badge-dot');
-            const heroBtn = document.getElementById('hero-post-btn');
             const floatBtn = document.getElementById('floating-post-btn');
             const logo = document.getElementById('brand-logo');
-            const heroSideCard = document.getElementById('hero-side-card');
-
-            if (heroSideCard) {
-                if (tab === 'activities') heroSideCard.classList.add('hidden');
-                else heroSideCard.classList.remove('hidden');
-            }
 
             if (tab === 'feed') {
                 accent.className = "slogan-line text-brand-orange transition-colors"; accent.innerText = "No Bullshit.";
                 heroBadge.className = "inline-flex items-center gap-2 bg-brand-phthalo/10 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
                 heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-phthalo animate-pulse";
-                heroBtn.className = "w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block";
                 floatBtn.className = "bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
                 logo.className = "w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
             } else if (tab === 'articles') {
                 accent.className = "slogan-line text-brand-phthalo transition-colors"; accent.innerText = "Verified News.";
                 heroBadge.className = "inline-flex items-center gap-2 bg-brand-phthalo/20 text-brand-phthalo text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
                 heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-phthalo animate-pulse";
-                heroBtn.className = "w-full bg-brand-phthalo hover:bg-emerald-900 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block";
                 floatBtn.className = "bg-brand-phthalo hover:bg-emerald-900 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
                 logo.className = "w-10 h-10 bg-brand-phthalo rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
             } else if (tab === 'anon') {
                 accent.className = "slogan-line text-brand-ruby transition-colors"; accent.innerText = "Off The Record.";
                 heroBadge.className = "inline-flex items-center gap-2 bg-brand-ruby/20 text-red-400 text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
                 heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-ruby animate-pulse";
-                heroBtn.className = "w-full bg-brand-ruby hover:bg-red-800 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block";
                 floatBtn.className = "bg-brand-ruby hover:bg-red-800 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
                 logo.className = "w-10 h-10 bg-brand-ruby rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
             } else if (tab === 'activities') {
                 accent.className = "slogan-line text-brand-ultra transition-colors"; accent.innerText = "Connect Live.";
                 heroBadge.className = "inline-flex items-center gap-2 bg-brand-ultra/10 text-brand-ultra text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full transition-colors";
                 heroBadgeDot.className = "w-2 h-2 rounded-full bg-brand-ultra animate-pulse";
-                heroBtn.className = "w-full bg-brand-ultra hover:bg-blue-900 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block";
                 floatBtn.className = "bg-brand-ultra hover:bg-blue-900 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20";
                 logo.className = "w-10 h-10 bg-brand-ultra rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-sm group-hover:scale-105 transition-all";
             }
@@ -1076,16 +1450,11 @@
             }
         };
 
-        // ============================================================
-        //  ACTIVITY: MULTIPLE SCHEDULES + EDITING
-        // ============================================================
-
         function getCurrentEventType() {
             const checked = document.querySelector('input[name="eventType"]:checked');
             return checked ? checked.value : 'one-time';
         }
 
-        // Build HTML for a single schedule entry based on event type
         function scheduleEntryHtml(type, data, index) {
             data = data || {};
             let fields = '';
@@ -1182,20 +1551,17 @@
             }
             const entry = btn.closest('.schedule-entry');
             if (entry) entry.remove();
-            // Re-index labels
             Array.from(container.children).forEach((child, i) => {
                 const label = child.querySelector('span');
                 if (label) label.textContent = `Time slot ${i + 1}`;
             });
         };
 
-        // When event type changes, reset schedule entries to a single blank one
         window.toggleActivityFields = function() {
             const type = getCurrentEventType();
             renderScheduleEntries(type, [{}]);
         };
 
-        // Collect all schedule entries into an array
         function collectSchedules() {
             const type = getCurrentEventType();
             const entries = document.querySelectorAll('#schedule-list .schedule-entry');
@@ -1224,7 +1590,6 @@
             return schedules;
         }
 
-        // Open modal — optionally pass an existing post for editing
         window.openActivityModal = function(existingPost) {
             if (!currentUser) { openAuthModal('signup'); return; }
             const modal = document.getElementById('activityModal');
@@ -1234,20 +1599,16 @@
             document.getElementById('activityModalTitle').innerText = existingPost ? 'Edit City Activity' : 'Host a City Activity';
             document.getElementById('actSubmitBtn').innerText = existingPost ? 'Save Changes' : 'Publish Activity';
 
-            // Reset form
             document.getElementById('activityForm').reset();
 
             if (existingPost) {
-                // Prefill with existing data
                 const type = existingPost.eventType || 'one-time';
                 const radio = document.querySelector(`input[name="eventType"][value="${type}"]`);
                 if (radio) radio.checked = true;
-
                 document.getElementById('actTitle').value = existingPost.title || '';
                 document.getElementById('actLocation').value = existingPost.location || '';
                 document.getElementById('actContent').value = existingPost.content || '';
                 document.getElementById('actBeHost').checked = existingPost.isHost !== false;
-
                 renderScheduleEntries(type, getActivitySchedules(existingPost));
             } else {
                 const oneTime = document.querySelector('input[name="eventType"][value="one-time"]');
@@ -1268,7 +1629,6 @@
             editingActivityId = null;
         };
 
-        // NEW: Edit an existing activity
         window.editActivity = function(postId) {
             const post = posts.find(p => p.id === postId);
             if (!post) return;
@@ -1314,8 +1674,8 @@
                     title,
                     content,
                     location,
-                    schedules,                          // NEW: array of schedules
-                    schedule: scheduleString,           // human-readable string for display
+                    schedules,
+                    schedule: scheduleString,
                     author: authorName,
                     userId: currentUser.uid,
                     authorColor: beHost ? authorColor : '',
@@ -1323,17 +1683,9 @@
                 };
 
                 if (editingActivityId) {
-                    // Update existing document
-                    await updateDoc(doc(db, "posts", editingActivityId), {
-                        ...payload,
-                        updatedAt: serverTimestamp()
-                    });
+                    await updateDoc(doc(db, "posts", editingActivityId), { ...payload, updatedAt: serverTimestamp() });
                 } else {
-                    // Create new document
-                    await addDoc(collection(db, "posts"), {
-                        ...payload,
-                        createdAt: serverTimestamp()
-                    });
+                    await addDoc(collection(db, "posts"), { ...payload, createdAt: serverTimestamp() });
                 }
                 closeActivityModal();
                 if (currentMainTab !== 'activities') switchMainTab('activities');
@@ -1346,7 +1698,6 @@
             }
         };
 
-        // ---------- Delete / Detail / Comments ----------
         window.deletePost = async function(postId, postUserId) {
             if (!currentUser || currentUser.uid !== postUserId) {
                 alert("You can only delete your own posts.");
@@ -1390,7 +1741,7 @@
                     <h2 class="font-heading font-extrabold text-2xl text-brand-dark">${escapeHtml(post.title)}</h2>
                     ${isActivity && schedules.length > 0 ? `
                         <div class="space-y-2">
-                            ${schedules.map((s, i) => `
+                            ${schedules.map(s => `
                                 <div class="bg-brand-ultra/10 text-brand-ultra text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">
                                     🗓 ${escapeHtml(scheduleEntryDisplay(s))}
                                 </div>
@@ -1438,16 +1789,6 @@
             document.getElementById('detailModal').classList.add('flex');
             loadComments(postId);
         };
-
-        // NEW: Display a single schedule entry as a short string
-        function scheduleEntryDisplay(s) {
-            const monthNames = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
-            if (s.type === 'one-time') return (s.date || '') + (s.time ? ' at ' + s.time : '');
-            if (s.type === 'weekly') return 'Every ' + (s.weekday || '') + (s.time ? ' at ' + s.time : '');
-            if (s.type === 'monthly') return 'Every month on the ' + (s.monthDay || '') + (s.time ? ' at ' + s.time : '');
-            if (s.type === 'yearly') return 'Every year on ' + (monthNames[s.month] || '') + ' ' + (s.day || '') + (s.time ? ' at ' + s.time : '');
-            return '';
-        }
 
         window.closeDetailModal = function() {
             document.getElementById('detailModal').classList.add('hidden');
@@ -1617,7 +1958,6 @@
             const authorInfo = getPostAuthorInfo(p);
             const schedules = isActivity ? getActivitySchedules(p) : [];
 
-            // Build schedule display HTML
             let scheduleHtml = '';
             if (isActivity && schedules.length > 0) {
                 const first = scheduleEntryDisplay(schedules[0]);
@@ -1732,7 +2072,6 @@
             }
 
             try {
-                // Initialize the schedule list in the activity modal with one empty entry
                 renderScheduleEntries('one-time', [{}]);
             } catch (err) {
                 console.error('[Liuzhou Loop] schedule list init failed:', err);
@@ -1760,6 +2099,7 @@
                     const el = document.getElementById('active-count');
                     if (el) el.innerText = snapshot.size;
                     renderAll();
+                    renderFriendsContent();
                 }, (error) => {
                     console.warn("Users listener error:", error);
                 });
