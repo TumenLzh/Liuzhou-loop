@@ -153,7 +153,8 @@
                 </div>
             </div>
 
-            <div class="lg:col-span-4 bg-brand-card p-7 rounded-3xl border border-brand-border shadow-sm space-y-5 mt-4 transition-all">
+            <!-- Added ID to this card -->
+            <div id="hero-side-card" class="lg:col-span-4 bg-brand-card p-7 rounded-3xl border border-brand-border shadow-sm space-y-5 mt-4 transition-all">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-muted transition-colors">Cloud Status</span>
                     <span class="inline-flex items-center gap-1.5 bg-brand-phthalo/10 text-brand-phthalo text-xs font-semibold px-2.5 py-1 rounded-full">
@@ -1040,6 +1041,18 @@
             const heroBtn = document.getElementById('hero-post-btn');
             const floatBtn = document.getElementById('floating-post-btn');
             const logo = document.getElementById('brand-logo');
+            
+            // Get the hero side card element
+            const heroSideCard = document.getElementById('hero-side-card');
+
+            // Hide the side card on the Activities tab
+            if (heroSideCard) {
+                if (tab === 'activities') {
+                    heroSideCard.classList.add('hidden');
+                } else {
+                    heroSideCard.classList.remove('hidden');
+                }
+            }
 
             if (tab === 'feed') {
                 accent.className = "slogan-line text-brand-orange transition-colors";
@@ -1160,7 +1173,7 @@
             if (!modal) return;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            document.getElementById('postAuthor').value = ''; // <-- CHANGED: Alias is blank by default
+            document.getElementById('postAuthor').value = '';
             updateAnonNote();
         };
         window.openModalCustom = function(category) {
@@ -1173,7 +1186,7 @@
             if (!modal) return;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            document.getElementById('postAuthor').value = ''; // <-- CHANGED: Alias is blank by default
+            document.getElementById('postAuthor').value = '';
             updateAnonNote();
         };
         window.closeModal = function() {
