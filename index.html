@@ -97,18 +97,14 @@
                 <p class="text-lg text-brand-muted max-w-2xl font-normal leading-relaxed pt-2 transition-colors">
                     A clean, cloud-synced platform built for the youth and expats of Liuzhou. Real-time posts, independent articles, anonymous boards, and city activities — visible to everyone instantly.
                 </p>
-                <div class="pt-6 grid grid-cols-3 gap-4 max-w-lg border-t border-brand-border transition-colors">
+                <div class="pt-6 grid grid-cols-2 gap-4 max-w-md border-t border-brand-border transition-colors">
                     <div>
                         <span id="active-count" class="block font-heading font-extrabold text-3xl text-brand-dark transition-colors">0</span>
                         <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Active Insiders</span>
                     </div>
                     <div>
-                        <span id="secrets-count" class="block font-heading font-extrabold text-3xl text-brand-mikado">0</span>
-                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Secret Spots</span>
-                    </div>
-                    <div>
-                        <span id="articles-count" class="block font-heading font-extrabold text-3xl text-brand-phthalo transition-colors">0</span>
-                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Live Articles</span>
+                        <span id="posts-count" class="block font-heading font-extrabold text-3xl text-brand-orange transition-colors">0</span>
+                        <span class="text-xs text-brand-muted uppercase tracking-wider font-semibold transition-colors">Posts</span>
                     </div>
                 </div>
             </div>
@@ -165,7 +161,6 @@
                 <button type="button" onclick="openActivityModal()" class="text-xs font-bold uppercase tracking-wider bg-brand-ultra text-white hover:bg-blue-900 px-5 py-2.5 rounded-full transition-colors shadow-sm">+ Host / Create Activity</button>
             </div>
 
-            <!-- Your Clubs section (auto-shown when member of ≥1 club) -->
             <div id="your-clubs-section" class="hidden space-y-4">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-orange">Your Memberships</span>
@@ -190,7 +185,6 @@
 
     </main>
 
-    <!-- Auth Modal -->
     <div id="authModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-6 relative">
             <div class="flex items-center justify-between">
@@ -220,7 +214,6 @@
         </div>
     </div>
 
-    <!-- Post Modal -->
     <div id="postModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-6 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
@@ -253,7 +246,6 @@
         </div>
     </div>
 
-    <!-- Activity Modal -->
     <div id="activityModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[92vh] overflow-y-auto">
             <div class="flex items-center justify-between">
@@ -333,7 +325,6 @@
         </div>
     </div>
 
-    <!-- Detail Modal -->
     <div id="detailModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-2xl w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-brand-border">
@@ -344,7 +335,6 @@
         </div>
     </div>
 
-    <!-- Account Menu -->
     <div id="accountMenu" class="fixed z-50 hidden bg-brand-card border border-brand-border rounded-2xl shadow-xl py-2 min-w-[220px]">
         <div class="px-4 py-2 border-b border-brand-border">
             <p class="text-[10px] uppercase tracking-wider text-brand-muted font-bold">Your friend code</p>
@@ -362,7 +352,6 @@
         <button type="button" onclick="handleLogout(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-ruby hover:bg-brand-light transition-colors">Log out</button>
     </div>
 
-    <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
@@ -486,7 +475,6 @@
         </div>
     </div>
 
-    <!-- Friends Modal -->
     <div id="friendsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-md w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-brand-border">
@@ -567,7 +555,6 @@
         let currentDetailPostId = null;
         let editingActivityId = null;
 
-        // Friends state
         let myFriends = [];
         let incomingRequests = [];
         let outgoingRequests = [];
@@ -576,10 +563,8 @@
         let incomingListenerUnsub = null;
         let outgoingListenerUnsub = null;
 
-        // Clubs state
-        let myClubMemberships = [];       // [{ id, clubId, userId, role, roleName }]
+        let myClubMemberships = [];
         let clubMembershipsUnsub = null;
-        let currentClubMembers = [];      // for the open detail modal
 
         function escapeHtml(str) {
             if (!str) return '';
@@ -630,15 +615,6 @@
             return { name: post.author || 'User', color: post.authorColor || '#FF5722' };
         }
 
-        function generateUniqueFriendCode() {
-            for (let attempt = 0; attempt < 20; attempt++) {
-                const code = String(Math.floor(100000 + Math.random() * 900000));
-                // Note: we can't easily await inside this sync helper; caller does the uniqueness check
-                return code;
-            }
-            return String(Date.now()).slice(-6);
-        }
-
         async function generateUniqueFriendCodeAsync() {
             for (let attempt = 0; attempt < 20; attempt++) {
                 const code = String(Math.floor(100000 + Math.random() * 900000));
@@ -668,16 +644,9 @@
             }
         }
 
-        // ---------- Club helpers ----------
-        function isClubMember(clubId) {
-            return myClubMemberships.some(m => m.clubId === clubId);
-        }
-        function getMyClubMembership(clubId) {
-            return myClubMemberships.find(m => m.clubId === clubId) || null;
-        }
-        function isClubOwner(post) {
-            return currentUser && post.userId === currentUser.uid;
-        }
+        function isClubMember(clubId) { return myClubMemberships.some(m => m.clubId === clubId); }
+        function getMyClubMembership(clubId) { return myClubMemberships.find(m => m.clubId === clubId) || null; }
+        function isClubOwner(post) { return currentUser && post.userId === currentUser.uid; }
 
         function setupClubListeners() {
             if (clubMembershipsUnsub) { clubMembershipsUnsub(); clubMembershipsUnsub = null; }
@@ -696,8 +665,7 @@
         async function loadClubMembers(clubId) {
             try {
                 const snap = await getDocs(query(collection(db, "clubMembers"), where("clubId", "==", clubId)));
-                currentClubMembers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                return currentClubMembers;
+                return snap.docs.map(d => ({ id: d.id, ...d.data() }));
             } catch (e) {
                 console.error('loadClubMembers failed:', e);
                 return [];
@@ -757,7 +725,6 @@
             }
         };
 
-        // ---------- Auth UI ----------
         function updateAuthUI() {
             const area = document.getElementById('auth-area');
             const floating = document.getElementById('floating-drop-btn-container');
@@ -871,7 +838,6 @@
             renderAll();
         });
 
-        // ---------- Friends listeners ----------
         function setupFriendsListeners() {
             if (friendsListenerUnsub) { friendsListenerUnsub(); friendsListenerUnsub = null; }
             if (incomingListenerUnsub) { incomingListenerUnsub(); incomingListenerUnsub = null; }
@@ -1171,7 +1137,6 @@
             }
         };
 
-        // ---------- Account menu ----------
         window.toggleAccountMenu = function(e) {
             e.stopPropagation();
             const menu = document.getElementById('accountMenu');
@@ -1189,7 +1154,6 @@
         };
         document.addEventListener('click', () => closeAccountMenu());
 
-        // ---------- Settings ----------
         window.openSettings = async function() {
             if (!currentUser) return;
             document.getElementById('settingsModal').classList.remove('hidden');
@@ -1282,7 +1246,6 @@
             }
         };
 
-        // ---------- Profile view ----------
         window.openProfile = async function(uid) {
             if (!uid) return;
             document.getElementById('profileModal').classList.remove('hidden');
@@ -1319,7 +1282,6 @@
                 if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
                 html += `</div>`;
 
-                // Clubs section (respects showClubsOnProfile; default true)
                 if (u.showClubsOnProfile !== false) {
                     try {
                         const mSnap = await getDocs(query(collection(db, "clubMembers"), where("userId", "==", uid)));
@@ -1380,7 +1342,6 @@
             document.getElementById('profileModal').classList.remove('flex');
         };
 
-        // ---------- Messages (stub) ----------
         window.openMessages = function() {
             document.getElementById('messagesModal').classList.remove('hidden');
             document.getElementById('messagesModal').classList.add('flex');
@@ -1393,7 +1354,6 @@
         window.startDm = function(uid, name) { closeProfile(); openMessages(); };
         window.sendDm = async function(e) { e.preventDefault(); };
 
-        // ---------- Main Tab Switcher ----------
         window.switchMainTab = function(tab) {
             currentMainTab = tab;
             document.querySelectorAll('.main-panel').forEach(p => p.classList.add('hidden'));
@@ -1809,7 +1769,6 @@
 
                 if (editingActivityId) {
                     await updateDoc(doc(db, "posts", editingActivityId), { ...payload, updatedAt: serverTimestamp() });
-                    // If it became a club and owner isn't yet a member, add owner membership
                     if (isClub) {
                         const ownerMemberId = `${editingActivityId}_${currentUser.uid}`;
                         const ownerSnap = await getDoc(doc(db, "clubMembers", ownerMemberId));
@@ -1854,10 +1813,8 @@
             if (!confirm("Delete this post permanently?")) return;
             try {
                 await deleteDoc(doc(db, "posts", postId));
-                // Cascade: club memberships
                 const membersSnap = await getDocs(query(collection(db, "clubMembers"), where("clubId", "==", postId)));
                 await Promise.all(membersSnap.docs.map(d => deleteDoc(d.ref)));
-                // Cascade: comments
                 const commentsSnap = await getDocs(query(collection(db, "comments"), where("postId", "==", postId)));
                 await Promise.all(commentsSnap.docs.map(d => deleteDoc(d.ref)));
             } catch (error) {
@@ -2130,10 +2087,8 @@
         }
 
         function updateCounters() {
-            const secretsCount = posts.filter(p => p.category === 'spot' || p.category === 'anon-spot').length;
-            document.getElementById('secrets-count').innerText = secretsCount;
-            const articlesCount = posts.filter(p => p.category === 'article').length;
-            document.getElementById('articles-count').innerText = articlesCount;
+            const postsEl = document.getElementById('posts-count');
+            if (postsEl) postsEl.innerText = posts.length;
             const feedPosts = posts.filter(p => ['lifehack','spot','inquiry'].includes(p.category));
             document.getElementById('post-count').innerText = feedFilter === 'all'
                 ? feedPosts.length
@@ -2159,7 +2114,6 @@
             section.classList.remove('hidden');
             grid.innerHTML = entries.map(m => {
                 const p = m.clubPost;
-                const ownerView = p.userId === currentUser.uid;
                 return `
                     <div onclick="openDetailModal('${p.id}')" class="bg-brand-card p-5 rounded-2xl border border-brand-orange/30 hover:border-brand-orange/70 cursor-pointer transition-all shadow-sm">
                         <div class="flex items-center justify-between mb-2">
