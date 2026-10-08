@@ -1160,7 +1160,7 @@
             if (!modal) return;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            document.getElementById('postAuthor').value = currentUser.displayName || '';
+            document.getElementById('postAuthor').value = ''; // <-- CHANGED: Alias is blank by default
             updateAnonNote();
         };
         window.openModalCustom = function(category) {
@@ -1173,7 +1173,7 @@
             if (!modal) return;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            document.getElementById('postAuthor').value = currentUser.displayName || '';
+            document.getElementById('postAuthor').value = ''; // <-- CHANGED: Alias is blank by default
             updateAnonNote();
         };
         window.closeModal = function() {
