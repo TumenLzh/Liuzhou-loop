@@ -1233,6 +1233,8 @@
         }
 
         // ---------- Direct Messages ----------
+        // Chat list lives under conversations/{myUid}/list/{otherUid} (simple rules)
+        // Actual messages under chats/{sortedUidPair}/messages
         let currentChatId = null;
         let currentChatOther = null;
         let dmMessagesUnsub = null;
@@ -1277,25 +1279,27 @@
 
             if (dmChatsUnsub) { dmChatsUnsub(); dmChatsUnsub = null; }
 
-            const q = query(
-                collection(db, "chats"),
-                where("members", "array-contains", currentUser.uid),
-                orderBy("updatedAt", "desc")
-            );
-            dmChatsUnsub = onSnapshot(q, (snap) => {
+            // Own subcollection — no special index, simple rules
+            dmChatsUnsub = onSnapshot(collection(db, "conversations", currentUser.uid, "list"), (snap) => {
                 if (snap.empty) {
                     list.innerHTML = `<p class="text-sm text-brand-muted text-center py-10">No conversations yet.<br><span class="text-xs">Open a friend's profile and tap Message.</span></p>`;
                     return;
                 }
-                list.innerHTML = snap.docs.map(d => {
+                const docs = snap.docs.slice().sort((a, b) => {
+                    const ta = a.data().updatedAt?.toMillis?.() || 0;
+                    const tb = b.data().updatedAt?.toMillis?.() || 0;
+                    return tb - ta;
+                });
+                list.innerHTML = docs.map(d => {
                     const c = d.data();
-                    const otherUid = (c.members || []).find(m => m !== currentUser.uid) || '';
-                    const otherName = (c.names && c.names[otherUid]) ? c.names[otherUid] : 'Friend';
+                    const otherUid = d.id;
+                    const otherName = c.name || 'Friend';
                     const initial = otherName.charAt(0).toUpperCase();
                     const preview = c.lastMessage ? escapeHtml(c.lastMessage).slice(0, 60) : 'No messages yet';
                     const time = c.updatedAt ? formatTime(c.updatedAt) : '';
+                    const cid = c.chatId || chatIdFor(currentUser.uid, otherUid);
                     return `
-                        <button onclick="openChat('${d.id}', '${otherUid}', '${escapeHtml(otherName).replace(/'/g, "\\'")}')" class="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-brand-light transition-colors text-left">
+                        <button onclick="openChat('${cid}', '${otherUid}', '${escapeHtml(otherName).replace(/'/g, "\\'")}')" class="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-brand-light transition-colors text-left">
                             <div class="w-11 h-11 rounded-full bg-brand-orange/20 text-brand-orange font-bold text-sm flex items-center justify-center flex-shrink-0">${escapeHtml(initial)}</div>
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center justify-between gap-2">
@@ -1309,7 +1313,7 @@
                 }).join('');
             }, (err) => {
                 console.error(err);
-                list.innerHTML = `<p class="text-sm text-brand-ruby text-center py-8">Could not load chats. You may need a Firestore index or rules update.</p>`;
+                list.innerHTML = `<p class="text-sm text-brand-ruby text-center py-8">Could not load chats.<br><span class="text-xs">${escapeHtml(err.code || '')} ${escapeHtml(err.message || '')}</span></p>`;
             });
         }
 
@@ -1350,7 +1354,7 @@
                 box.scrollTop = box.scrollHeight;
             }, (err) => {
                 console.error(err);
-                box.innerHTML = `<p class="text-sm text-brand-ruby text-center py-6">Could not load messages.</p>`;
+                box.innerHTML = `<p class="text-sm text-brand-ruby text-center py-6">Could not load messages.<br><span class="text-xs">${escapeHtml(err.message || '')}</span></p>`;
             });
         }
 
@@ -1361,7 +1365,6 @@
             }
             if (otherUid === currentUser.uid) return;
 
-            // Must be friends
             const friendDoc = await getDoc(doc(db, "friends", currentUser.uid, "list", otherUid));
             if (!friendDoc.exists()) {
                 alert('You can only message friends. Send a friend request first.');
@@ -1369,31 +1372,43 @@
             }
 
             const myName = currentUser.displayName || currentUser.email.split('@')[0];
+            const theirName = otherName || 'Friend';
             const cid = chatIdFor(currentUser.uid, otherUid);
+
+            // Ensure chat root doc exists
             const chatRef = doc(db, "chats", cid);
             const existing = await getDoc(chatRef);
-
             if (!existing.exists()) {
                 await setDoc(chatRef, {
                     members: [currentUser.uid, otherUid],
-                    names: {
-                        [currentUser.uid]: myName,
-                        [otherUid]: otherName || 'Friend'
-                    },
-                    lastMessage: '',
-                    updatedAt: serverTimestamp()
+                    createdAt: serverTimestamp()
                 });
             }
+
+            // Ensure both sides have a conversation list entry
+            await setDoc(doc(db, "conversations", currentUser.uid, "list", otherUid), {
+                name: theirName,
+                chatId: cid,
+                lastMessage: '',
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+
+            await setDoc(doc(db, "conversations", otherUid, "list", currentUser.uid), {
+                name: myName,
+                chatId: cid,
+                lastMessage: '',
+                updatedAt: serverTimestamp()
+            }, { merge: true });
 
             closeProfile();
             document.getElementById('messagesModal').classList.remove('hidden');
             document.getElementById('messagesModal').classList.add('flex');
-            openChat(cid, otherUid, otherName || 'Friend');
+            openChat(cid, otherUid, theirName);
         }
 
         window.sendDm = async function(event) {
             event.preventDefault();
-            if (!currentUser || !currentChatId) return;
+            if (!currentUser || !currentChatId || !currentChatOther) return;
             const input = document.getElementById('dm-input');
             const text = input.value.trim();
             if (!text) return;
@@ -1407,14 +1422,36 @@
                     senderName: currentUser.displayName || currentUser.email.split('@')[0],
                     createdAt: serverTimestamp()
                 });
-                await updateDoc(doc(db, "chats", currentChatId), {
-                    lastMessage: text.slice(0, 100),
+
+                const preview = text.slice(0, 100);
+                const myName = currentUser.displayName || currentUser.email.split('@')[0];
+
+                // Update both conversation list entries
+                await setDoc(doc(db, "conversations", currentUser.uid, "list", currentChatOther.uid), {
+                    name: currentChatOther.name,
+                    chatId: currentChatId,
+                    lastMessage: preview,
                     updatedAt: serverTimestamp()
-                });
+                }, { merge: true });
+
+                await setDoc(doc(db, "conversations", currentChatOther.uid, "list", currentUser.uid), {
+                    name: myName,
+                    chatId: currentChatId,
+                    lastMessage: preview,
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                // Keep chat root updated
+                await setDoc(doc(db, "chats", currentChatId), {
+                    members: [currentUser.uid, currentChatOther.uid],
+                    lastMessage: preview,
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
                 input.value = '';
             } catch (e) {
                 console.error(e);
-                alert('Could not send. Check Firestore rules for chats.');
+                alert('Could not send: ' + (e.message || 'check rules'));
             } finally {
                 btn.disabled = false;
                 input.focus();
