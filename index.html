@@ -94,17 +94,17 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                <button onclick="switchMainTab('feed')" id="nav-feed" class="nav-tab px-5 py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all">Feed</button>
-                <button onclick="switchMainTab('articles')" id="nav-articles" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Articles</button>
-                <button onclick="switchMainTab('anon')" id="nav-anon" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Liuzhou Anon</button>
-                <button onclick="switchMainTab('activities')" id="nav-activities" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Activities</button>
+                <button type="button" onclick="switchMainTab('feed')" id="nav-feed" class="nav-tab px-5 py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all">Feed</button>
+                <button type="button" onclick="switchMainTab('articles')" id="nav-articles" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Articles</button>
+                <button type="button" onclick="switchMainTab('anon')" id="nav-anon" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Liuzhou Anon</button>
+                <button type="button" onclick="switchMainTab('activities')" id="nav-activities" class="nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all">Activities</button>
             </nav>
 
             <div class="flex items-center gap-3">
                 <!-- Auth status -->
                 <div id="auth-area" class="flex items-center gap-3">
-                    <button onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
-                    <button onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
+                    <button type="button" onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
+                    <button type="button" onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
                 </div>
             </div>
         </div>
@@ -112,7 +112,7 @@
 
     <!-- Floating Bottom-Right Drop a Post Button -->
     <div id="floating-drop-btn-container" class="fixed bottom-6 right-6 z-40 hidden">
-        <button onclick="openModal()" id="floating-post-btn" class="bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20">
+        <button type="button" onclick="openModal()" id="floating-post-btn" class="bg-brand-orange hover:bg-orange-600 text-white font-heading font-bold text-sm px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 border border-white/20">
             <span class="text-lg leading-none">+</span> Drop a Post
         </button>
     </div>
@@ -161,7 +161,7 @@
                     </span>
                 </div>
                 <h3 class="font-heading font-bold text-xl text-brand-dark transition-colors">Got something to put out there?</h3>
-                <button onclick="heroActionClick()" id="hero-post-btn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block">
+                <button type="button" onclick="heroActionClick()" id="hero-post-btn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all text-center block">
                     Sign up to Post
                 </button>
             </div>
@@ -175,10 +175,10 @@
         <section id="panel-feed" class="main-panel space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6 transition-colors">
                 <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-                    <button onclick="filterFeed('all')" id="feed-btn-all" class="feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
-                    <button onclick="filterFeed('lifehack')" id="feed-btn-lifehack" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
-                    <button onclick="filterFeed('spot')" id="feed-btn-spot" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
-                    <button onclick="filterFeed('inquiry')" id="feed-btn-inquiry" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Inquiry</button>
+                    <button type="button" onclick="filterFeed('all')" id="feed-btn-all" class="feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
+                    <button type="button" onclick="filterFeed('lifehack')" id="feed-btn-lifehack" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
+                    <button type="button" onclick="filterFeed('spot')" id="feed-btn-spot" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
+                    <button type="button" onclick="filterFeed('inquiry')" id="feed-btn-inquiry" class="feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Inquiry</button>
                 </div>
                 <div class="text-xs text-brand-muted font-semibold transition-colors">
                     Showing <span id="post-count">0</span> contributions
@@ -196,7 +196,7 @@
                     <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-phthalo">Liuzhou News</span>
                     <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark mt-1 transition-colors">Independent Articles</h2>
                 </div>
-                <button onclick="openModalCustom('article')" class="text-xs font-bold uppercase tracking-wider bg-brand-phthalo/10 text-brand-phthalo hover:bg-brand-phthalo hover:text-white px-4 py-2 rounded-full transition-colors">+ Write Article</button>
+                <button type="button" onclick="openModalCustom('article')" class="text-xs font-bold uppercase tracking-wider bg-brand-phthalo/10 text-brand-phthalo hover:bg-brand-phthalo hover:text-white px-4 py-2 rounded-full transition-colors">+ Write Article</button>
             </div>
             <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
@@ -205,12 +205,12 @@
         <section id="panel-anon" class="main-panel hidden space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6 transition-colors">
                 <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-                    <button onclick="filterAnon('all')" id="anon-btn-all" class="anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
-                    <button onclick="filterAnon('lifehack')" id="anon-btn-lifehack" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
-                    <button onclick="filterAnon('spot')" id="anon-btn-spot" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
-                    <button onclick="filterAnon('inquiry')" id="anon-btn-inquiry" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Inquiry</button>
+                    <button type="button" onclick="filterAnon('all')" id="anon-btn-all" class="anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All Posts</button>
+                    <button type="button" onclick="filterAnon('lifehack')" id="anon-btn-lifehack" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Lifehacks</button>
+                    <button type="button" onclick="filterAnon('spot')" id="anon-btn-spot" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Secret Spots</button>
+                    <button type="button" onclick="filterAnon('inquiry')" id="anon-btn-inquiry" class="anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Inquiry</button>
                 </div>
-                <button onclick="openModalCustom('anon')" class="text-xs font-bold uppercase tracking-wider bg-brand-ruby/20 text-red-400 hover:bg-brand-ruby hover:text-white px-4 py-2 rounded-full transition-colors">+ Post Anonymously</button>
+                <button type="button" onclick="openModalCustom('anon')" class="text-xs font-bold uppercase tracking-wider bg-brand-ruby/20 text-red-400 hover:bg-brand-ruby hover:text-white px-4 py-2 rounded-full transition-colors">+ Post Anonymously</button>
             </div>
             <div id="anon-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
@@ -222,18 +222,18 @@
                     <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-ultra">Liuzhou Life</span>
                     <h2 class="font-heading font-extrabold text-3xl tracking-tight text-brand-dark mt-1 transition-colors">City Activities</h2>
                 </div>
-                <button onclick="openActivityModal()" class="text-xs font-bold uppercase tracking-wider bg-brand-ultra text-white hover:bg-blue-900 px-5 py-2.5 rounded-full transition-colors shadow-sm">
+                <button type="button" onclick="openActivityModal()" class="text-xs font-bold uppercase tracking-wider bg-brand-ultra text-white hover:bg-blue-900 px-5 py-2.5 rounded-full transition-colors shadow-sm">
                     + Host / Create Activity
                 </button>
             </div>
 
             <!-- Filters -->
             <div class="flex flex-wrap items-center gap-2">
-                <button onclick="filterActivities('all')" id="act-btn-all" class="act-tab bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All</button>
-                <button onclick="filterActivities('one-time')" id="act-btn-one-time" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">One-time</button>
-                <button onclick="filterActivities('weekly')" id="act-btn-weekly" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Weekly</button>
-                <button onclick="filterActivities('monthly')" id="act-btn-monthly" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Monthly</button>
-                <button onclick="filterActivities('yearly')" id="act-btn-yearly" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Yearly</button>
+                <button type="button" onclick="filterActivities('all')" id="act-btn-all" class="act-tab bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All</button>
+                <button type="button" onclick="filterActivities('one-time')" id="act-btn-one-time" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">One-time</button>
+                <button type="button" onclick="filterActivities('weekly')" id="act-btn-weekly" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Weekly</button>
+                <button type="button" onclick="filterActivities('monthly')" id="act-btn-monthly" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Monthly</button>
+                <button type="button" onclick="filterActivities('yearly')" id="act-btn-yearly" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Yearly</button>
             </div>
 
             <div id="activities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -248,7 +248,7 @@
         <div class="bg-brand-card rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-6 relative">
             <div class="flex items-center justify-between">
                 <h3 id="auth-title" class="font-heading font-extrabold text-2xl text-brand-dark">Create Account</h3>
-                <button onclick="closeAuthModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+                <button type="button" onclick="closeAuthModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
             <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
                 <div id="display-name-wrapper">
@@ -275,10 +275,10 @@
 
     <!-- Submission Modal (Feed / Articles / Anon) -->
     <div id="postModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-6 relative animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+        <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-6 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
                 <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Drop to Liuzhou Loop</h3>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+                <button type="button" onclick="closeModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
             
             <form id="submissionForm" onsubmit="handleSubmission(event)" class="space-y-4">
@@ -320,7 +320,7 @@
                     <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Host a City Activity</h3>
                     <p class="text-xs text-brand-muted mt-1">One-time events, weekly clubs, monthly meetups…</p>
                 </div>
-                <button onclick="closeActivityModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+                <button type="button" onclick="closeActivityModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
 
             <form id="activityForm" onsubmit="handleActivitySubmission(event)" class="space-y-4">
@@ -471,7 +471,7 @@
         <div class="bg-brand-card rounded-3xl max-w-2xl w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-brand-border">
                 <h3 class="font-heading font-extrabold text-xl text-brand-dark">Post & Comments</h3>
-                <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+                <button type="button" onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
             <div id="detail-content" class="overflow-y-auto flex-1 p-6 space-y-6"></div>
         </div>
@@ -479,16 +479,16 @@
 
     <!-- Account Menu Dropdown -->
     <div id="accountMenu" class="fixed z-50 hidden bg-brand-card border border-brand-border rounded-2xl shadow-xl py-2 min-w-[200px]">
-        <button onclick="openMessages(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors flex items-center justify-between gap-3">
+        <button type="button" onclick="openMessages(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors flex items-center justify-between gap-3">
             <span>Messages</span>
             <span id="messages-badge" class="hidden bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
         </button>
-        <button onclick="openFriends(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors flex items-center justify-between gap-3">
+        <button type="button" onclick="openFriends(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors flex items-center justify-between gap-3">
             <span>Friends</span>
             <span id="friends-badge" class="hidden bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
         </button>
-        <button onclick="openSettings(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors">Settings</button>
-        <button onclick="handleLogout(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-ruby hover:bg-brand-light transition-colors">Log out</button>
+        <button type="button" onclick="openSettings(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors">Settings</button>
+        <button type="button" onclick="handleLogout(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-ruby hover:bg-brand-light transition-colors">Log out</button>
     </div>
 
     <!-- Settings Modal -->
@@ -496,7 +496,7 @@
         <div class="bg-brand-card rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
                 <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Edit Profile</h3>
-                <button onclick="closeSettings()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+                <button type="button" onclick="closeSettings()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
 
             <div class="flex flex-col items-center gap-3">
@@ -599,10 +599,10 @@
             <p class="text-[10px] text-brand-muted">All fields except name are optional. Empty fields stay hidden on your public profile.</p>
             <p id="settings-error" class="text-sm text-brand-ruby hidden"></p>
 
-            <button onclick="saveSettings()" id="settingsSaveBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Save Profile</button>
+            <button type="button" onclick="saveSettings()" id="settingsSaveBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Save Profile</button>
 
             <div class="border-t border-brand-border pt-4">
-                <button onclick="confirmDeleteAccount()" class="w-full text-sm font-semibold text-brand-ruby hover:bg-brand-ruby/10 py-3 rounded-2xl transition-colors">Delete Account</button>
+                <button type="button" onclick="confirmDeleteAccount()" class="w-full text-sm font-semibold text-brand-ruby hover:bg-brand-ruby/10 py-3 rounded-2xl transition-colors">Delete Account</button>
             </div>
         </div>
     </div>
@@ -612,12 +612,12 @@
         <div class="bg-brand-card rounded-3xl max-w-md w-full p-0 shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col">
             <div class="flex items-center justify-between p-6 border-b border-brand-border">
                 <h3 class="font-heading font-extrabold text-xl text-brand-dark">Friends</h3>
-                <button onclick="closeFriends()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+                <button type="button" onclick="closeFriends()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
             <div class="flex border-b border-brand-border px-4 gap-1 pt-2">
-                <button onclick="switchFriendsTab('list')" id="ftab-list" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all">Friends</button>
-                <button onclick="switchFriendsTab('incoming')" id="ftab-incoming" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all">Requests <span id="incoming-count" class="text-brand-orange"></span></button>
-                <button onclick="switchFriendsTab('outgoing')" id="ftab-outgoing" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all">Sent</button>
+                <button type="button" onclick="switchFriendsTab('list')" id="ftab-list" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all">Friends</button>
+                <button type="button" onclick="switchFriendsTab('incoming')" id="ftab-incoming" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all">Requests <span id="incoming-count" class="text-brand-orange"></span></button>
+                <button type="button" onclick="switchFriendsTab('outgoing')" id="ftab-outgoing" class="friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all">Sent</button>
             </div>
             <div id="friends-content" class="overflow-y-auto flex-1 p-4 space-y-2 min-h-[240px]">
                 <p class="text-sm text-brand-muted text-center py-8">Loading...</p>
@@ -632,7 +632,7 @@
             <div id="dm-list-view" class="flex flex-col h-full">
                 <div class="flex items-center justify-between p-5 border-b border-brand-border">
                     <h3 class="font-heading font-extrabold text-xl text-brand-dark">Messages</h3>
-                    <button onclick="closeMessages()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+                    <button type="button" onclick="closeMessages()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
                 </div>
                 <div id="dm-chat-list" class="overflow-y-auto flex-1 p-3 space-y-1">
                     <p class="text-sm text-brand-muted text-center py-10">Loading...</p>
@@ -642,7 +642,7 @@
             <!-- Conversation view -->
             <div id="dm-thread-view" class="hidden flex flex-col h-full">
                 <div class="flex items-center gap-3 p-4 border-b border-brand-border">
-                    <button onclick="showDmList()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark text-lg">&larr;</button>
+                    <button type="button" onclick="showDmList()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark text-lg">&larr;</button>
                     <div id="dm-thread-header" class="flex-1 min-w-0">
                         <p class="font-heading font-bold text-brand-dark truncate" id="dm-thread-name">Chat</p>
                     </div>
@@ -661,7 +661,7 @@
         <div class="bg-brand-card rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-border space-y-5 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between">
                 <h3 class="font-heading font-extrabold text-xl text-brand-dark">Profile</h3>
-                <button onclick="closeProfile()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
+                <button type="button" onclick="closeProfile()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
             <div id="profile-content" class="space-y-4"></div>
         </div>
@@ -719,49 +719,55 @@
         function updateAuthUI() {
             const area = document.getElementById('auth-area');
             const floating = document.getElementById('floating-drop-btn-container');
+            const heroBtn = document.getElementById('hero-post-btn');
+            if (!area) return;
             if (currentUser) {
-                const name = currentUser.displayName || currentUser.email.split('@')[0];
+                const name = currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'Insider');
                 const initial = name.charAt(0).toUpperCase();
                 area.innerHTML = `
-                    <button onclick="toggleAccountMenu(event)" class="flex items-center gap-2 group">
+                    <button type="button" onclick="toggleAccountMenu(event)" class="flex items-center gap-2 group">
                         <div class="w-9 h-9 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold text-sm">${escapeHtml(initial)}</div>
                         <span class="text-sm font-semibold text-brand-dark hidden sm:inline">Hi, ${escapeHtml(name)}</span>
                         <span class="text-brand-muted text-xs">▾</span>
                     </button>
                 `;
-                if (currentMainTab !== 'activities') floating.classList.remove('hidden');
-                document.getElementById('hero-post-btn').innerText = 'Drop a Post';
+                if (floating && currentMainTab !== 'activities') floating.classList.remove('hidden');
+                if (heroBtn) heroBtn.innerText = 'Drop a Post';
             } else {
                 area.innerHTML = `
-                    <button onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
-                    <button onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
+                    <button type="button" onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
+                    <button type="button" onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
                 `;
-                floating.classList.add('hidden');
-                document.getElementById('hero-post-btn').innerText = 'Sign up to Post';
+                if (floating) floating.classList.add('hidden');
+                if (heroBtn) heroBtn.innerText = 'Sign up to Post';
             }
         }
 
         window.heroActionClick = function() {
             if (currentUser) openModal();
             else openAuthModal('signup');
-        }
+        };
 
         let authMode = 'signup';
         window.openAuthModal = function(mode) {
             authMode = mode || 'signup';
-            document.getElementById('authModal').classList.remove('hidden');
-            document.getElementById('authModal').classList.add('flex');
+            const modal = document.getElementById('authModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
             updateAuthForm();
-        }
+        };
         window.closeAuthModal = function() {
-            document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('authModal').classList.remove('flex');
+            const modal = document.getElementById('authModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
             document.getElementById('auth-error').classList.add('hidden');
-        }
+        };
         window.toggleAuthMode = function() {
             authMode = authMode === 'signup' ? 'login' : 'signup';
             updateAuthForm();
-        }
+        };
         function updateAuthForm() {
             const isSignup = authMode === 'signup';
             document.getElementById('auth-title').innerText = isSignup ? 'Create Account' : 'Log In';
@@ -796,11 +802,11 @@
                 errEl.innerText = err.message;
                 errEl.classList.remove('hidden');
             }
-        }
+        };
 
         window.handleLogout = async function() {
             await signOut(auth);
-        }
+        };
 
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
@@ -812,6 +818,7 @@
         window.toggleAccountMenu = function(e) {
             e.stopPropagation();
             const menu = document.getElementById('accountMenu');
+            if (!menu) return;
             if (!menu.classList.contains('hidden')) {
                 menu.classList.add('hidden');
                 return;
@@ -821,10 +828,11 @@
             menu.style.top = (rect.bottom + 8) + 'px';
             menu.style.right = (window.innerWidth - rect.right) + 'px';
             menu.classList.remove('hidden');
-        }
+        };
         window.closeAccountMenu = function() {
-            document.getElementById('accountMenu').classList.add('hidden');
-        }
+            const menu = document.getElementById('accountMenu');
+            if (menu) menu.classList.add('hidden');
+        };
         document.addEventListener('click', () => closeAccountMenu());
 
         // ---------- Settings ----------
@@ -849,11 +857,11 @@
             const color = data.color || '#FF5722';
             document.getElementById('settingsColor').value = color;
             pickColor(color);
-        }
+        };
         window.closeSettings = function() {
             document.getElementById('settingsModal').classList.add('hidden');
             document.getElementById('settingsModal').classList.remove('flex');
-        }
+        };
         window.pickColor = function(c) {
             document.getElementById('settingsColor').value = c;
             document.querySelectorAll('.color-swatch').forEach(s => {
@@ -863,7 +871,7 @@
             document.getElementById('settings-pfp-preview').style.backgroundColor = c + '26';
             document.getElementById('settings-pfp-initial').style.color = c;
             document.getElementById('settings-pfp-initial').innerText = name.charAt(0).toUpperCase();
-        }
+        };
         window.saveSettings = async function() {
             if (!currentUser) return;
             const btn = document.getElementById('settingsSaveBtn');
@@ -896,7 +904,7 @@
                 btn.disabled = false;
                 btn.innerText = 'Save Profile';
             }
-        }
+        };
         window.confirmDeleteAccount = async function() {
             if (!confirm('Permanently delete your account and all data? This cannot be undone.')) return;
             try {
@@ -905,7 +913,7 @@
             } catch (err) {
                 alert('Could not delete account: ' + (err.message || 'unknown error'));
             }
-        }
+        };
 
         // ---------- Profile view ----------
         window.openProfile = async function(uid) {
@@ -939,33 +947,33 @@
                 if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
                 html += `</div>`;
                 if (currentUser && currentUser.uid !== uid) {
-                    html += `<button onclick="sendFriendRequest('${uid}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Add Friend</button>`;
-                    html += `<button onclick="startDm('${uid}', '${escapeHtml(name)}')" class="w-full border border-brand-border text-brand-dark font-semibold py-2.5 rounded-full text-sm mt-2">Message</button>`;
+                    html += `<button type="button" onclick="sendFriendRequest('${uid}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Add Friend</button>`;
+                    html += `<button type="button" onclick="startDm('${uid}', '${escapeHtml(name)}')" class="w-full border border-brand-border text-brand-dark font-semibold py-2.5 rounded-full text-sm mt-2">Message</button>`;
                 }
                 content.innerHTML = html;
             } catch (err) {
                 content.innerHTML = '<p class="text-sm text-brand-ruby">Could not load profile.</p>';
             }
-        }
+        };
         window.closeProfile = function() {
             document.getElementById('profileModal').classList.add('hidden');
             document.getElementById('profileModal').classList.remove('flex');
-        }
+        };
 
         // ---------- Friends (simplified stubs – keep your existing full logic if present) ----------
         window.openFriends = function() {
             document.getElementById('friendsModal').classList.remove('hidden');
             document.getElementById('friendsModal').classList.add('flex');
             document.getElementById('friends-content').innerHTML = '<p class="text-sm text-brand-muted text-center py-8">Friends system – keep your original implementation or expand later.</p>';
-        }
+        };
         window.closeFriends = function() {
             document.getElementById('friendsModal').classList.add('hidden');
             document.getElementById('friendsModal').classList.remove('flex');
-        }
-        window.switchFriendsTab = function() {}
+        };
+        window.switchFriendsTab = function() {};
         window.sendFriendRequest = async function(uid) {
             alert('Friend request sent (implement full logic from original if needed).');
-        }
+        };
 
         // ---------- Messages (simplified stubs) ----------
         window.openMessages = function() {
@@ -974,27 +982,27 @@
             document.getElementById('dm-list-view').classList.remove('hidden');
             document.getElementById('dm-thread-view').classList.add('hidden');
             document.getElementById('dm-chat-list').innerHTML = '<p class="text-sm text-brand-muted text-center py-10">Messages – keep your original DM implementation.</p>';
-        }
+        };
         window.closeMessages = function() {
             document.getElementById('messagesModal').classList.add('hidden');
             document.getElementById('messagesModal').classList.remove('flex');
-        }
+        };
         window.showDmList = function() {
             document.getElementById('dm-list-view').classList.remove('hidden');
             document.getElementById('dm-thread-view').classList.add('hidden');
-        }
+        };
         window.startDm = function(uid, name) {
             closeProfile();
             openMessages();
-            // expand with your original thread logic
-        }
-        window.sendDm = async function(e) { e.preventDefault(); }
+        };
+        window.sendDm = async function(e) { e.preventDefault(); };
 
         // ---------- Main Tab Switcher ----------
         window.switchMainTab = function(tab) {
             currentMainTab = tab;
             document.querySelectorAll('.main-panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`panel-${tab}`).classList.remove('hidden');
+            const panel = document.getElementById(`panel-${tab}`);
+            if (panel) panel.classList.remove('hidden');
 
             const body = document.getElementById('main-body');
             body.className = `theme-${tab} font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white relative`;
@@ -1044,10 +1052,10 @@
                 btn.className = 'nav-tab px-5 py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all';
             });
             const activeNav = document.getElementById(`nav-${tab}`);
-            if (tab === 'feed') activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all';
-            if (tab === 'articles') activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-phthalo text-white shadow-sm transition-all';
-            if (tab === 'anon') activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-ruby text-white shadow-sm transition-all';
-            if (tab === 'activities') activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-ultra text-white shadow-sm transition-all';
+            if (tab === 'feed' && activeNav) activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all';
+            if (tab === 'articles' && activeNav) activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-phthalo text-white shadow-sm transition-all';
+            if (tab === 'anon' && activeNav) activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-ruby text-white shadow-sm transition-all';
+            if (tab === 'activities' && activeNav) activeNav.className = 'nav-tab px-5 py-2.5 rounded-full bg-brand-ultra text-white shadow-sm transition-all';
 
             const floatingBtn = document.getElementById('floating-drop-btn-container');
             if (floatingBtn) {
@@ -1059,7 +1067,7 @@
             }
 
             renderAll();
-        }
+        };
 
         // ---------- Feed / Anon filters ----------
         window.filterFeed = function(cat) {
@@ -1070,7 +1078,7 @@
             const activeBtn = document.getElementById(`feed-btn-${cat}`);
             if (activeBtn) activeBtn.className = 'feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all';
             renderPosts();
-        }
+        };
         window.filterAnon = function(cat) {
             anonFilter = cat;
             document.querySelectorAll('.anon-tab').forEach(btn => {
@@ -1079,7 +1087,7 @@
             const activeBtn = document.getElementById(`anon-btn-${cat}`);
             if (activeBtn) activeBtn.className = 'anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all';
             renderAnon();
-        }
+        };
 
         // ---------- Activity filter ----------
         window.filterActivities = function(type) {
@@ -1090,11 +1098,12 @@
             const activeBtn = document.getElementById(`act-btn-${type}`);
             if (activeBtn) activeBtn.className = 'act-tab bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all';
             renderActivities();
-        }
+        };
 
         // ---------- Post Modal (feed/articles/anon) ----------
         function populateCategoryOptions(forcedCategory) {
             const select = document.getElementById('postCategory');
+            if (!select) return;
             let options = [];
             if (currentMainTab === 'feed') {
                 options = [
@@ -1120,32 +1129,39 @@
         window.openModal = function() {
             if (!currentUser) { openAuthModal('signup'); return; }
             populateCategoryOptions();
-            document.getElementById('postModal').classList.remove('hidden');
-            document.getElementById('postModal').classList.add('flex');
+            const modal = document.getElementById('postModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
             document.getElementById('postAuthor').value = currentUser.displayName || '';
             updateAnonNote();
-        }
+        };
         window.openModalCustom = function(category) {
             if (!currentUser) { openAuthModal('signup'); return; }
             if (category === 'article') currentMainTab = 'articles';
             if (category === 'anon' || (category && category.startsWith('anon-'))) currentMainTab = 'anon';
             if (['lifehack','spot','inquiry'].includes(category)) currentMainTab = 'feed';
             populateCategoryOptions(category);
-            document.getElementById('postModal').classList.remove('hidden');
-            document.getElementById('postModal').classList.add('flex');
+            const modal = document.getElementById('postModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
             document.getElementById('postAuthor').value = currentUser.displayName || '';
             updateAnonNote();
-        }
+        };
         window.closeModal = function() {
-            document.getElementById('postModal').classList.add('hidden');
-            document.getElementById('postModal').classList.remove('flex');
+            const modal = document.getElementById('postModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
             document.getElementById('submissionForm').reset();
             document.getElementById('author-field-wrapper').classList.add('hidden');
-        }
-        document.getElementById('postCategory').addEventListener('change', updateAnonNote);
+        };
         function updateAnonNote() {
-            const cat = document.getElementById('postCategory').value;
+            const sel = document.getElementById('postCategory');
             const wrapper = document.getElementById('author-field-wrapper');
+            if (!sel || !wrapper) return;
+            const cat = sel.value;
             if (cat === 'anon' || (cat && cat.startsWith('anon-'))) wrapper.classList.remove('hidden');
             else wrapper.classList.add('hidden');
         }
@@ -1194,36 +1210,51 @@
                 submitBtn.innerText = "Publish Live";
                 submitBtn.disabled = false;
             }
-        }
+        };
 
         // ---------- ACTIVITY MODAL ----------
-        // Fill day-of-month selects
-        (function() {
-            const opts = Array.from({length: 31}, (_, i) => `<option value="${i+1}">${i+1}</option>`).join('');
-            document.getElementById('actMonthDay').innerHTML = opts;
-            document.getElementById('actYearDay').innerHTML = opts;
-        })();
-
         window.toggleActivityFields = function() {
-            const type = document.querySelector('input[name="eventType"]:checked').value;
-            document.getElementById('field-onetime').classList.toggle('hidden', type !== 'one-time');
-            document.getElementById('field-weekly').classList.toggle('hidden', type !== 'weekly');
-            document.getElementById('field-monthly').classList.toggle('hidden', type !== 'monthly');
-            document.getElementById('field-yearly').classList.toggle('hidden', type !== 'yearly');
-        }
+            const checked = document.querySelector('input[name="eventType"]:checked');
+            const type = checked ? checked.value : 'one-time';
+            ['one-time', 'weekly', 'monthly', 'yearly'].forEach(t => {
+                const el = document.getElementById('field-' + t);
+                if (el) el.classList.toggle('hidden', t !== type);
+            });
+        };
 
         window.openActivityModal = function() {
             if (!currentUser) { openAuthModal('signup'); return; }
-            document.getElementById('activityModal').classList.remove('hidden');
-            document.getElementById('activityModal').classList.add('flex');
-            document.getElementById('activityForm').reset();
-            document.querySelector('input[name="eventType"][value="one-time"]').checked = true;
-            document.getElementById('actBeHost').checked = true;
-            toggleActivityFields();
-        }
+            const modal = document.getElementById('activityModal');
+            if (!modal) { console.error('[Liuzhou Loop] #activityModal not found.'); return; }
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            const form = document.getElementById('activityForm');
+            if (form) form.reset();
+
+            const oneTime = document.querySelector('input[name="eventType"][value="one-time"]');
+            if (oneTime) oneTime.checked = true;
+
+            const hostToggle = document.getElementById('actBeHost');
+            if (hostToggle) hostToggle.checked = true;
+
+            populateActivityDaySelects();
+            window.toggleActivityFields();
+        };
         window.closeActivityModal = function() {
-            document.getElementById('activityModal').classList.add('hidden');
-            document.getElementById('activityModal').classList.remove('flex');
+            const modal = document.getElementById('activityModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        // Fills the "day of month" dropdowns safely (no top-level DOM access)
+        function populateActivityDaySelects() {
+            const opts = Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
+            const mDay = document.getElementById('actMonthDay');
+            const yDay = document.getElementById('actYearDay');
+            if (mDay && !mDay.options.length) mDay.innerHTML = opts;
+            if (yDay && !yDay.options.length) yDay.innerHTML = opts;
         }
 
         window.handleActivitySubmission = async function(event) {
@@ -1287,20 +1318,19 @@
 
                 await addDoc(collection(db, "posts"), {
                     category: 'activity',
-                    eventType,               // one-time | weekly | monthly | yearly
+                    eventType,
                     title,
                     content,
                     location,
-                    schedule,                // human readable
-                    scheduleData,            // structured for future filtering
+                    schedule,
+                    scheduleData,
                     author: authorName,
                     userId: currentUser.uid,
                     authorColor: beHost ? authorColor : '',
-                    isHost: beHost,          // true = show host profile link
+                    isHost: beHost,
                     createdAt: serverTimestamp()
                 });
                 closeActivityModal();
-                // stay on activities tab
                 if (currentMainTab !== 'activities') switchMainTab('activities');
             } catch (error) {
                 console.error(error);
@@ -1309,9 +1339,9 @@
                 btn.innerText = 'Publish Activity';
                 btn.disabled = false;
             }
-        }
+        };
 
-        // ---------- Delete / Detail / Comments (same as before) ----------
+        // ---------- Delete / Detail / Comments ----------
         window.deletePost = async function(postId, postUserId) {
             if (!currentUser || currentUser.uid !== postUserId) {
                 alert("You can only delete your own posts.");
@@ -1326,7 +1356,7 @@
                 console.error(error);
                 alert("Could not delete. Check your Firestore security rules.");
             }
-        }
+        };
 
         window.openDetailModal = async function(postId) {
             currentDetailPostId = postId;
@@ -1362,7 +1392,7 @@
                             <span>${isAnon ? escapeHtml(post.author) : (isActivity ? 'Hosted by ' : 'By ') + escapeHtml(post.author)}</span>
                         </div>
                         ${currentUser && currentUser.uid === post.userId ? `
-                            <button onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-ruby text-xs font-bold hover:underline">Delete</button>
+                            <button type="button" onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-ruby text-xs font-bold hover:underline">Delete</button>
                         ` : ''}
                     </div>
                 </div>
@@ -1378,7 +1408,7 @@
                             <button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2 rounded-full">Post Comment</button>
                         </form>
                     ` : `
-                        <p class="text-sm text-brand-muted"><button onclick="closeDetailModal(); openAuthModal('login');" class="text-brand-orange font-semibold hover:underline">Log in</button> to leave a comment.</p>
+                        <p class="text-sm text-brand-muted"><button type="button" onclick="closeDetailModal(); openAuthModal('login');" class="text-brand-orange font-semibold hover:underline">Log in</button> to leave a comment.</p>
                     `}
                 </div>
             `;
@@ -1386,16 +1416,17 @@
             document.getElementById('detailModal').classList.remove('hidden');
             document.getElementById('detailModal').classList.add('flex');
             loadComments(postId);
-        }
+        };
 
         window.closeDetailModal = function() {
             document.getElementById('detailModal').classList.add('hidden');
             document.getElementById('detailModal').classList.remove('flex');
             currentDetailPostId = null;
-        }
+        };
 
         async function loadComments(postId) {
             const listEl = document.getElementById('comments-list');
+            if (!listEl) return;
             try {
                 const q = query(collection(db, "comments"), where("postId", "==", postId), orderBy("createdAt", "asc"));
                 const snap = await getDocs(q);
@@ -1414,8 +1445,8 @@
                                 <div class="flex items-center gap-3">
                                     <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
                                     ${isOwner ? `
-                                        <button onclick="startEditComment('${cid}')" class="text-brand-orange hover:underline font-semibold">Edit</button>
-                                        <button onclick="deleteComment('${cid}', '${c.userId}')" class="text-brand-ruby hover:underline font-semibold">Delete</button>
+                                        <button type="button" onclick="startEditComment('${cid}')" class="text-brand-orange hover:underline font-semibold">Edit</button>
+                                        <button type="button" onclick="deleteComment('${cid}', '${c.userId}')" class="text-brand-ruby hover:underline font-semibold">Delete</button>
                                     ` : ''}
                                 </div>
                             </div>
@@ -1423,8 +1454,8 @@
                             <div id="comment-edit-${cid}" class="hidden space-y-2 pt-1">
                                 <textarea id="comment-edit-input-${cid}" rows="2" class="w-full bg-white border border-brand-border rounded-xl p-2 text-sm focus:outline-none focus:border-brand-orange">${escapeHtml(c.text)}</textarea>
                                 <div class="flex gap-2">
-                                    <button onclick="saveEditComment('${cid}')" class="bg-brand-orange text-white text-xs font-semibold px-3 py-1.5 rounded-full">Save</button>
-                                    <button onclick="cancelEditComment('${cid}')" class="text-brand-muted text-xs font-semibold px-3 py-1.5">Cancel</button>
+                                    <button type="button" onclick="saveEditComment('${cid}')" class="bg-brand-orange text-white text-xs font-semibold px-3 py-1.5 rounded-full">Save</button>
+                                    <button type="button" onclick="cancelEditComment('${cid}')" class="text-brand-muted text-xs font-semibold px-3 py-1.5">Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -1448,15 +1479,15 @@
             } catch (err) {
                 alert("Could not delete comment.");
             }
-        }
+        };
         window.startEditComment = function(commentId) {
             document.getElementById(`comment-text-${commentId}`).classList.add('hidden');
             document.getElementById(`comment-edit-${commentId}`).classList.remove('hidden');
-        }
+        };
         window.cancelEditComment = function(commentId) {
             document.getElementById(`comment-text-${commentId}`).classList.remove('hidden');
             document.getElementById(`comment-edit-${commentId}`).classList.add('hidden');
-        }
+        };
         window.saveEditComment = async function(commentId) {
             const input = document.getElementById(`comment-edit-input-${commentId}`);
             const newText = input.value.trim();
@@ -1467,7 +1498,7 @@
             } catch (err) {
                 alert("Could not update comment.");
             }
-        }
+        };
         window.addComment = async function(event) {
             event.preventDefault();
             if (!currentUser || !currentDetailPostId) return;
@@ -1492,29 +1523,9 @@
                 btn.disabled = false;
                 btn.innerText = 'Post Comment';
             }
-        }
+        };
 
-        // ---------- Live data ----------
-        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-        onSnapshot(q, (snapshot) => {
-            posts = [];
-            snapshot.forEach((docSnap) => {
-                posts.push({ id: docSnap.id, ...docSnap.data() });
-            });
-            renderAll();
-        }, (error) => {
-            console.error("Error listening to Firestore:", error);
-            document.getElementById('posts-grid').innerHTML = `
-                <div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-brand-border text-brand-ruby font-semibold text-sm">
-                    Cloud database connection error.
-                </div>
-            `;
-        });
-
-        onSnapshot(collection(db, "users"), (snapshot) => {
-            document.getElementById('active-count').innerText = snapshot.size;
-        });
-
+        // ---------- Renderers ----------
         function renderAll() {
             renderPosts();
             renderArticles();
@@ -1536,7 +1547,6 @@
 
         function getCategoryLabel(p) {
             if (typeof p === 'string') {
-                // legacy string calls
                 const cat = p;
                 if (cat === 'spot' || cat === 'anon-spot') return 'Secret Spot';
                 if (cat === 'article') return 'Article';
@@ -1547,7 +1557,6 @@
                 if (cat === 'corner' || cat === 'activity') return 'Activity';
                 return 'Lifehack';
             }
-            // object
             if (p.category === 'activity' || p.category === 'corner') {
                 const typeMap = { 'one-time': 'One-time', 'weekly': 'Weekly', 'monthly': 'Monthly', 'yearly': 'Yearly' };
                 const t = typeMap[p.eventType] || 'Activity';
@@ -1598,7 +1607,7 @@
                             <span class="truncate">${isAnon ? escapeHtml(p.author) : (isActivity ? 'Host: ' : 'By ') + escapeHtml(p.author)}</span>
                         </div>
                         <div class="flex items-center gap-3 flex-shrink-0">
-                            ${canDelete ? `<button onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-ruby hover:underline">Delete</button>` : ''}
+                            ${canDelete ? `<button type="button" onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-ruby hover:underline">Delete</button>` : ''}
                             <span class="text-brand-orange">View →</span>
                         </div>
                     </div>
@@ -1618,7 +1627,7 @@
                         <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
                         <h4 class="font-heading font-bold text-lg text-brand-dark">No posts in the feed yet</h4>
                         <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to drop a lifehack, secret spot or inquiry!</p>
-                        <button onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Drop a Post</button>
+                        <button type="button" onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Drop a Post</button>
                     </div>
                 `;
                 return;
@@ -1664,7 +1673,6 @@
             const grid = document.getElementById('activities-grid');
             if (!grid) return;
 
-            // Support both new "activity" and old "corner" categories
             let acts = posts.filter(p => p.category === 'activity' || p.category === 'corner');
 
             if (activityFilter !== 'all') {
@@ -1677,13 +1685,67 @@
                         <div class="w-12 h-12 bg-brand-ultra/10 rounded-full flex items-center justify-center mx-auto text-brand-ultra font-bold text-xl">📅</div>
                         <h4 class="font-heading font-bold text-lg text-brand-dark">No activities yet</h4>
                         <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to host a one-time event, weekly club, or monthly meetup!</p>
-                        <button onclick="openActivityModal()" class="mt-2 inline-block bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">+ Host Activity</button>
+                        <button type="button" onclick="openActivityModal()" class="mt-2 inline-block bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">+ Host Activity</button>
                     </div>
                 `;
                 return;
             }
             grid.innerHTML = acts.map(p => makePostCard(p)).join('');
         }
+
+        // ============================================================
+        //  BOOT — all DOM-dependent init runs HERE, at the very end,
+        //  and is guarded so a single failure can never prevent the
+        //  window.* handlers above from being defined.
+        // ============================================================
+        function boot() {
+            try {
+                const catSelect = document.getElementById('postCategory');
+                if (catSelect) catSelect.addEventListener('change', updateAnonNote);
+            } catch (err) {
+                console.error('[Liuzhou Loop] category select init failed:', err);
+            }
+
+            try {
+                populateActivityDaySelects();
+            } catch (err) {
+                console.error('[Liuzhou Loop] activity day selects init failed:', err);
+            }
+
+            try {
+                const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+                onSnapshot(q, (snapshot) => {
+                    posts = [];
+                    snapshot.forEach((docSnap) => {
+                        posts.push({ id: docSnap.id, ...docSnap.data() });
+                    });
+                    renderAll();
+                }, (error) => {
+                    console.error("Error listening to Firestore:", error);
+                    const grid = document.getElementById('posts-grid');
+                    if (grid) {
+                        grid.innerHTML = `
+                            <div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-brand-border text-brand-ruby font-semibold text-sm">
+                                Cloud database connection error.
+                            </div>
+                        `;
+                    }
+                });
+
+                onSnapshot(collection(db, "users"), (snapshot) => {
+                    const el = document.getElementById('active-count');
+                    if (el) el.innerText = snapshot.size;
+                }, (error) => {
+                    console.warn("Users listener error (check Firestore read rules):", error);
+                });
+            } catch (err) {
+                console.error('[Liuzhou Loop] Firestore listeners failed:', err);
+            }
+
+            console.log('[Liuzhou Loop] ready · openActivityModal:', typeof window.openActivityModal);
+        }
+
+        boot();
     </script>
 </body>
 </html>
