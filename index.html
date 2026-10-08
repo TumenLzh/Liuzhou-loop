@@ -153,7 +153,6 @@
                 </div>
             </div>
 
-            <!-- Added ID to this card -->
             <div id="hero-side-card" class="lg:col-span-4 bg-brand-card p-7 rounded-3xl border border-brand-border shadow-sm space-y-5 mt-4 transition-all">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-muted transition-colors">Cloud Status</span>
@@ -690,6 +689,8 @@
 
         // ---------- Global State ----------
         let currentUser = null;
+        let currentUserProfile = null; // To store the live profile of the logged-in user
+        let usersMap = {};             // To store a live map of all users' names & colors
         let posts = [];
         let currentMainTab = 'feed';
         let feedFilter = 'all';
@@ -716,6 +717,27 @@
             return d.toLocaleDateString();
         }
 
+        // Helper to get the live name and color for a post
+        function getPostAuthorInfo(post) {
+            const isAnon = isAnonCategory(post.category);
+            if (isAnon) {
+                return { name: post.author || 'Anonymous Insider', color: '' };
+            }
+            
+            // Use live data if available, otherwise fallback to the snapshot saved on the post
+            if (post.userId && usersMap[post.userId]) {
+                return {
+                    name: usersMap[post.userId].displayName || post.author || 'User',
+                    color: usersMap[post.userId].color || post.authorColor || '#FF5722'
+                };
+            }
+            
+            return { 
+                name: post.author || 'User', 
+                color: post.authorColor || '#FF5722' 
+            };
+        }
+
         // ---------- Auth UI ----------
         function updateAuthUI() {
             const area = document.getElementById('auth-area');
@@ -723,11 +745,14 @@
             const heroBtn = document.getElementById('hero-post-btn');
             if (!area) return;
             if (currentUser) {
-                const name = currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'Insider');
+                // Use currentUserProfile for live data, fallback to auth data
+                const name = currentUserProfile?.displayName || currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'Insider');
+                const color = currentUserProfile?.color || '#FF5722';
                 const initial = name.charAt(0).toUpperCase();
+                
                 area.innerHTML = `
                     <button type="button" onclick="toggleAccountMenu(event)" class="flex items-center gap-2 group">
-                        <div class="w-9 h-9 rounded-full bg-brand-orange text-white flex items-center justify-center font-bold text-sm">${escapeHtml(initial)}</div>
+                        <div class="w-9 h-9 rounded-full text-white flex items-center justify-center font-bold text-sm" style="background-color: ${color}">${escapeHtml(initial)}</div>
                         <span class="text-sm font-semibold text-brand-dark hidden sm:inline">Hi, ${escapeHtml(name)}</span>
                         <span class="text-brand-muted text-xs">▾</span>
                     </button>
@@ -789,12 +814,14 @@
                 if (authMode === 'signup') {
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(cred.user, { displayName: displayName || email.split('@')[0] });
-                    await setDoc(doc(db, "users", cred.user.uid), {
+                    const newProfile = {
                         displayName: displayName || email.split('@')[0],
                         email,
                         color: '#FF5722',
                         createdAt: serverTimestamp()
-                    });
+                    };
+                    await setDoc(doc(db, "users", cred.user.uid), newProfile);
+                    currentUserProfile = newProfile;
                 } else {
                     await signInWithEmailAndPassword(auth, email, password);
                 }
@@ -809,8 +836,24 @@
             await signOut(auth);
         };
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             currentUser = user;
+            if (user) {
+                // Fetch user profile from Firestore on login/auth state change
+                try {
+                    const snap = await getDoc(doc(db, "users", user.uid));
+                    if (snap.exists()) {
+                        currentUserProfile = snap.data();
+                    } else {
+                        currentUserProfile = { displayName: user.displayName, color: '#FF5722' };
+                    }
+                } catch (e) {
+                    console.error("Error fetching user profile:", e);
+                    currentUserProfile = { displayName: user.displayName, color: '#FF5722' };
+                }
+            } else {
+                currentUserProfile = null;
+            }
             updateAuthUI();
             renderAll();
         });
@@ -896,8 +939,12 @@
                 };
                 await setDoc(doc(db, "users", currentUser.uid), data, { merge: true });
                 await updateProfile(currentUser, { displayName: data.displayName });
-                closeSettings();
+                
+                // Update local cache immediately so UI reflects changes without waiting for Firestore
+                currentUserProfile = { ...currentUserProfile, ...data };
                 updateAuthUI();
+                
+                closeSettings();
             } catch (err) {
                 document.getElementById('settings-error').innerText = err.message;
                 document.getElementById('settings-error').classList.remove('hidden');
@@ -967,7 +1014,6 @@
         window.openFriends = function() {
             document.getElementById('friendsModal').classList.remove('hidden');
             document.getElementById('friendsModal').classList.add('flex');
-            // Reset to the first tab
             window.switchFriendsTab('list');
         };
         window.closeFriends = function() {
@@ -976,7 +1022,6 @@
         };
         
         window.switchFriendsTab = function(tab) {
-            // Update tab styles
             const tabs = ['list', 'incoming', 'outgoing'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`ftab-${t}`);
@@ -989,7 +1034,6 @@
                 }
             });
 
-            // Update content
             const content = document.getElementById('friends-content');
             if (tab === 'list') {
                 content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">Friends system – keep your original implementation or expand later.</p>';
@@ -1042,10 +1086,8 @@
             const floatBtn = document.getElementById('floating-post-btn');
             const logo = document.getElementById('brand-logo');
             
-            // Get the hero side card element
             const heroSideCard = document.getElementById('hero-side-card');
 
-            // Hide the side card on the Activities tab
             if (heroSideCard) {
                 if (tab === 'activities') {
                     heroSideCard.classList.add('hidden');
@@ -1222,15 +1264,11 @@
             if (category === 'anon' || category.startsWith('anon-')) {
                 author = authorInput || 'Anonymous Insider';
             } else {
-                author = currentUser.displayName || currentUser.email.split('@')[0] || 'Liuzhou Resident';
+                author = currentUserProfile?.displayName || currentUser.displayName || currentUser.email.split('@')[0] || 'Liuzhou Resident';
             }
 
             try {
-                let authorColor = '#FF5722';
-                try {
-                    const usnap = await getDoc(doc(db, "users", currentUser.uid));
-                    if (usnap.exists() && usnap.data().color) authorColor = usnap.data().color;
-                } catch (e) {}
+                let authorColor = currentUserProfile?.color || '#FF5722';
 
                 await addDoc(collection(db, "posts"), {
                     category,
@@ -1346,15 +1384,8 @@
             }
 
             try {
-                let authorColor = '#FF5722';
-                let authorName = currentUser.displayName || currentUser.email.split('@')[0] || 'Host';
-                try {
-                    const usnap = await getDoc(doc(db, "users", currentUser.uid));
-                    if (usnap.exists()) {
-                        if (usnap.data().color) authorColor = usnap.data().color;
-                        if (usnap.data().displayName) authorName = usnap.data().displayName;
-                    }
-                } catch (e) {}
+                let authorColor = currentUserProfile?.color || '#FF5722';
+                let authorName = currentUserProfile?.displayName || currentUser.displayName || currentUser.email.split('@')[0] || 'Host';
 
                 await addDoc(collection(db, "posts"), {
                     category: 'activity',
@@ -1406,6 +1437,9 @@
             const contentEl = document.getElementById('detail-content');
             const isActivity = post.category === 'activity' || post.category === 'corner';
             const isAnon = isAnonCategory(post.category);
+            
+            // Use live author info
+            const authorInfo = getPostAuthorInfo(post);
 
             contentEl.innerHTML = `
                 <div class="space-y-4">
@@ -1426,10 +1460,10 @@
                     <div class="flex items-center justify-between text-sm">
                         <div class="flex items-center gap-2 font-semibold text-brand-dark ${!isAnon && post.userId && post.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && post.userId && post.isHost !== false ? `onclick="openProfile('${post.userId}')"` : ''}>
                             ${!isAnon && post.isHost !== false ? (() => {
-                                const c = post.authorColor || '#FF5722';
-                                return `<div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background-color:${c}26;color:${c}">${escapeHtml((post.author || '?').charAt(0).toUpperCase())}</div>`;
+                                const c = authorInfo.color || '#FF5722';
+                                return `<div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background-color:${c}26;color:${c}">${escapeHtml(authorInfo.name.charAt(0).toUpperCase())}</div>`;
                             })() : ''}
-                            <span>${isAnon ? escapeHtml(post.author) : (isActivity ? 'Hosted by ' : 'By ') + escapeHtml(post.author)}</span>
+                            <span>${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Hosted by ' : 'By ') + escapeHtml(authorInfo.name)}</span>
                         </div>
                         ${currentUser && currentUser.uid === post.userId ? `
                             <button type="button" onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-ruby text-xs font-bold hover:underline">Delete</button>
@@ -1478,10 +1512,17 @@
                     const c = d.data();
                     const cid = d.id;
                     const isOwner = currentUser && c.userId && currentUser.uid === c.userId;
+                    
+                    // Use live user data for comments too
+                    let commentAuthor = c.author;
+                    if (c.userId && usersMap[c.userId]) {
+                        commentAuthor = usersMap[c.userId].displayName || commentAuthor;
+                    }
+                    
                     return `
                         <div class="bg-brand-light rounded-2xl p-4 space-y-1" id="comment-${cid}">
                             <div class="flex items-center justify-between text-xs">
-                                <span class="font-semibold text-brand-dark ${c.userId ? 'hover:text-brand-orange cursor-pointer' : ''}" ${c.userId ? `onclick="openProfile('${c.userId}')"` : ''}>${escapeHtml(c.author)}</span>
+                                <span class="font-semibold text-brand-dark ${c.userId ? 'hover:text-brand-orange cursor-pointer' : ''}" ${c.userId ? `onclick="openProfile('${c.userId}')"` : ''}>${escapeHtml(commentAuthor)}</span>
                                 <div class="flex items-center gap-3">
                                     <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
                                     ${isOwner ? `
@@ -1551,7 +1592,7 @@
                 await addDoc(collection(db, "comments"), {
                     postId: currentDetailPostId,
                     text,
-                    author: currentUser.displayName || currentUser.email.split('@')[0] || 'Insider',
+                    author: currentUserProfile?.displayName || currentUser.displayName || currentUser.email.split('@')[0] || 'Insider',
                     userId: currentUser.uid,
                     createdAt: serverTimestamp()
                 });
@@ -1623,6 +1664,10 @@
             const canDelete = currentUser && p.userId && currentUser.uid === p.userId;
             const isAnon = isAnonCategory(p.category);
             const isActivity = p.category === 'activity' || p.category === 'corner';
+            
+            // Fetch live author info
+            const authorInfo = getPostAuthorInfo(p);
+
             return `
                 <div class="bg-brand-card p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/40 transition-all relative group cursor-pointer ${extraClass}"
                      onclick="openDetailModal('${p.id}')">
@@ -1641,10 +1686,10 @@
                     <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
                         <div class="flex items-center gap-2 min-w-0 ${!isAnon && p.userId && p.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && p.userId && p.isHost !== false ? `onclick="event.stopPropagation(); openProfile('${p.userId}')"` : ''}>
                             ${!isAnon && p.isHost !== false ? (() => {
-                                const c = p.authorColor || '#FF5722';
-                                return `<div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold" style="background-color:${c}26;color:${c}">${escapeHtml((p.author || '?').charAt(0).toUpperCase())}</div>`;
+                                const c = authorInfo.color || '#FF5722';
+                                return `<div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold" style="background-color:${c}26;color:${c}">${escapeHtml(authorInfo.name.charAt(0).toUpperCase())}</div>`;
                             })() : ''}
-                            <span class="truncate">${isAnon ? escapeHtml(p.author) : (isActivity ? 'Host: ' : 'By ') + escapeHtml(p.author)}</span>
+                            <span class="truncate">${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Host: ' : 'By ') + escapeHtml(authorInfo.name)}</span>
                         </div>
                         <div class="flex items-center gap-3 flex-shrink-0">
                             ${canDelete ? `<button type="button" onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-ruby hover:underline">Delete</button>` : ''}
@@ -1753,6 +1798,7 @@
             }
 
             try {
+                // Listen to Posts
                 const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
                 onSnapshot(q, (snapshot) => {
                     posts = [];
@@ -1761,7 +1807,7 @@
                     });
                     renderAll();
                 }, (error) => {
-                    console.error("Error listening to Firestore:", error);
+                    console.error("Error listening to Firestore posts:", error);
                     const grid = document.getElementById('posts-grid');
                     if (grid) {
                         grid.innerHTML = `
@@ -1772,9 +1818,25 @@
                     }
                 });
 
+                // Listen to Users to keep the usersMap updated in real-time
                 onSnapshot(collection(db, "users"), (snapshot) => {
+                    usersMap = {};
+                    snapshot.forEach((docSnap) => {
+                        usersMap[docSnap.id] = docSnap.data();
+                    });
+                    
+                    // Update the local currentUserProfile if it exists in the map
+                    if (currentUser && usersMap[currentUser.uid]) {
+                        currentUserProfile = usersMap[currentUser.uid];
+                        updateAuthUI();
+                    }
+                    
+                    // Update the active count
                     const el = document.getElementById('active-count');
                     if (el) el.innerText = snapshot.size;
+                    
+                    // Re-render everything so posts reflect updated user names/colors
+                    renderAll();
                 }, (error) => {
                     console.warn("Users listener error (check Firestore read rules):", error);
                 });
