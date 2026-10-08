@@ -944,6 +944,8 @@
                 if (u.mbti) html += `<p><span class="font-semibold">MBTI:</span> ${escapeHtml(u.mbti)}</p>`;
                 if (u.status) html += `<p><span class="font-semibold">Status:</span> ${escapeHtml(u.status)}</p>`;
                 if (u.hobbies) html += `<p><span class="font-semibold">Hobbies:</span> ${escapeHtml(u.hobbies)}</p>`;
+                if (u.likes) html += `<p><span class="font-semibold">Likes:</span> ${escapeHtml(u.likes)}</p>`;
+                if (u.dislikes) html += `<p><span class="font-semibold">Dislikes:</span> ${escapeHtml(u.dislikes)}</p>`;
                 if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
                 html += `</div>`;
                 if (currentUser && currentUser.uid !== uid) {
@@ -960,17 +962,42 @@
             document.getElementById('profileModal').classList.remove('flex');
         };
 
-        // ---------- Friends (simplified stubs – keep your existing full logic if present) ----------
+        // ---------- Friends ----------
         window.openFriends = function() {
             document.getElementById('friendsModal').classList.remove('hidden');
             document.getElementById('friendsModal').classList.add('flex');
-            document.getElementById('friends-content').innerHTML = '<p class="text-sm text-brand-muted text-center py-8">Friends system – keep your original implementation or expand later.</p>';
+            // Reset to the first tab
+            window.switchFriendsTab('list');
         };
         window.closeFriends = function() {
             document.getElementById('friendsModal').classList.add('hidden');
             document.getElementById('friendsModal').classList.remove('flex');
         };
-        window.switchFriendsTab = function() {};
+        
+        window.switchFriendsTab = function(tab) {
+            // Update tab styles
+            const tabs = ['list', 'incoming', 'outgoing'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`ftab-${t}`);
+                if (btn) {
+                    if (t === tab) {
+                        btn.className = 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all';
+                    } else {
+                        btn.className = 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all';
+                    }
+                }
+            });
+
+            // Update content
+            const content = document.getElementById('friends-content');
+            if (tab === 'list') {
+                content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">Friends system – keep your original implementation or expand later.</p>';
+            } else if (tab === 'incoming') {
+                content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No incoming friend requests.</p>';
+            } else if (tab === 'outgoing') {
+                content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No sent friend requests.</p>';
+            }
+        };
         window.sendFriendRequest = async function(uid) {
             alert('Friend request sent (implement full logic from original if needed).');
         };
