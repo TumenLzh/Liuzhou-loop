@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Liuzhou Loop — Expat & Youth Insider</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='12' fill='%23FF5722'/><text x='50%' y='54%' font-family='Syne, sans-serif' font-weight='800' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'>L</text></svg>">
+
+    <!-- Non-blocking font load (critical for Chinese networks where Google Fonts is slow) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E6%9F%B3%E5%B7%9E&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E6%9F%B3%E5%B7%9E&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap">
+    </noscript>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -22,14 +28,43 @@
                         }
                     },
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        heading: ['"Syne"', 'sans-serif'],
-                        display: ['"Playfair Display"', 'serif']
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        heading: ['"Syne"', 'system-ui', '-apple-system', 'sans-serif'],
+                        display: ['"Playfair Display"', 'Georgia', 'serif']
                     }
                 }
             }
         }
     </script>
+
+    <!-- Early error banner: shows JS errors on screen so WebView users aren't stuck with a dead page -->
+    <script>
+        (function() {
+            window.__lzShowError = function(msg) {
+                try {
+                    let el = document.getElementById('lz-error-banner');
+                    if (!el) {
+                        el = document.createElement('div');
+                        el.id = 'lz-error-banner';
+                        el.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#9B1E2E;color:#fff;padding:14px 18px;font-family:system-ui,-apple-system,sans-serif;font-size:13px;line-height:1.4;z-index:999999;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.2);';
+                        document.body ? document.body.appendChild(el) : document.addEventListener('DOMContentLoaded', () => document.body.appendChild(el));
+                    }
+                    el.textContent = msg;
+                } catch (e) { /* silent */ }
+            };
+            window.addEventListener('error', function(ev) {
+                console.error('[Liuzhou Loop Error]', ev.error || ev.message);
+                const m = String(ev.message || '');
+                if (m.includes('import') || m.includes('module') || m.includes('Failed to fetch')) {
+                    window.__lzShowError('App failed to load. Your browser may not support the required features. Please try Chrome, Firefox, or a recent version of Safari.');
+                }
+            });
+            window.addEventListener('unhandledrejection', function(ev) {
+                console.error('[Liuzhou Loop Promise]', ev.reason);
+            });
+        })();
+    </script>
+
     <style>
         body { background-color: #F8F1E0; color: #1A1A1A; transition: background-color 0.4s ease, color 0.4s ease; }
         body.theme-feed { background-color: #F8F1E0; color: #1A1A1A; }
@@ -52,9 +87,6 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* ============================================
-           Decorative background layers (scroll with page)
-           ============================================ */
         .decor-root {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -80,8 +112,6 @@
             transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s,
                         transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
         }
-
-        /* FEED — huge 柳州 */
         .decor-feed { color: #1A1A1A; }
         .decor-lz {
             position: absolute;
@@ -97,8 +127,6 @@
             opacity: 0.045;
             user-select: none;
         }
-
-        /* ARTICLES — city skyline */
         .decor-articles { color: #123524; }
         .decor-skyline {
             position: absolute;
@@ -108,10 +136,8 @@
             height: auto;
             opacity: 0.055;
         }
-
-        /* ANON — twinkling stars */
         .decor-anon { color: #F8F1E0; }
-        .decor-stars { position: absolute; inset: 0; overflow: hidden; }
+        .decor-stars { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; }
         .decor-star {
             position: absolute;
             background: #ffffff;
@@ -124,8 +150,6 @@
             0%, 100% { opacity: 0.12; transform: scale(0.85); }
             50%      { opacity: 0.85; transform: scale(1.15); }
         }
-
-        /* ACTIVITIES — people chatting */
         .decor-activities { color: #120A8F; }
         .decor-people {
             position: absolute;
@@ -135,7 +159,6 @@
             height: auto;
             opacity: 0.05;
         }
-
         @media (prefers-reduced-motion: reduce) {
             .decor-star { animation: none; opacity: 0.5; }
             .decor-layer { transition: opacity 0.3s ease; transform: none !important; }
@@ -144,13 +167,16 @@
 </head>
 <body id="main-body" class="theme-feed font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-orange selection:text-white relative">
 
-    <!-- Decorative background layers -->
-    <div class="decor-root" aria-hidden="true">
+    <noscript>
+        <div style="position:fixed;top:0;left:0;right:0;background:#9B1E2E;color:white;padding:20px;text-align:center;font-family:sans-serif;z-index:999999;">
+            This app requires JavaScript. Please enable JavaScript in your browser settings and reload the page.
+        </div>
+    </noscript>
 
+    <div class="decor-root" aria-hidden="true">
         <div class="decor-layer decor-feed">
             <span class="decor-lz">柳州</span>
         </div>
-
         <div class="decor-layer decor-articles">
             <svg class="decor-skyline" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
                 <g fill="currentColor">
@@ -179,11 +205,9 @@
                 </g>
             </svg>
         </div>
-
         <div class="decor-layer decor-anon">
             <div id="decor-stars" class="decor-stars"></div>
         </div>
-
         <div class="decor-layer decor-activities">
             <svg class="decor-people" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
                 <g fill="currentColor">
@@ -202,14 +226,11 @@
                 </g>
             </svg>
         </div>
-
     </div>
 
-    <!-- Top Navigation Bar (mobile-friendly) -->
     <header class="sticky top-0 z-50 bg-[#F8F1E0]/90 backdrop-blur-md border-b border-brand-border transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 py-2.5 md:h-20 md:py-0 md:flex-nowrap">
-
                 <a href="#" class="flex items-center gap-2 sm:gap-3 group order-1 flex-shrink-0">
                     <div id="brand-logo" class="w-9 h-9 sm:w-10 sm:h-10 bg-brand-orange rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-lg sm:text-xl shadow-sm group-hover:scale-105 transition-all">L</div>
                     <div>
@@ -217,21 +238,18 @@
                         <span class="block text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-brand-muted font-semibold transition-colors">Expat & Youth Insider</span>
                     </div>
                 </a>
-
                 <div class="flex items-center gap-3 order-2 md:order-3 flex-shrink-0">
                     <div id="auth-area" class="flex items-center gap-3">
                         <button type="button" onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
                         <button type="button" onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
                     </div>
                 </div>
-
                 <nav class="order-3 md:order-2 w-full md:w-auto flex items-center gap-1.5 md:gap-2 text-[10px] md:text-xs font-bold uppercase tracking-wider overflow-x-auto pb-1 md:pb-0 md:overflow-visible scrollbar-hide">
                     <button type="button" onclick="switchMainTab('feed')" id="nav-feed" class="nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap">Feed</button>
                     <button type="button" onclick="switchMainTab('articles')" id="nav-articles" class="nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap">Articles</button>
                     <button type="button" onclick="switchMainTab('anon')" id="nav-anon" class="nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap">Liuzhou Anon</button>
                     <button type="button" onclick="switchMainTab('activities')" id="nav-activities" class="nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap">Activities</button>
                 </nav>
-
             </div>
         </div>
     </header>
@@ -272,7 +290,6 @@
     </section>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full">
-
         <section id="panel-feed" class="main-panel space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6 transition-colors">
                 <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
@@ -320,7 +337,6 @@
                 </div>
                 <button type="button" onclick="openActivityModal()" class="text-xs font-bold uppercase tracking-wider bg-brand-ultra text-white hover:bg-blue-900 px-5 py-2.5 rounded-full transition-colors shadow-sm">+ Host / Create Activity</button>
             </div>
-
             <div id="your-clubs-section" class="hidden space-y-4">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-[0.15em] text-brand-orange">Your Memberships</span>
@@ -329,7 +345,6 @@
                 <div id="your-clubs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                 <div class="border-b border-brand-border"></div>
             </div>
-
             <div class="flex flex-wrap items-center gap-2">
                 <button type="button" onclick="filterActivities('all')" id="act-btn-all" class="act-tab bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all">All</button>
                 <button type="button" onclick="filterActivities('clubs')" id="act-btn-clubs" class="act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all">Clubs</button>
@@ -342,7 +357,6 @@
                 <div class="col-span-full py-16 text-center text-sm text-brand-muted">Loading activities...</div>
             </div>
         </section>
-
     </main>
 
     <div id="authModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
@@ -351,18 +365,18 @@
                 <h3 id="auth-title" class="font-heading font-extrabold text-2xl text-brand-dark">Create Account</h3>
                 <button type="button" onclick="closeAuthModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
-            <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
+            <form id="authForm" autocomplete="on" class="space-y-4">
                 <div id="display-name-wrapper">
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Display Name</label>
-                    <input type="text" id="authDisplayName" placeholder="How others will see you" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                    <input type="text" id="authDisplayName" name="displayName" autocomplete="nickname" placeholder="How others will see you" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Email</label>
-                    <input type="email" id="authEmail" required placeholder="you@example.com" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                    <input type="email" id="authEmail" name="email" required autocomplete="email" inputmode="email" placeholder="you@example.com" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Password</label>
-                    <input type="password" id="authPassword" required minlength="6" placeholder="At least 6 characters" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                    <input type="password" id="authPassword" name="password" required minlength="6" autocomplete="current-password" placeholder="At least 6 characters" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
                 </div>
                 <p id="auth-error" class="text-sm text-brand-ruby hidden"></p>
                 <button type="submit" id="authSubmitBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Create Account</button>
@@ -380,7 +394,7 @@
                 <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Drop to Liuzhou Loop</h3>
                 <button type="button" onclick="closeModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
-            <form id="submissionForm" onsubmit="handleSubmission(event)" class="space-y-4">
+            <form id="submissionForm" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Category</label>
                     <select id="postCategory" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-semibold text-brand-dark focus:outline-none focus:border-brand-orange"></select>
@@ -415,7 +429,7 @@
                 </div>
                 <button type="button" onclick="closeActivityModal()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
-            <form id="activityForm" onsubmit="handleActivitySubmission(event)" class="space-y-4">
+            <form id="activityForm" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Event Type</label>
                     <div class="grid grid-cols-2 gap-2">
@@ -518,7 +532,6 @@
                 <h3 class="font-heading font-extrabold text-2xl text-brand-dark">Edit Profile</h3>
                 <button type="button" onclick="closeSettings()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
             </div>
-
             <div class="bg-brand-ultra/5 border border-brand-ultra/20 rounded-2xl p-4">
                 <p class="text-[10px] uppercase tracking-wider text-brand-muted font-bold mb-1">Your friend code</p>
                 <div class="flex items-center gap-3">
@@ -527,7 +540,6 @@
                 </div>
                 <p class="text-[10px] text-brand-muted mt-2">Share this code with anyone so they can add you instantly — no need for them to find you in a post first.</p>
             </div>
-
             <div class="flex items-center justify-between bg-brand-light border border-brand-border rounded-2xl p-4">
                 <div class="pr-3">
                     <p class="text-sm font-bold text-brand-dark">Show my clubs on my profile</p>
@@ -539,7 +551,6 @@
                     <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow peer-checked:translate-x-5 transition-all"></div>
                 </label>
             </div>
-
             <div class="flex flex-col items-center gap-3">
                 <div id="settings-pfp-preview" class="w-24 h-24 rounded-full flex items-center justify-center border-2 border-brand-border" style="background-color: rgba(255,87,34,0.15)">
                     <span class="text-2xl font-bold" id="settings-pfp-initial" style="color:#FF5722">?</span>
@@ -661,11 +672,8 @@
         </div>
     </div>
 
-    <!-- Messages Modal -->
     <div id="messagesModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-md w-full shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col" style="height:min(640px,90vh)">
-
-            <!-- Chat list view -->
             <div id="dm-list-view" class="flex flex-col h-full">
                 <div class="flex items-center justify-between p-5 border-b border-brand-border">
                     <h3 class="font-heading font-extrabold text-xl text-brand-dark">Messages</h3>
@@ -676,8 +684,6 @@
                 </div>
                 <p class="text-[10px] text-brand-muted text-center px-4 pb-3">You can only message friends. Add friends from their profiles.</p>
             </div>
-
-            <!-- Conversation view -->
             <div id="dm-thread-view" class="hidden flex flex-col h-full">
                 <div class="flex items-center gap-3 p-4 border-b border-brand-border">
                     <button type="button" onclick="showDmList()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark text-lg">&larr;</button>
@@ -687,12 +693,11 @@
                     </div>
                 </div>
                 <div id="dm-messages" class="overflow-y-auto flex-1 p-4 space-y-3 bg-brand-light/40"></div>
-                <form id="dm-send-form" onsubmit="sendDm(event)" class="p-3 border-t border-brand-border flex gap-2">
+                <form id="dm-send-form" class="p-3 border-t border-brand-border flex gap-2">
                     <input type="text" id="dm-input" placeholder="Type a message..." class="flex-1 bg-brand-light border border-brand-border rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-brand-orange" autocomplete="off">
                     <button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white rounded-full px-4 py-2.5 text-sm font-semibold transition-colors">Send</button>
                 </form>
             </div>
-
         </div>
     </div>
 
@@ -708,7 +713,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, initializeAuth, browserLocalPersistence, browserSessionPersistence, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, getDoc, setDoc, updateDoc, deleteDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -722,7 +727,26 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+
+        // Robust auth initialization with persistence fallback (fixes Safari / WeChat WebView storage issues)
+        let auth;
+        try {
+            auth = initializeAuth(app, {
+                persistence: [browserLocalPersistence, browserSessionPersistence, inMemoryPersistence]
+            });
+        } catch (e) {
+            console.warn('initializeAuth failed, falling back to getAuth:', e);
+            try {
+                auth = getAuth(app);
+            } catch (e2) {
+                console.error('getAuth also failed:', e2);
+                if (window.__lzShowError) {
+                    window.__lzShowError('Authentication is not available in this browser. Please try Chrome, Firefox, or Safari (not in a private window).');
+                }
+                throw e2;
+            }
+        }
+
         const db = getFirestore(app);
 
         let currentUser = null;
@@ -747,7 +771,6 @@
         let myClubMemberships = [];
         let clubMembershipsUnsub = null;
 
-        // DM state
         let currentDmPartner = null;
         let currentDmPartnerName = '';
         let dmMessagesUnsub = null;
@@ -808,9 +831,7 @@
                     const q = query(collection(db, "users"), where("friendCode", "==", code));
                     const snap = await getDocs(q);
                     if (snap.empty) return code;
-                } catch (e) {
-                    console.warn('Friend code uniqueness check failed:', e);
-                }
+                } catch (e) { console.warn('Friend code uniqueness check failed:', e); }
             }
             return String(Date.now()).slice(-6);
         }
@@ -824,10 +845,7 @@
                 const code = await generateUniqueFriendCodeAsync();
                 await setDoc(doc(db, "users", uid), { friendCode: code }, { merge: true });
                 return code;
-            } catch (e) {
-                console.error('ensureFriendCode failed:', e);
-                return null;
-            }
+            } catch (e) { console.error('ensureFriendCode failed:', e); return null; }
         }
 
         function isClubMember(clubId) { return myClubMemberships.some(m => m.clubId === clubId); }
@@ -840,10 +858,7 @@
             if (!currentUser) { renderAll(); return; }
             clubMembershipsUnsub = onSnapshot(
                 query(collection(db, "clubMembers"), where("userId", "==", currentUser.uid)),
-                (snap) => {
-                    myClubMemberships = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                    renderAll();
-                },
+                (snap) => { myClubMemberships = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll(); },
                 (error) => { console.warn('Club memberships listener error:', error); }
             );
         }
@@ -852,10 +867,7 @@
             try {
                 const snap = await getDocs(query(collection(db, "clubMembers"), where("clubId", "==", clubId)));
                 return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            } catch (e) {
-                console.error('loadClubMembers failed:', e);
-                return [];
-            }
+            } catch (e) { console.error('loadClubMembers failed:', e); return []; }
         }
 
         window.joinClub = async function(clubId) {
@@ -864,17 +876,10 @@
             const membershipId = `${clubId}_${currentUser.uid}`;
             try {
                 await setDoc(doc(db, "clubMembers", membershipId), {
-                    clubId,
-                    userId: currentUser.uid,
-                    role: 'member',
-                    roleName: 'Member',
-                    joinedAt: serverTimestamp()
+                    clubId, userId: currentUser.uid, role: 'member', roleName: 'Member', joinedAt: serverTimestamp()
                 });
                 if (currentDetailPostId === clubId) openDetailModal(clubId);
-            } catch (e) {
-                console.error(e);
-                alert('Could not join club.');
-            }
+            } catch (e) { console.error(e); alert('Could not join club.'); }
         };
 
         window.leaveClub = async function(clubId) {
@@ -884,20 +889,13 @@
             try {
                 await deleteDoc(doc(db, "clubMembers", membershipId));
                 if (currentDetailPostId === clubId) openDetailModal(clubId);
-            } catch (e) {
-                console.error(e);
-                alert('Could not leave club.');
-            }
+            } catch (e) { console.error(e); alert('Could not leave club.'); }
         };
 
         window.updateMemberRole = async function(membershipId, newRoleName) {
             const clean = (newRoleName || '').trim() || 'Member';
-            try {
-                await updateDoc(doc(db, "clubMembers", membershipId), { roleName: clean });
-            } catch (e) {
-                console.error(e);
-                alert('Could not update role.');
-            }
+            try { await updateDoc(doc(db, "clubMembers", membershipId), { roleName: clean }); }
+            catch (e) { console.error(e); alert('Could not update role.'); }
         };
 
         window.removeClubMember = async function(membershipId) {
@@ -905,10 +903,7 @@
             try {
                 await deleteDoc(doc(db, "clubMembers", membershipId));
                 if (currentDetailPostId) openDetailModal(currentDetailPostId);
-            } catch (e) {
-                console.error(e);
-                alert('Could not remove member.');
-            }
+            } catch (e) { console.error(e); alert('Could not remove member.'); }
         };
 
         function updateAuthUI() {
@@ -969,12 +964,24 @@
         }
 
         window.handleAuth = async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value;
-            const displayName = document.getElementById('authDisplayName').value.trim();
+            if (e && e.preventDefault) e.preventDefault();
+            const emailEl = document.getElementById('authEmail');
+            const passEl = document.getElementById('authPassword');
+            const nameEl = document.getElementById('authDisplayName');
             const errEl = document.getElementById('auth-error');
-            errEl.classList.add('hidden');
+            const btn = document.getElementById('authSubmitBtn');
+            const email = (emailEl && emailEl.value || '').trim();
+            const password = (passEl && passEl.value) || '';
+            const displayName = (nameEl && nameEl.value || '').trim();
+            if (errEl) errEl.classList.add('hidden');
+            if (!email || !password) {
+                if (errEl) {
+                    errEl.innerText = 'Email and password are required.';
+                    errEl.classList.remove('hidden');
+                }
+                return;
+            }
+            if (btn) { btn.disabled = true; btn.innerText = 'Please wait...'; }
             try {
                 if (authMode === 'signup') {
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
@@ -982,9 +989,7 @@
                     const friendCode = await generateUniqueFriendCodeAsync();
                     const newProfile = {
                         displayName: displayName || email.split('@')[0],
-                        email,
-                        color: '#FF5722',
-                        friendCode,
+                        email, color: '#FF5722', friendCode,
                         showClubsOnProfile: true,
                         createdAt: serverTimestamp()
                     };
@@ -995,8 +1000,18 @@
                 }
                 closeAuthModal();
             } catch (err) {
-                errEl.innerText = err.message;
-                errEl.classList.remove('hidden');
+                console.error('Auth error:', err);
+                let msg = err && err.message ? err.message : 'Authentication failed.';
+                // Friendlier messages for common cases
+                if (/network/i.test(msg)) msg = 'Network error. Please check your connection and try again.';
+                else if (/invalid-credential|wrong-password|invalid-login/i.test(msg)) msg = 'Wrong email or password.';
+                else if (/user-not-found/i.test(msg)) msg = 'No account with that email. Try signing up first.';
+                else if (/email-already-in-use/i.test(msg)) msg = 'That email is already registered. Try logging in.';
+                else if (/web-storage|storage|persistence/i.test(msg)) msg = 'Your browser is blocking storage. Please disable private mode / tracking protection and try again.';
+                else if (/too-many-requests/i.test(msg)) msg = 'Too many attempts. Please wait a minute and try again.';
+                if (errEl) { errEl.innerText = msg; errEl.classList.remove('hidden'); }
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerText = authMode === 'signup' ? 'Create Account' : 'Log In'; }
             }
         };
 
@@ -1081,12 +1096,8 @@
             const badge = document.getElementById('friends-badge');
             if (!badge) return;
             const count = incomingRequests.length;
-            if (count > 0) {
-                badge.textContent = count;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
+            if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+            else badge.classList.add('hidden');
         }
 
         window.openFriends = function() {
@@ -1119,15 +1130,10 @@
             if (!content) return;
             const countEl = document.getElementById('incoming-count');
             if (countEl) countEl.textContent = incomingRequests.length > 0 ? `(${incomingRequests.length})` : '';
-            if (!currentUser) {
-                content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">Log in to see friends.</p>';
-                return;
-            }
+            if (!currentUser) { content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">Log in to see friends.</p>'; return; }
+
             if (currentFriendsTab === 'list') {
-                if (myFriends.length === 0) {
-                    content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No friends yet. Add someone using their 6-digit friend code above!</p>';
-                    return;
-                }
+                if (myFriends.length === 0) { content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No friends yet. Add someone using their 6-digit friend code above!</p>'; return; }
                 content.innerHTML = myFriends.map(f => {
                     const u = usersMap[f.uid] || {};
                     const name = u.displayName || 'User';
@@ -1145,14 +1151,10 @@
                                 <button type="button" onclick="openProfile('${f.uid}')" class="text-xs font-bold text-brand-orange hover:underline">View</button>
                                 <button type="button" onclick="removeFriend('${f.friendshipId}')" class="text-xs font-bold text-brand-ruby hover:underline">Remove</button>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
             } else if (currentFriendsTab === 'incoming') {
-                if (incomingRequests.length === 0) {
-                    content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No incoming requests.</p>';
-                    return;
-                }
+                if (incomingRequests.length === 0) { content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No incoming requests.</p>'; return; }
                 content.innerHTML = incomingRequests.map(r => {
                     const u = usersMap[r.from] || {};
                     const name = u.displayName || r.fromName || 'User';
@@ -1171,14 +1173,10 @@
                                 <button type="button" onclick="acceptFriendRequest('${r.id}', '${r.from}')" class="flex-1 bg-brand-orange hover:bg-orange-600 text-white text-xs font-bold py-2 rounded-full transition-colors">Accept</button>
                                 <button type="button" onclick="declineFriendRequest('${r.id}')" class="flex-1 border border-brand-border text-brand-muted text-xs font-bold py-2 rounded-full hover:bg-white transition-colors">Decline</button>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
             } else if (currentFriendsTab === 'outgoing') {
-                if (outgoingRequests.length === 0) {
-                    content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No pending outgoing requests.</p>';
-                    return;
-                }
+                if (outgoingRequests.length === 0) { content.innerHTML = '<p class="text-sm text-brand-muted text-center py-8">No pending outgoing requests.</p>'; return; }
                 content.innerHTML = outgoingRequests.map(r => {
                     const u = usersMap[r.to] || {};
                     const name = u.displayName || r.toName || 'User';
@@ -1194,8 +1192,7 @@
                                 </div>
                             </div>
                             <button type="button" onclick="cancelFriendRequest('${r.id}')" class="text-xs font-bold text-brand-ruby hover:underline">Cancel</button>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
             }
         }
@@ -1213,27 +1210,13 @@
             try {
                 const q = query(collection(db, "users"), where("friendCode", "==", code));
                 const snap = await getDocs(q);
-                if (snap.empty) {
-                    status.className = 'text-xs mt-2 text-brand-ruby';
-                    status.textContent = 'No user found with that code.';
-                    return;
-                }
+                if (snap.empty) { status.className = 'text-xs mt-2 text-brand-ruby'; status.textContent = 'No user found with that code.'; return; }
                 const targetDoc = snap.docs[0];
                 const targetUid = targetDoc.id;
-                if (targetUid === currentUser.uid) {
-                    status.className = 'text-xs mt-2 text-brand-ruby';
-                    status.textContent = "That's your own code!";
-                    return;
-                }
+                if (targetUid === currentUser.uid) { status.className = 'text-xs mt-2 text-brand-ruby'; status.textContent = "That's your own code!"; return; }
                 const result = await createFriendRequest(targetUid, targetDoc.data());
-                if (result.ok) {
-                    status.className = 'text-xs mt-2 text-brand-phthalo font-semibold';
-                    status.textContent = result.message;
-                    input.value = '';
-                } else {
-                    status.className = 'text-xs mt-2 text-brand-ruby';
-                    status.textContent = result.message;
-                }
+                if (result.ok) { status.className = 'text-xs mt-2 text-brand-phthalo font-semibold'; status.textContent = result.message; input.value = ''; }
+                else { status.className = 'text-xs mt-2 text-brand-ruby'; status.textContent = result.message; }
             } catch (e) {
                 console.error(e);
                 status.className = 'text-xs mt-2 text-brand-ruby';
@@ -1247,20 +1230,15 @@
             if (myFriends.some(f => f.uid === targetUid)) return { ok: false, message: 'You are already friends.' };
             if (outgoingRequests.some(r => r.to === targetUid)) return { ok: false, message: 'Request already sent — waiting for them to accept.' };
             const incoming = incomingRequests.find(r => r.from === targetUid);
-            if (incoming) {
-                await acceptFriendRequest(incoming.id, targetUid);
-                return { ok: true, message: 'You had a pending request from them — accepted!' };
-            }
+            if (incoming) { await acceptFriendRequest(incoming.id, targetUid); return { ok: true, message: 'You had a pending request from them — accepted!' }; }
             try {
                 await addDoc(collection(db, "friendRequests"), {
-                    from: currentUser.uid,
-                    to: targetUid,
+                    from: currentUser.uid, to: targetUid,
                     fromName: currentUserProfile?.displayName || currentUser.displayName || 'User',
                     fromColor: currentUserProfile?.color || '#FF5722',
                     toName: targetData?.displayName || 'User',
                     toColor: targetData?.color || '#FF5722',
-                    status: 'pending',
-                    createdAt: serverTimestamp()
+                    status: 'pending', createdAt: serverTimestamp()
                 });
                 return { ok: true, message: 'Request sent! They\'ll see it in their Requests tab.' };
             } catch (e) {
@@ -1273,11 +1251,8 @@
             const targetSnap = await getDoc(doc(db, "users", targetUid));
             const targetData = targetSnap.exists() ? targetSnap.data() : {};
             const result = await createFriendRequest(targetUid, targetData);
-            if (!result.ok) {
-                alert(result.message);
-            } else if (!document.getElementById('profileModal').classList.contains('hidden')) {
-                openProfile(targetUid);
-            }
+            if (!result.ok) alert(result.message);
+            else if (!document.getElementById('profileModal').classList.contains('hidden')) openProfile(targetUid);
         };
 
         window.acceptFriendRequest = async function(requestId, fromUid) {
@@ -1286,41 +1261,26 @@
                 const users = [currentUser.uid, fromUid].sort();
                 await addDoc(collection(db, "friends"), { users, createdAt: serverTimestamp() });
                 await updateDoc(doc(db, "friendRequests", requestId), { status: 'accepted', respondedAt: serverTimestamp() });
-            } catch (e) {
-                console.error(e);
-                alert('Could not accept request: ' + (e.message || 'unknown error'));
-            }
+            } catch (e) { console.error(e); alert('Could not accept request: ' + (e.message || 'unknown error')); }
         };
 
         window.declineFriendRequest = async function(requestId) {
             if (!currentUser) return;
-            try {
-                await updateDoc(doc(db, "friendRequests", requestId), { status: 'declined', respondedAt: serverTimestamp() });
-            } catch (e) {
-                console.error(e);
-                alert('Could not decline request.');
-            }
+            try { await updateDoc(doc(db, "friendRequests", requestId), { status: 'declined', respondedAt: serverTimestamp() }); }
+            catch (e) { console.error(e); alert('Could not decline request.'); }
         };
 
         window.cancelFriendRequest = async function(requestId) {
             if (!currentUser) return;
             if (!confirm('Cancel this friend request?')) return;
-            try {
-                await deleteDoc(doc(db, "friendRequests", requestId));
-            } catch (e) {
-                console.error(e);
-                alert('Could not cancel request.');
-            }
+            try { await deleteDoc(doc(db, "friendRequests", requestId)); }
+            catch (e) { console.error(e); alert('Could not cancel request.'); }
         };
 
         window.removeFriend = async function(friendshipId) {
             if (!confirm('Remove this friend?')) return;
-            try {
-                await deleteDoc(doc(db, "friends", friendshipId));
-            } catch (e) {
-                console.error(e);
-                alert('Could not remove friend.');
-            }
+            try { await deleteDoc(doc(db, "friends", friendshipId)); }
+            catch (e) { console.error(e); alert('Could not remove friend.'); }
         };
 
         window.toggleAccountMenu = function(e) {
@@ -1371,17 +1331,11 @@
         window.copyFriendCode = function() {
             const code = (currentUserProfile?.friendCode || '').toString();
             if (!code) return;
-            navigator.clipboard.writeText(code).then(() => {
-                alert('Friend code copied: #' + code);
-            }).catch(() => {
-                alert('Your friend code is #' + code);
-            });
+            navigator.clipboard.writeText(code).then(() => alert('Friend code copied: #' + code)).catch(() => alert('Your friend code is #' + code));
         };
         window.pickColor = function(c) {
             document.getElementById('settingsColor').value = c;
-            document.querySelectorAll('.color-swatch').forEach(s => {
-                s.style.borderColor = s.dataset.color === c ? '#1A1A1A' : 'transparent';
-            });
+            document.querySelectorAll('.color-swatch').forEach(s => { s.style.borderColor = s.dataset.color === c ? '#1A1A1A' : 'transparent'; });
             const name = document.getElementById('settingsName').value || '?';
             document.getElementById('settings-pfp-preview').style.backgroundColor = c + '26';
             document.getElementById('settings-pfp-initial').style.color = c;
@@ -1390,8 +1344,7 @@
         window.saveSettings = async function() {
             if (!currentUser) return;
             const btn = document.getElementById('settingsSaveBtn');
-            btn.disabled = true;
-            btn.innerText = 'Saving...';
+            btn.disabled = true; btn.innerText = 'Saving...';
             try {
                 const data = {
                     displayName: document.getElementById('settingsName').value.trim() || currentUser.email.split('@')[0],
@@ -1418,8 +1371,7 @@
                 document.getElementById('settings-error').innerText = err.message;
                 document.getElementById('settings-error').classList.remove('hidden');
             } finally {
-                btn.disabled = false;
-                btn.innerText = 'Save Profile';
+                btn.disabled = false; btn.innerText = 'Save Profile';
             }
         };
         window.confirmDeleteAccount = async function() {
@@ -1427,9 +1379,7 @@
             try {
                 await deleteDoc(doc(db, "users", currentUser.uid));
                 await deleteUser(currentUser);
-            } catch (err) {
-                alert('Could not delete account: ' + (err.message || 'unknown error'));
-            }
+            } catch (err) { alert('Could not delete account: ' + (err.message || 'unknown error')); }
         };
 
         window.openProfile = async function(uid) {
@@ -1440,23 +1390,18 @@
             content.innerHTML = '<p class="text-sm text-brand-muted">Loading...</p>';
             try {
                 const snap = await getDoc(doc(db, "users", uid));
-                if (!snap.exists()) {
-                    content.innerHTML = '<p class="text-sm text-brand-muted">User not found.</p>';
-                    return;
-                }
+                if (!snap.exists()) { content.innerHTML = '<p class="text-sm text-brand-muted">User not found.</p>'; return; }
                 const u = snap.data();
                 const color = u.color || '#FF5722';
                 const name = u.displayName || 'Insider';
                 const isMe = currentUser && currentUser.uid === uid;
-
                 let html = `
                     <div class="flex flex-col items-center gap-3">
                         <div class="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
                         <h4 class="font-heading font-extrabold text-xl text-brand-dark">${escapeHtml(name)}</h4>
                         ${u.friendCode ? `<button type="button" onclick="copyProfileFriendCode('${escapeHtml(u.friendCode)}')" class="text-xs font-bold tracking-wider text-brand-ultra bg-brand-ultra/10 px-3 py-1 rounded-full hover:bg-brand-ultra/20 transition-colors">#${escapeHtml(u.friendCode)} · Tap to copy</button>` : ''}
                     </div>
-                    <div class="space-y-2 text-sm">
-                `;
+                    <div class="space-y-2 text-sm">`;
                 if (u.about) html += `<p class="text-brand-muted">${escapeHtml(u.about)}</p>`;
                 if (u.age) html += `<p><span class="font-semibold">Age:</span> ${escapeHtml(u.age)}</p>`;
                 if (u.gender) html += `<p><span class="font-semibold">Gender:</span> ${escapeHtml(u.gender)}</p>`;
@@ -1467,7 +1412,6 @@
                 if (u.dislikes) html += `<p><span class="font-semibold">Dislikes:</span> ${escapeHtml(u.dislikes)}</p>`;
                 if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
                 html += `</div>`;
-
                 if (u.showClubsOnProfile !== false) {
                     try {
                         const mSnap = await getDocs(query(collection(db, "clubMembers"), where("userId", "==", uid)));
@@ -1479,70 +1423,48 @@
                         if (clubList.length > 0) {
                             html += `<div class="border-t border-brand-border pt-4">
                                 <p class="text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-3">Clubs</p>
-                                <div class="space-y-2">
-                                    ${clubList.map(c => `
-                                        <div class="flex items-center justify-between text-sm">
-                                            <span class="font-semibold text-brand-dark truncate">${escapeHtml(c.clubPost.title)}</span>
-                                            <span class="text-[10px] font-bold uppercase tracking-wider flex-shrink-0 ml-2 ${c.role === 'owner' ? 'text-brand-orange' : 'text-brand-ultra'}">${escapeHtml(c.roleName || (c.role === 'owner' ? 'Owner' : 'Member'))}</span>
-                                        </div>
-                                    `).join('')}
-                                </div>
+                                <div class="space-y-2">${clubList.map(c => `
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span class="font-semibold text-brand-dark truncate">${escapeHtml(c.clubPost.title)}</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider flex-shrink-0 ml-2 ${c.role === 'owner' ? 'text-brand-orange' : 'text-brand-ultra'}">${escapeHtml(c.roleName || (c.role === 'owner' ? 'Owner' : 'Member'))}</span>
+                                    </div>`).join('')}</div>
                             </div>`;
                         }
-                    } catch (e) {
-                        console.warn('Could not load clubs for profile:', e);
-                    }
+                    } catch (e) { console.warn('Could not load clubs for profile:', e); }
                 }
-
                 if (!isMe) {
                     const isFriend = myFriends.some(f => f.uid === uid);
                     const hasOutgoing = outgoingRequests.some(r => r.to === uid);
                     const incoming = incomingRequests.find(r => r.from === uid);
                     if (isFriend) {
-                        html += `<button type="button" onclick="startDm('${uid}', '${escapeHtml(name)}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Message</button>`;
+                        html += `<button type="button" onclick="startDm('${uid}', '${escapeHtml(name).replace(/'/g, "\\'")}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Message</button>`;
                         html += `<p class="text-xs text-center text-brand-phthalo font-bold uppercase tracking-wider">✓ Friends</p>`;
-                    } else if (hasOutgoing) {
-                        html += `<button type="button" disabled class="w-full border border-brand-border text-brand-muted font-semibold py-2.5 rounded-full text-sm cursor-not-allowed">Request Pending…</button>`;
-                    } else if (incoming) {
-                        html += `<button type="button" onclick="acceptFriendRequest('${incoming.id}', '${uid}'); closeProfile();" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Accept Friend Request</button>`;
-                    } else {
-                        html += `<button type="button" onclick="sendFriendRequest('${uid}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Add Friend</button>`;
-                    }
+                    } else if (hasOutgoing) html += `<button type="button" disabled class="w-full border border-brand-border text-brand-muted font-semibold py-2.5 rounded-full text-sm cursor-not-allowed">Request Pending…</button>`;
+                    else if (incoming) html += `<button type="button" onclick="acceptFriendRequest('${incoming.id}', '${uid}'); closeProfile();" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Accept Friend Request</button>`;
+                    else html += `<button type="button" onclick="sendFriendRequest('${uid}')" class="w-full bg-brand-orange text-white font-semibold py-2.5 rounded-full text-sm">Add Friend</button>`;
                 } else {
                     html += `<button type="button" onclick="closeProfile(); openSettings();" class="w-full border border-brand-border text-brand-dark font-semibold py-2.5 rounded-full text-sm">Edit Profile</button>`;
                 }
                 content.innerHTML = html;
-            } catch (err) {
-                content.innerHTML = '<p class="text-sm text-brand-ruby">Could not load profile.</p>';
-            }
+            } catch (err) { content.innerHTML = '<p class="text-sm text-brand-ruby">Could not load profile.</p>'; }
         };
         window.copyProfileFriendCode = function(code) {
-            navigator.clipboard.writeText(code).then(() => {
-                alert('Friend code copied: #' + code);
-            }).catch(() => {
-                alert('Friend code: #' + code);
-            });
+            navigator.clipboard.writeText(code).then(() => alert('Friend code copied: #' + code)).catch(() => alert('Friend code: #' + code));
         };
         window.closeProfile = function() {
             document.getElementById('profileModal').classList.add('hidden');
             document.getElementById('profileModal').classList.remove('flex');
         };
 
-        // ---------- Direct Messages ----------
-        function getChatId(uidA, uidB) {
-            return [uidA, uidB].sort().join('_');
-        }
+        // DM
+        function getChatId(uidA, uidB) { return [uidA, uidB].sort().join('_'); }
 
         async function ensureChatDoc(partnerUid) {
             if (!currentUser || !partnerUid) return;
             const chatId = getChatId(currentUser.uid, partnerUid);
             try {
-                await setDoc(doc(db, "chats", chatId), {
-                    members: [currentUser.uid, partnerUid].sort()
-                }, { merge: true });
-            } catch (e) {
-                console.warn('ensureChatDoc failed:', e);
-            }
+                await setDoc(doc(db, "chats", chatId), { members: [currentUser.uid, partnerUid].sort() }, { merge: true });
+            } catch (e) { console.warn('ensureChatDoc failed:', e); }
         }
 
         window.openMessages = function() {
@@ -1552,7 +1474,6 @@
             modal.classList.add('flex');
             showDmList();
         };
-
         window.closeMessages = function() {
             document.getElementById('messagesModal').classList.add('hidden');
             document.getElementById('messagesModal').classList.remove('flex');
@@ -1560,12 +1481,10 @@
             currentDmPartner = null;
             currentDmPartnerName = '';
         };
-
         window.showDmList = function() {
             document.getElementById('dm-list-view').classList.remove('hidden');
             const thread = document.getElementById('dm-thread-view');
-            thread.classList.add('hidden');
-            thread.classList.remove('flex');
+            thread.classList.add('hidden'); thread.classList.remove('flex');
             if (dmMessagesUnsub) { dmMessagesUnsub(); dmMessagesUnsub = null; }
             currentDmPartner = null;
             currentDmPartnerName = '';
@@ -1575,36 +1494,22 @@
         async function renderDmFriendList() {
             const list = document.getElementById('dm-chat-list');
             if (!list) return;
-            if (!currentUser) {
-                list.innerHTML = '<p class="text-sm text-brand-muted text-center py-10">Log in first.</p>';
-                return;
-            }
-            if (myFriends.length === 0) {
-                list.innerHTML = '<p class="text-sm text-brand-muted text-center py-10">No friends yet. Add someone from the Friends list first.</p>';
-                return;
-            }
-
+            if (!currentUser) { list.innerHTML = '<p class="text-sm text-brand-muted text-center py-10">Log in first.</p>'; return; }
+            if (myFriends.length === 0) { list.innerHTML = '<p class="text-sm text-brand-muted text-center py-10">No friends yet. Add someone from the Friends list first.</p>'; return; }
             const enriched = await Promise.all(myFriends.map(async f => {
                 const chatId = getChatId(currentUser.uid, f.uid);
-                let lastMessage = null;
-                let lastMessageAt = null;
+                let lastMessage = null, lastMessageAt = null;
                 try {
                     const snap = await getDoc(doc(db, "chats", chatId));
-                    if (snap.exists()) {
-                        const d = snap.data();
-                        lastMessage = d.lastMessage || null;
-                        lastMessageAt = d.lastMessageAt || null;
-                    }
-                } catch (e) { /* silent */ }
+                    if (snap.exists()) { const d = snap.data(); lastMessage = d.lastMessage || null; lastMessageAt = d.lastMessageAt || null; }
+                } catch (e) {}
                 return { ...f, lastMessage, lastMessageAt };
             }));
-
             enriched.sort((a, b) => {
                 const ta = a.lastMessageAt?.toMillis?.() || 0;
                 const tb = b.lastMessageAt?.toMillis?.() || 0;
                 return tb - ta;
             });
-
             list.innerHTML = enriched.map(f => {
                 const u = usersMap[f.uid] || {};
                 const name = u.displayName || 'User';
@@ -1619,8 +1524,7 @@
                             <p class="text-[11px] ${previewClass} truncate">${preview}</p>
                         </div>
                         ${f.lastMessageAt ? `<span class="text-[10px] text-brand-muted flex-shrink-0">${formatTime(f.lastMessageAt)}</span>` : `<span class="text-brand-orange text-sm">→</span>`}
-                    </button>
-                `;
+                    </button>`;
             }).join('');
         }
 
@@ -1629,18 +1533,12 @@
             const profileModal = document.getElementById('profileModal');
             if (profileModal && !profileModal.classList.contains('hidden')) closeProfile();
             const modal = document.getElementById('messagesModal');
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
+            if (modal.classList.contains('hidden')) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
             document.getElementById('dm-list-view').classList.add('hidden');
             const thread = document.getElementById('dm-thread-view');
-            thread.classList.remove('hidden');
-            thread.classList.add('flex');
-
+            thread.classList.remove('hidden'); thread.classList.add('flex');
             currentDmPartner = uid;
             currentDmPartnerName = name || 'Chat';
-
             const u = usersMap[uid] || {};
             const color = u.color || '#FF5722';
             const initial = (name || 'U').charAt(0).toUpperCase();
@@ -1649,9 +1547,7 @@
             avatar.style.background = color + '26';
             avatar.style.color = color;
             avatar.textContent = initial;
-
             document.getElementById('dm-messages').innerHTML = '<p class="text-sm text-brand-muted text-center py-6">Loading...</p>';
-
             await ensureChatDoc(uid);
             loadDmMessages(uid);
         };
@@ -1659,28 +1555,20 @@
         function loadDmMessages(partnerUid) {
             if (dmMessagesUnsub) { dmMessagesUnsub(); dmMessagesUnsub = null; }
             const chatId = getChatId(currentUser.uid, partnerUid);
-            const q = query(
-                collection(db, "chats", chatId, "messages"),
-                orderBy("createdAt", "asc")
-            );
+            const q = query(collection(db, "chats", chatId, "messages"), orderBy("createdAt", "asc"));
             dmMessagesUnsub = onSnapshot(q, (snap) => {
                 const container = document.getElementById('dm-messages');
                 if (!container) return;
-                if (snap.empty) {
-                    container.innerHTML = '<p class="text-sm text-brand-muted text-center py-6">No messages yet. Say hi 👋</p>';
-                    return;
-                }
+                if (snap.empty) { container.innerHTML = '<p class="text-sm text-brand-muted text-center py-6">No messages yet. Say hi 👋</p>'; return; }
                 container.innerHTML = snap.docs.map(d => {
                     const m = d.data();
                     const isMine = m.senderId === currentUser.uid;
-                    return `
-                        <div class="flex ${isMine ? 'justify-end' : 'justify-start'}">
-                            <div class="max-w-[80%] ${isMine ? 'bg-brand-orange text-white' : 'bg-brand-card text-brand-dark border border-brand-border'} rounded-2xl px-4 py-2.5 shadow-sm">
-                                <p class="text-sm whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>
-                                <p class="text-[9px] mt-1 ${isMine ? 'text-white/70' : 'text-brand-muted'}">${formatTime(m.createdAt)}</p>
-                            </div>
+                    return `<div class="flex ${isMine ? 'justify-end' : 'justify-start'}">
+                        <div class="max-w-[80%] ${isMine ? 'bg-brand-orange text-white' : 'bg-brand-card text-brand-dark border border-brand-border'} rounded-2xl px-4 py-2.5 shadow-sm">
+                            <p class="text-sm whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>
+                            <p class="text-[9px] mt-1 ${isMine ? 'text-white/70' : 'text-brand-muted'}">${formatTime(m.createdAt)}</p>
                         </div>
-                    `;
+                    </div>`;
                 }).join('');
                 container.scrollTop = container.scrollHeight;
             }, (error) => {
@@ -1701,19 +1589,10 @@
             try {
                 await setDoc(doc(db, "chats", chatId), {
                     members: [currentUser.uid, currentDmPartner].sort(),
-                    lastMessage: text,
-                    lastMessageAt: serverTimestamp(),
-                    lastSender: currentUser.uid
+                    lastMessage: text, lastMessageAt: serverTimestamp(), lastSender: currentUser.uid
                 }, { merge: true });
-                await addDoc(collection(db, "chats", chatId, "messages"), {
-                    text,
-                    senderId: currentUser.uid,
-                    createdAt: serverTimestamp()
-                });
-            } catch (err) {
-                console.error('Send failed:', err);
-                alert('Could not send message: ' + (err.message || 'unknown'));
-            }
+                await addDoc(collection(db, "chats", chatId, "messages"), { text, senderId: currentUser.uid, createdAt: serverTimestamp() });
+            } catch (err) { console.error('Send failed:', err); alert('Could not send message: ' + (err.message || 'unknown')); }
         };
 
         window.switchMainTab = function(tab) {
@@ -1756,9 +1635,7 @@
                 logo.className = "w-9 h-9 sm:w-10 sm:h-10 bg-brand-ultra rounded-xl flex items-center justify-center text-white font-heading font-extrabold text-lg sm:text-xl shadow-sm group-hover:scale-105 transition-all";
             }
 
-            document.querySelectorAll('.nav-tab').forEach(btn => {
-                btn.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap';
-            });
+            document.querySelectorAll('.nav-tab').forEach(btn => { btn.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full text-brand-dark hover:bg-black/5 transition-all flex-shrink-0 whitespace-nowrap'; });
             const activeNav = document.getElementById(`nav-${tab}`);
             if (tab === 'feed' && activeNav) activeNav.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-orange text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap';
             if (tab === 'articles' && activeNav) activeNav.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-phthalo text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap';
@@ -1766,36 +1643,27 @@
             if (tab === 'activities' && activeNav) activeNav.className = 'nav-tab px-3 md:px-5 py-2 md:py-2.5 rounded-full bg-brand-ultra text-white shadow-sm transition-all flex-shrink-0 whitespace-nowrap';
 
             const floatingBtn = document.getElementById('floating-drop-btn-container');
-            if (floatingBtn) {
-                if (tab === 'activities' || !currentUser) floatingBtn.classList.add('hidden');
-                else floatingBtn.classList.remove('hidden');
-            }
+            if (floatingBtn) { if (tab === 'activities' || !currentUser) floatingBtn.classList.add('hidden'); else floatingBtn.classList.remove('hidden'); }
             renderAll();
         };
 
         window.filterFeed = function(cat) {
             feedFilter = cat;
-            document.querySelectorAll('.feed-tab').forEach(btn => {
-                btn.className = 'feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0';
-            });
+            document.querySelectorAll('.feed-tab').forEach(btn => { btn.className = 'feed-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0'; });
             const activeBtn = document.getElementById(`feed-btn-${cat}`);
             if (activeBtn) activeBtn.className = 'feed-tab bg-brand-dark text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all flex-shrink-0';
             renderPosts();
         };
         window.filterAnon = function(cat) {
             anonFilter = cat;
-            document.querySelectorAll('.anon-tab').forEach(btn => {
-                btn.className = 'anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0';
-            });
+            document.querySelectorAll('.anon-tab').forEach(btn => { btn.className = 'anon-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all flex-shrink-0'; });
             const activeBtn = document.getElementById(`anon-btn-${cat}`);
             if (activeBtn) activeBtn.className = 'anon-tab bg-brand-ruby text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all flex-shrink-0';
             renderAnon();
         };
         window.filterActivities = function(type) {
             activityFilter = type;
-            document.querySelectorAll('.act-tab').forEach(btn => {
-                btn.className = 'act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all';
-            });
+            document.querySelectorAll('.act-tab').forEach(btn => { btn.className = 'act-tab bg-brand-card hover:bg-brand-border text-brand-muted text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full border border-brand-border transition-all'; });
             const activeBtn = document.getElementById(`act-btn-${type}`);
             if (activeBtn) activeBtn.className = 'act-tab bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-all';
             renderActivities();
@@ -1805,18 +1673,14 @@
             const select = document.getElementById('postCategory');
             if (!select) return;
             let options = [];
-            if (currentMainTab === 'feed') {
-                options = [{ value: 'lifehack', label: 'Lifehack' }, { value: 'spot', label: 'Secret Spot' }, { value: 'inquiry', label: 'Inquiry' }];
-            } else if (currentMainTab === 'articles') {
-                options = [{ value: 'article', label: 'Independent Article' }];
-            } else if (currentMainTab === 'anon') {
-                options = [
-                    { value: 'anon', label: 'Liuzhou Anon' },
-                    { value: 'anon-lifehack', label: 'Anon · Lifehack' },
-                    { value: 'anon-spot', label: 'Anon · Secret Spot' },
-                    { value: 'anon-inquiry', label: 'Anon · Inquiry' }
-                ];
-            }
+            if (currentMainTab === 'feed') options = [{ value: 'lifehack', label: 'Lifehack' }, { value: 'spot', label: 'Secret Spot' }, { value: 'inquiry', label: 'Inquiry' }];
+            else if (currentMainTab === 'articles') options = [{ value: 'article', label: 'Independent Article' }];
+            else if (currentMainTab === 'anon') options = [
+                { value: 'anon', label: 'Liuzhou Anon' },
+                { value: 'anon-lifehack', label: 'Anon · Lifehack' },
+                { value: 'anon-spot', label: 'Anon · Secret Spot' },
+                { value: 'anon-inquiry', label: 'Anon · Inquiry' }
+            ];
             select.innerHTML = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
             if (forcedCategory && options.some(o => o.value === forcedCategory)) select.value = forcedCategory;
             updateAnonNote();
@@ -1827,8 +1691,7 @@
             populateCategoryOptions();
             const modal = document.getElementById('postModal');
             if (!modal) return;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
             document.getElementById('postAuthor').value = '';
             updateAnonNote();
         };
@@ -1840,16 +1703,14 @@
             populateCategoryOptions(category);
             const modal = document.getElementById('postModal');
             if (!modal) return;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
             document.getElementById('postAuthor').value = '';
             updateAnonNote();
         };
         window.closeModal = function() {
             const modal = document.getElementById('postModal');
             if (!modal) return;
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
             document.getElementById('submissionForm').reset();
             document.getElementById('author-field-wrapper').classList.add('hidden');
         };
@@ -1866,15 +1727,12 @@
             event.preventDefault();
             if (!currentUser) { openAuthModal('signup'); return; }
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "Publishing...";
-            submitBtn.disabled = true;
+            submitBtn.innerText = "Publishing..."; submitBtn.disabled = true;
             const category = document.getElementById('postCategory').value;
             const title = document.getElementById('postTitle').value.trim();
             const content = document.getElementById('postContent').value.trim();
             const authorInput = document.getElementById('postAuthor').value.trim();
-            let author = (category === 'anon' || category.startsWith('anon-'))
-                ? (authorInput || 'Anonymous Insider')
-                : (currentUserProfile?.displayName || currentUser.displayName || currentUser.email.split('@')[0] || 'Liuzhou Resident');
+            let author = (category === 'anon' || category.startsWith('anon-')) ? (authorInput || 'Anonymous Insider') : (currentUserProfile?.displayName || currentUser.displayName || currentUser.email.split('@')[0] || 'Liuzhou Resident');
             try {
                 let authorColor = currentUserProfile?.color || '#FF5722';
                 await addDoc(collection(db, "posts"), {
@@ -1884,13 +1742,8 @@
                     createdAt: serverTimestamp()
                 });
                 closeModal();
-            } catch (error) {
-                console.error(error);
-                alert("Failed to publish. Check Firebase console.");
-            } finally {
-                submitBtn.innerText = "Publish Live";
-                submitBtn.disabled = false;
-            }
+            } catch (error) { console.error(error); alert("Failed to publish. Check Firebase console."); }
+            finally { submitBtn.innerText = "Publish Live"; submitBtn.disabled = false; }
         };
 
         function getCurrentEventType() {
@@ -1902,72 +1755,42 @@
             data = data || {};
             let fields = '';
             if (type === 'one-time') {
-                fields = `
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Date</label>
-                            <input type="date" class="sched-date w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.date || ''}">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Time</label>
-                            <input type="time" class="sched-time w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.time || ''}">
-                        </div>
-                    </div>`;
+                fields = `<div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Date</label>
+                    <input type="date" class="sched-date w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.date || ''}"></div>
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Time</label>
+                    <input type="time" class="sched-time w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.time || ''}"></div></div>`;
             } else if (type === 'weekly') {
-                fields = `
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Day of Week</label>
-                            <select class="sched-weekday w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">
-                                ${['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(d => `<option value="${d}" ${data.weekday===d?'selected':''}>${d}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Time</label>
-                            <input type="time" class="sched-time w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.time || ''}">
-                        </div>
-                    </div>`;
+                fields = `<div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Day of Week</label>
+                    <select class="sched-weekday w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">
+                        ${['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(d => `<option value="${d}" ${data.weekday===d?'selected':''}>${d}</option>`).join('')}</select></div>
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Time</label>
+                    <input type="time" class="sched-time w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.time || ''}"></div></div>`;
             } else if (type === 'monthly') {
                 const dayOpts = Array.from({length:31},(_,i)=>`<option value="${i+1}" ${String(data.monthDay)===String(i+1)?'selected':''}>${i+1}</option>`).join('');
-                fields = `
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Day of Month</label>
-                            <select class="sched-monthday w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">${dayOpts}</select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Time</label>
-                            <input type="time" class="sched-time w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.time || ''}">
-                        </div>
-                    </div>`;
+                fields = `<div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Day of Month</label>
+                    <select class="sched-monthday w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">${dayOpts}</select></div>
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Time</label>
+                    <input type="time" class="sched-time w-full bg-white border border-brand-border rounded-2xl px-3 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.time || ''}"></div></div>`;
             } else if (type === 'yearly') {
                 const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
                 const monthOpts = monthNames.map((m,i)=>`<option value="${i+1}" ${String(data.month)===String(i+1)?'selected':''}>${m}</option>`).join('');
                 const dayOpts = Array.from({length:31},(_,i)=>`<option value="${i+1}" ${String(data.day)===String(i+1)?'selected':''}>${i+1}</option>`).join('');
-                fields = `
-                    <div class="grid grid-cols-3 gap-2">
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Month</label>
-                            <select class="sched-month w-full bg-white border border-brand-border rounded-2xl px-2 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">${monthOpts}</select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Day</label>
-                            <select class="sched-day w-full bg-white border border-brand-border rounded-2xl px-2 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">${dayOpts}</select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Time</label>
-                            <input type="time" class="sched-time w-full bg-white border border-brand-border rounded-2xl px-2 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.time || ''}">
-                        </div>
-                    </div>`;
+                fields = `<div class="grid grid-cols-3 gap-2">
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Month</label>
+                    <select class="sched-month w-full bg-white border border-brand-border rounded-2xl px-2 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">${monthOpts}</select></div>
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Day</label>
+                    <select class="sched-day w-full bg-white border border-brand-border rounded-2xl px-2 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra">${dayOpts}</select></div>
+                    <div><label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">Time</label>
+                    <input type="time" class="sched-time w-full bg-white border border-brand-border rounded-2xl px-2 py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra" value="${data.time || ''}"></div></div>`;
             }
-            return `
-                <div class="schedule-entry bg-brand-ultra/5 border border-brand-ultra/20 rounded-2xl p-3 relative">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-brand-ultra">Time slot ${index + 1}</span>
-                        <button type="button" onclick="removeScheduleEntry(this)" class="text-brand-ruby text-[10px] font-bold uppercase tracking-wider hover:underline">Remove</button>
-                    </div>
-                    ${fields}
-                </div>`;
+            return `<div class="schedule-entry bg-brand-ultra/5 border border-brand-ultra/20 rounded-2xl p-3 relative">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-brand-ultra">Time slot ${index + 1}</span>
+                    <button type="button" onclick="removeScheduleEntry(this)" class="text-brand-ruby text-[10px] font-bold uppercase tracking-wider hover:underline">Remove</button>
+                </div>${fields}</div>`;
         }
 
         function renderScheduleEntries(type, schedules) {
@@ -1988,10 +1811,7 @@
 
         window.removeScheduleEntry = function(btn) {
             const container = document.getElementById('schedule-list');
-            if (container.children.length <= 1) {
-                alert('At least one time slot is required.');
-                return;
-            }
+            if (container.children.length <= 1) { alert('At least one time slot is required.'); return; }
             const entry = btn.closest('.schedule-entry');
             if (entry) entry.remove();
             Array.from(container.children).forEach((child, i) => {
@@ -2015,8 +1835,7 @@
                     const d = entry.querySelector('.sched-date').value;
                     const t = entry.querySelector('.sched-time').value;
                     if (!d) return;
-                    s.date = d;
-                    s.time = t || '';
+                    s.date = d; s.time = t || '';
                 } else if (type === 'weekly') {
                     s.weekday = entry.querySelector('.sched-weekday').value;
                     s.time = entry.querySelector('.sched-time').value || '';
@@ -2037,13 +1856,10 @@
             if (!currentUser) { openAuthModal('signup'); return; }
             const modal = document.getElementById('activityModal');
             if (!modal) return;
-
             editingActivityId = existingPost ? existingPost.id : null;
             document.getElementById('activityModalTitle').innerText = existingPost ? 'Edit City Activity' : 'Host a City Activity';
             document.getElementById('actSubmitBtn').innerText = existingPost ? 'Save Changes' : 'Publish Activity';
-
             document.getElementById('activityForm').reset();
-
             if (existingPost) {
                 const type = existingPost.eventType || 'one-time';
                 const radio = document.querySelector(`input[name="eventType"][value="${type}"]`);
@@ -2061,26 +1877,20 @@
                 document.getElementById('actIsClub').checked = false;
                 renderScheduleEntries('one-time', [{}]);
             }
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
         };
 
         window.closeActivityModal = function() {
             const modal = document.getElementById('activityModal');
             if (!modal) return;
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
             editingActivityId = null;
         };
 
         window.editActivity = function(postId) {
             const post = posts.find(p => p.id === postId);
             if (!post) return;
-            if (!currentUser || post.userId !== currentUser.uid) {
-                alert('You can only edit your own activities.');
-                return;
-            }
+            if (!currentUser || post.userId !== currentUser.uid) { alert('You can only edit your own activities.'); return; }
             closeDetailModal();
             openActivityModal(post);
         };
@@ -2088,11 +1898,9 @@
         window.handleActivitySubmission = async function(event) {
             event.preventDefault();
             if (!currentUser) { openAuthModal('signup'); return; }
-
             const btn = document.getElementById('actSubmitBtn');
             btn.innerText = editingActivityId ? 'Saving...' : 'Publishing...';
             btn.disabled = true;
-
             const eventType = getCurrentEventType();
             const title = document.getElementById('actTitle').value.trim();
             const location = document.getElementById('actLocation').value.trim();
@@ -2100,35 +1908,23 @@
             const beHost = document.getElementById('actBeHost').checked;
             const isClub = document.getElementById('actIsClub').checked;
             const schedules = collectSchedules();
-
             if (schedules.length === 0) {
                 alert('Please add at least one time slot.');
                 btn.disabled = false;
                 btn.innerText = editingActivityId ? 'Save Changes' : 'Publish Activity';
                 return;
             }
-
             const scheduleString = formatScheduleString(schedules);
-
             try {
                 const authorColor = currentUserProfile?.color || '#FF5722';
                 const authorName = currentUserProfile?.displayName || currentUser.displayName || currentUser.email.split('@')[0] || 'Host';
-
                 const payload = {
-                    category: 'activity',
-                    eventType,
-                    title,
-                    content,
-                    location,
-                    schedules,
-                    schedule: scheduleString,
-                    author: authorName,
+                    category: 'activity', eventType, title, content, location,
+                    schedules, schedule: scheduleString, author: authorName,
                     userId: currentUser.uid,
                     authorColor: beHost ? authorColor : '',
-                    isHost: beHost,
-                    isClub: isClub
+                    isHost: beHost, isClub: isClub
                 };
-
                 if (editingActivityId) {
                     await updateDoc(doc(db, "posts", editingActivityId), { ...payload, updatedAt: serverTimestamp() });
                     if (isClub) {
@@ -2136,11 +1932,8 @@
                         const ownerSnap = await getDoc(doc(db, "clubMembers", ownerMemberId));
                         if (!ownerSnap.exists()) {
                             await setDoc(doc(db, "clubMembers", ownerMemberId), {
-                                clubId: editingActivityId,
-                                userId: currentUser.uid,
-                                role: 'owner',
-                                roleName: 'Owner',
-                                joinedAt: serverTimestamp()
+                                clubId: editingActivityId, userId: currentUser.uid,
+                                role: 'owner', roleName: 'Owner', joinedAt: serverTimestamp()
                             });
                         }
                     }
@@ -2148,30 +1941,19 @@
                     const postRef = await addDoc(collection(db, "posts"), { ...payload, createdAt: serverTimestamp() });
                     if (isClub) {
                         await setDoc(doc(db, "clubMembers", `${postRef.id}_${currentUser.uid}`), {
-                            clubId: postRef.id,
-                            userId: currentUser.uid,
-                            role: 'owner',
-                            roleName: 'Owner',
-                            joinedAt: serverTimestamp()
+                            clubId: postRef.id, userId: currentUser.uid,
+                            role: 'owner', roleName: 'Owner', joinedAt: serverTimestamp()
                         });
                     }
                 }
                 closeActivityModal();
                 if (currentMainTab !== 'activities') switchMainTab('activities');
-            } catch (error) {
-                console.error(error);
-                alert("Failed to save activity. Check Firebase rules.");
-            } finally {
-                btn.innerText = editingActivityId ? 'Save Changes' : 'Publish Activity';
-                btn.disabled = false;
-            }
+            } catch (error) { console.error(error); alert("Failed to save activity. Check Firebase rules."); }
+            finally { btn.innerText = editingActivityId ? 'Save Changes' : 'Publish Activity'; btn.disabled = false; }
         };
 
         window.deletePost = async function(postId, postUserId) {
-            if (!currentUser || currentUser.uid !== postUserId) {
-                alert("You can only delete your own posts.");
-                return;
-            }
+            if (!currentUser || currentUser.uid !== postUserId) { alert("You can only delete your own posts."); return; }
             if (!confirm("Delete this post permanently?")) return;
             try {
                 await deleteDoc(doc(db, "posts", postId));
@@ -2179,17 +1961,13 @@
                 await Promise.all(membersSnap.docs.map(d => deleteDoc(d.ref)));
                 const commentsSnap = await getDocs(query(collection(db, "comments"), where("postId", "==", postId)));
                 await Promise.all(commentsSnap.docs.map(d => deleteDoc(d.ref)));
-            } catch (error) {
-                console.error(error);
-                alert("Could not delete. Check your Firestore security rules.");
-            }
+            } catch (error) { console.error(error); alert("Could not delete. Check your Firestore security rules."); }
         };
 
         window.openDetailModal = async function(postId) {
             currentDetailPostId = postId;
             const post = posts.find(p => p.id === postId);
             if (!post) return;
-
             const contentEl = document.getElementById('detail-content');
             const isActivity = post.category === 'activity' || post.category === 'corner';
             const isAnon = isAnonCategory(post.category);
@@ -2197,70 +1975,41 @@
             const schedules = getActivitySchedules(post);
             const isOwner = currentUser && post.userId === currentUser.uid;
             const isClub = post.isClub === true;
-
             let clubSectionHtml = '';
             if (isClub) {
                 const members = await loadClubMembers(postId);
                 const membership = getMyClubMembership(postId);
                 const isMember = !!membership;
                 const ownerView = isClubOwner(post);
-
-                clubSectionHtml = `
-                    <div class="border-t border-brand-border pt-6 space-y-4">
-                        <div class="flex items-center justify-between flex-wrap gap-2">
-                            <h4 class="font-heading font-bold text-lg text-brand-dark">
-                                🏛️ Club Members
-                                <span class="text-brand-muted font-normal text-sm">(${members.length})</span>
-                            </h4>
-                            ${isMember && !ownerView ? `<button type="button" onclick="leaveClub('${postId}')" class="text-xs font-bold text-brand-ruby hover:underline">Leave Club</button>` : ''}
-                            ${ownerView ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-orange">You're the owner</span>` : ''}
-                        </div>
-
-                        ${!currentUser ? `<p class="text-sm text-brand-muted">Log in to join this club.</p>` : ''}
-
-                        ${currentUser && !isMember ? `
-                            <button type="button" onclick="joinClub('${postId}')" class="w-full bg-brand-ultra hover:bg-blue-900 text-white font-bold py-3 rounded-2xl transition-colors">Join the Club</button>
-                        ` : ''}
-
-                        ${isMember && !ownerView ? `
-                            <p class="text-xs font-semibold text-brand-ultra">You're a member · ${escapeHtml(membership.roleName || 'Member')}</p>
-                        ` : ''}
-
-                        <div class="space-y-2">
-                            ${members.length === 0 ? `<p class="text-sm text-brand-muted">No members yet.</p>` : members.map(m => {
-                                const u = usersMap[m.userId] || {};
-                                const mName = u.displayName || 'User';
-                                const mColor = u.color || '#FF5722';
-                                const isMeRow = currentUser && m.userId === currentUser.uid;
-                                const isOwnerRow = m.role === 'owner';
-                                return `
-                                    <div class="flex items-center gap-3 p-2.5 bg-brand-light rounded-2xl">
-                                        <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 cursor-pointer" style="background:${mColor}26;color:${mColor}" onclick="event.stopPropagation(); openProfile('${m.userId}')">${escapeHtml(mName.charAt(0).toUpperCase())}</div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-semibold text-brand-dark truncate cursor-pointer" onclick="event.stopPropagation(); openProfile('${m.userId}')">${escapeHtml(mName)}${isMeRow ? ' <span class="text-brand-muted font-normal">(you)</span>' : ''}</p>
-                                            ${ownerView && !isOwnerRow ? `
-                                                <input type="text" value="${escapeHtml(m.roleName || 'Member')}" 
-                                                    onclick="event.stopPropagation()"
-                                                    onchange="updateMemberRole('${m.id}', this.value)"
-                                                    placeholder="Rank" maxlength="24"
-                                                    class="mt-1 w-full bg-white border border-brand-border rounded-lg px-2 py-1 text-[11px] font-bold text-brand-ultra focus:outline-none focus:border-brand-ultra">
-                                            ` : `
-                                                <p class="text-[10px] font-bold uppercase tracking-wider ${isOwnerRow ? 'text-brand-orange' : 'text-brand-ultra'}">${escapeHtml(m.roleName || (isOwnerRow ? 'Owner' : 'Member'))}</p>
-                                            `}
-                                        </div>
-                                        ${ownerView && !isOwnerRow ? `
-                                            <button type="button" onclick="event.stopPropagation(); removeClubMember('${m.id}')" class="text-brand-ruby text-xl leading-none px-2 py-1 hover:bg-brand-ruby/10 rounded-full transition-colors" title="Remove from club">&times;</button>
-                                        ` : ''}
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-
-                        ${ownerView ? `<p class="text-[10px] text-brand-muted italic">Tip: click any member's rank to rename it — "Coach", "VIP", "Moderator", anything you want.</p>` : ''}
+                clubSectionHtml = `<div class="border-t border-brand-border pt-6 space-y-4">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <h4 class="font-heading font-bold text-lg text-brand-dark">🏛️ Club Members <span class="text-brand-muted font-normal text-sm">(${members.length})</span></h4>
+                        ${isMember && !ownerView ? `<button type="button" onclick="leaveClub('${postId}')" class="text-xs font-bold text-brand-ruby hover:underline">Leave Club</button>` : ''}
+                        ${ownerView ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-orange">You're the owner</span>` : ''}
                     </div>
-                `;
+                    ${!currentUser ? `<p class="text-sm text-brand-muted">Log in to join this club.</p>` : ''}
+                    ${currentUser && !isMember ? `<button type="button" onclick="joinClub('${postId}')" class="w-full bg-brand-ultra hover:bg-blue-900 text-white font-bold py-3 rounded-2xl transition-colors">Join the Club</button>` : ''}
+                    ${isMember && !ownerView ? `<p class="text-xs font-semibold text-brand-ultra">You're a member · ${escapeHtml(membership.roleName || 'Member')}</p>` : ''}
+                    <div class="space-y-2">
+                        ${members.length === 0 ? `<p class="text-sm text-brand-muted">No members yet.</p>` : members.map(m => {
+                            const u = usersMap[m.userId] || {};
+                            const mName = u.displayName || 'User';
+                            const mColor = u.color || '#FF5722';
+                            const isMeRow = currentUser && m.userId === currentUser.uid;
+                            const isOwnerRow = m.role === 'owner';
+                            return `<div class="flex items-center gap-3 p-2.5 bg-brand-light rounded-2xl">
+                                <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 cursor-pointer" style="background:${mColor}26;color:${mColor}" onclick="event.stopPropagation(); openProfile('${m.userId}')">${escapeHtml(mName.charAt(0).toUpperCase())}</div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-brand-dark truncate cursor-pointer" onclick="event.stopPropagation(); openProfile('${m.userId}')">${escapeHtml(mName)}${isMeRow ? ' <span class="text-brand-muted font-normal">(you)</span>' : ''}</p>
+                                    ${ownerView && !isOwnerRow ? `<input type="text" value="${escapeHtml(m.roleName || 'Member')}" onclick="event.stopPropagation()" onchange="updateMemberRole('${m.id}', this.value)" placeholder="Rank" maxlength="24" class="mt-1 w-full bg-white border border-brand-border rounded-lg px-2 py-1 text-[11px] font-bold text-brand-ultra focus:outline-none focus:border-brand-ultra">` : `<p class="text-[10px] font-bold uppercase tracking-wider ${isOwnerRow ? 'text-brand-orange' : 'text-brand-ultra'}">${escapeHtml(m.roleName || (isOwnerRow ? 'Owner' : 'Member'))}</p>`}
+                                </div>
+                                ${ownerView && !isOwnerRow ? `<button type="button" onclick="event.stopPropagation(); removeClubMember('${m.id}')" class="text-brand-ruby text-xl leading-none px-2 py-1 hover:bg-brand-ruby/10 rounded-full transition-colors" title="Remove from club">&times;</button>` : ''}
+                            </div>`;
+                        }).join('')}
+                    </div>
+                    ${ownerView ? `<p class="text-[10px] text-brand-muted italic">Tip: click any member's rank to rename it — "Coach", "VIP", "Moderator", anything you want.</p>` : ''}
+                </div>`;
             }
-
             contentEl.innerHTML = `
                 <div class="space-y-4">
                     <div class="flex items-center justify-between text-xs flex-wrap gap-2">
@@ -2277,54 +2026,23 @@
                         <span class="text-brand-muted">${formatTime(post.createdAt)}${post.updatedAt ? ' · edited' : ''}</span>
                     </div>
                     <h2 class="font-heading font-extrabold text-2xl text-brand-dark">${escapeHtml(post.title)}</h2>
-                    ${isActivity && schedules.length > 0 ? `
-                        <div class="space-y-2">
-                            ${schedules.map(s => `
-                                <div class="bg-brand-ultra/10 text-brand-ultra text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">
-                                    🗓 ${escapeHtml(scheduleEntryDisplay(s))}
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : (post.schedule ? `<div class="bg-brand-ultra/10 text-brand-ultra text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">🗓 ${escapeHtml(post.schedule)}</div>` : '')}
+                    ${isActivity && schedules.length > 0 ? `<div class="space-y-2">${schedules.map(s => `<div class="bg-brand-ultra/10 text-brand-ultra text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">🗓 ${escapeHtml(scheduleEntryDisplay(s))}</div>`).join('')}</div>` : (post.schedule ? `<div class="bg-brand-ultra/10 text-brand-ultra text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2">🗓 ${escapeHtml(post.schedule)}</div>` : '')}
                     ${post.location ? `<div class="bg-brand-light p-3 rounded-xl text-sm font-semibold text-brand-dark">📍 ${escapeHtml(post.location)}</div>` : ''}
                     <p class="text-brand-muted leading-relaxed whitespace-pre-wrap">${escapeHtml(post.content)}</p>
                     <div class="flex items-center justify-between text-sm flex-wrap gap-2">
-                        ${(!isAnon && isActivity && post.isHost === false) ? '<span class="text-brand-muted">Posted anonymously</span>' : `
-                            <div class="flex items-center gap-2 font-semibold text-brand-dark ${!isAnon && post.userId && post.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && post.userId && post.isHost !== false ? `onclick="openProfile('${post.userId}')"` : ''}>
-                                ${!isAnon && post.isHost !== false ? (() => {
-                                    const c = authorInfo.color || '#FF5722';
-                                    return `<div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background-color:${c}26;color:${c}">${escapeHtml(authorInfo.name.charAt(0).toUpperCase())}</div>`;
-                                })() : ''}
-                                <span>${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Hosted by ' : 'By ') + escapeHtml(authorInfo.name)}</span>
-                            </div>
-                        `}
-                        ${isOwner ? `
-                            <div class="flex items-center gap-3">
-                                ${isActivity ? `<button type="button" onclick="editActivity('${post.id}')" class="text-brand-ultra text-xs font-bold hover:underline">Edit</button>` : ''}
-                                <button type="button" onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-ruby text-xs font-bold hover:underline">Delete</button>
-                            </div>
-                        ` : ''}
+                        ${(!isAnon && isActivity && post.isHost === false) ? '<span class="text-brand-muted">Posted anonymously</span>' : `<div class="flex items-center gap-2 font-semibold text-brand-dark ${!isAnon && post.userId && post.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && post.userId && post.isHost !== false ? `onclick="openProfile('${post.userId}')"` : ''}>
+                            ${!isAnon && post.isHost !== false ? (() => { const c = authorInfo.color || '#FF5722'; return `<div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background-color:${c}26;color:${c}">${escapeHtml(authorInfo.name.charAt(0).toUpperCase())}</div>`; })() : ''}
+                            <span>${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Hosted by ' : 'By ') + escapeHtml(authorInfo.name)}</span>
+                        </div>`}
+                        ${isOwner ? `<div class="flex items-center gap-3">${isActivity ? `<button type="button" onclick="editActivity('${post.id}')" class="text-brand-ultra text-xs font-bold hover:underline">Edit</button>` : ''}<button type="button" onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-ruby text-xs font-bold hover:underline">Delete</button></div>` : ''}
                     </div>
                 </div>
-
                 ${clubSectionHtml}
-
                 <div class="border-t border-brand-border pt-6 space-y-4">
                     <h4 class="font-heading font-bold text-lg text-brand-dark">Comments</h4>
-                    <div id="comments-list" class="space-y-3">
-                        <p class="text-sm text-brand-muted">Loading comments...</p>
-                    </div>
-                    ${currentUser ? `
-                        <form id="commentForm" onsubmit="addComment(event)" class="space-y-3 pt-2">
-                            <textarea id="commentText" required rows="2" placeholder="Add a comment..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-3 text-sm focus:outline-none focus:border-brand-orange"></textarea>
-                            <button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2 rounded-full">Post Comment</button>
-                        </form>
-                    ` : `
-                        <p class="text-sm text-brand-muted"><button type="button" onclick="closeDetailModal(); openAuthModal('login');" class="text-brand-orange font-semibold hover:underline">Log in</button> to leave a comment.</p>
-                    `}
-                </div>
-            `;
-
+                    <div id="comments-list" class="space-y-3"><p class="text-sm text-brand-muted">Loading comments...</p></div>
+                    ${currentUser ? `<form id="commentForm" class="space-y-3 pt-2"><textarea id="commentText" required rows="2" placeholder="Add a comment..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-3 text-sm focus:outline-none focus:border-brand-orange"></textarea><button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2 rounded-full">Post Comment</button></form>` : `<p class="text-sm text-brand-muted"><button type="button" onclick="closeDetailModal(); openAuthModal('login');" class="text-brand-orange font-semibold hover:underline">Log in</button> to leave a comment.</p>`}
+                </div>`;
             document.getElementById('detailModal').classList.remove('hidden');
             document.getElementById('detailModal').classList.add('flex');
             loadComments(postId);
@@ -2342,57 +2060,36 @@
             try {
                 const q = query(collection(db, "comments"), where("postId", "==", postId), orderBy("createdAt", "asc"));
                 const snap = await getDocs(q);
-                if (snap.empty) {
-                    listEl.innerHTML = `<p class="text-sm text-brand-muted">No comments yet. Be the first!</p>`;
-                    return;
-                }
+                if (snap.empty) { listEl.innerHTML = `<p class="text-sm text-brand-muted">No comments yet. Be the first!</p>`; return; }
                 listEl.innerHTML = snap.docs.map(d => {
                     const c = d.data();
                     const cid = d.id;
                     const isOwner = currentUser && c.userId && currentUser.uid === c.userId;
                     let commentAuthor = c.author;
                     if (c.userId && usersMap[c.userId]) commentAuthor = usersMap[c.userId].displayName || commentAuthor;
-                    return `
-                        <div class="bg-brand-light rounded-2xl p-4 space-y-1" id="comment-${cid}">
-                            <div class="flex items-center justify-between text-xs">
-                                <span class="font-semibold text-brand-dark ${c.userId ? 'hover:text-brand-orange cursor-pointer' : ''}" ${c.userId ? `onclick="openProfile('${c.userId}')"` : ''}>${escapeHtml(commentAuthor)}</span>
-                                <div class="flex items-center gap-3">
-                                    <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
-                                    ${isOwner ? `
-                                        <button type="button" onclick="startEditComment('${cid}')" class="text-brand-orange hover:underline font-semibold">Edit</button>
-                                        <button type="button" onclick="deleteComment('${cid}', '${c.userId}')" class="text-brand-ruby hover:underline font-semibold">Delete</button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                            <p class="text-sm text-brand-muted" id="comment-text-${cid}">${escapeHtml(c.text)}</p>
-                            <div id="comment-edit-${cid}" class="hidden space-y-2 pt-1">
-                                <textarea id="comment-edit-input-${cid}" rows="2" class="w-full bg-white border border-brand-border rounded-xl p-2 text-sm focus:outline-none focus:border-brand-orange">${escapeHtml(c.text)}</textarea>
-                                <div class="flex gap-2">
-                                    <button type="button" onclick="saveEditComment('${cid}')" class="bg-brand-orange text-white text-xs font-semibold px-3 py-1.5 rounded-full">Save</button>
-                                    <button type="button" onclick="cancelEditComment('${cid}')" class="text-brand-muted text-xs font-semibold px-3 py-1.5">Cancel</button>
-                                </div>
+                    return `<div class="bg-brand-light rounded-2xl p-4 space-y-1" id="comment-${cid}">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-semibold text-brand-dark ${c.userId ? 'hover:text-brand-orange cursor-pointer' : ''}" ${c.userId ? `onclick="openProfile('${c.userId}')"` : ''}>${escapeHtml(commentAuthor)}</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-brand-muted">${formatTime(c.createdAt)}</span>
+                                ${isOwner ? `<button type="button" onclick="startEditComment('${cid}')" class="text-brand-orange hover:underline font-semibold">Edit</button><button type="button" onclick="deleteComment('${cid}', '${c.userId}')" class="text-brand-ruby hover:underline font-semibold">Delete</button>` : ''}
                             </div>
                         </div>
-                    `;
+                        <p class="text-sm text-brand-muted" id="comment-text-${cid}">${escapeHtml(c.text)}</p>
+                        <div id="comment-edit-${cid}" class="hidden space-y-2 pt-1">
+                            <textarea id="comment-edit-input-${cid}" rows="2" class="w-full bg-white border border-brand-border rounded-xl p-2 text-sm focus:outline-none focus:border-brand-orange">${escapeHtml(c.text)}</textarea>
+                            <div class="flex gap-2"><button type="button" onclick="saveEditComment('${cid}')" class="bg-brand-orange text-white text-xs font-semibold px-3 py-1.5 rounded-full">Save</button><button type="button" onclick="cancelEditComment('${cid}')" class="text-brand-muted text-xs font-semibold px-3 py-1.5">Cancel</button></div>
+                        </div>
+                    </div>`;
                 }).join('');
-            } catch (err) {
-                console.error(err);
-                listEl.innerHTML = `<p class="text-sm text-brand-ruby">Could not load comments. Check rules or index.</p>`;
-            }
+            } catch (err) { console.error(err); listEl.innerHTML = `<p class="text-sm text-brand-ruby">Could not load comments. Check rules or index.</p>`; }
         }
 
         window.deleteComment = async function(commentId, commentUserId) {
-            if (!currentUser || currentUser.uid !== commentUserId) {
-                alert("You can only delete your own comments.");
-                return;
-            }
+            if (!currentUser || currentUser.uid !== commentUserId) { alert("You can only delete your own comments."); return; }
             if (!confirm("Delete this comment?")) return;
-            try {
-                await deleteDoc(doc(db, "comments", commentId));
-                if (currentDetailPostId) loadComments(currentDetailPostId);
-            } catch (err) {
-                alert("Could not delete comment.");
-            }
+            try { await deleteDoc(doc(db, "comments", commentId)); if (currentDetailPostId) loadComments(currentDetailPostId); }
+            catch (err) { alert("Could not delete comment."); }
         };
         window.startEditComment = function(commentId) {
             document.getElementById(`comment-text-${commentId}`).classList.add('hidden');
@@ -2406,12 +2103,8 @@
             const input = document.getElementById(`comment-edit-input-${commentId}`);
             const newText = input.value.trim();
             if (!newText) { alert("Comment can't be empty."); return; }
-            try {
-                await updateDoc(doc(db, "comments", commentId), { text: newText });
-                if (currentDetailPostId) loadComments(currentDetailPostId);
-            } catch (err) {
-                alert("Could not update comment.");
-            }
+            try { await updateDoc(doc(db, "comments", commentId), { text: newText }); if (currentDetailPostId) loadComments(currentDetailPostId); }
+            catch (err) { alert("Could not update comment."); }
         };
         window.addComment = async function(event) {
             event.preventDefault();
@@ -2419,77 +2112,52 @@
             const text = document.getElementById('commentText').value.trim();
             if (!text) return;
             const btn = event.target.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.innerText = 'Posting...';
+            btn.disabled = true; btn.innerText = 'Posting...';
             try {
                 await addDoc(collection(db, "comments"), {
-                    postId: currentDetailPostId,
-                    text,
+                    postId: currentDetailPostId, text,
                     author: currentUserProfile?.displayName || currentUser.displayName || currentUser.email.split('@')[0] || 'Insider',
-                    userId: currentUser.uid,
-                    createdAt: serverTimestamp()
+                    userId: currentUser.uid, createdAt: serverTimestamp()
                 });
                 document.getElementById('commentText').value = '';
                 loadComments(currentDetailPostId);
-            } catch (err) {
-                alert("Could not post comment.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'Post Comment';
-            }
+            } catch (err) { alert("Could not post comment."); }
+            finally { btn.disabled = false; btn.innerText = 'Post Comment'; }
         };
 
         function renderAll() {
-            renderPosts();
-            renderArticles();
-            renderAnon();
-            renderActivities();
-            renderYourClubs();
-            updateCounters();
+            renderPosts(); renderArticles(); renderAnon(); renderActivities(); renderYourClubs(); updateCounters();
         }
 
         function updateCounters() {
             const postsEl = document.getElementById('posts-count');
             if (postsEl) postsEl.innerText = posts.length;
             const feedPosts = posts.filter(p => ['lifehack','spot','inquiry'].includes(p.category));
-            document.getElementById('post-count').innerText = feedFilter === 'all'
-                ? feedPosts.length
-                : feedPosts.filter(p => p.category === feedFilter).length;
+            document.getElementById('post-count').innerText = feedFilter === 'all' ? feedPosts.length : feedPosts.filter(p => p.category === feedFilter).length;
         }
 
         function renderYourClubs() {
             const section = document.getElementById('your-clubs-section');
             const grid = document.getElementById('your-clubs-grid');
             if (!section || !grid) return;
-            if (!currentUser || myClubMemberships.length === 0) {
-                section.classList.add('hidden');
-                return;
-            }
+            if (!currentUser || myClubMemberships.length === 0) { section.classList.add('hidden'); return; }
             const entries = myClubMemberships.map(m => {
                 const clubPost = posts.find(p => p.id === m.clubId);
                 return clubPost ? { ...m, clubPost } : null;
             }).filter(Boolean);
-            if (entries.length === 0) {
-                section.classList.add('hidden');
-                return;
-            }
+            if (entries.length === 0) { section.classList.add('hidden'); return; }
             section.classList.remove('hidden');
             grid.innerHTML = entries.map(m => {
                 const p = m.clubPost;
-                return `
-                    <div onclick="openDetailModal('${p.id}')" class="bg-brand-card p-5 rounded-2xl border border-brand-orange/30 hover:border-brand-orange/70 cursor-pointer transition-all shadow-sm">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-brand-orange">🏛️ Club</span>
-                            <span class="text-xs text-brand-muted">${formatTime(p.createdAt)}</span>
-                        </div>
-                        <h4 class="font-heading font-bold text-lg text-brand-dark line-clamp-2">${escapeHtml(p.title)}</h4>
-                        ${p.location ? `<p class="text-xs text-brand-muted mt-1">📍 ${escapeHtml(p.location)}</p>` : ''}
-                        <div class="mt-3 pt-3 border-t border-brand-border flex items-center justify-between">
-                            <span class="text-xs font-bold uppercase tracking-wider ${m.role === 'owner' ? 'text-brand-orange' : 'text-brand-ultra'}">${escapeHtml(m.roleName || (m.role === 'owner' ? 'Owner' : 'Member'))}</span>
-                            <span class="text-brand-orange text-sm font-semibold">View →</span>
-                        </div>
+                return `<div onclick="openDetailModal('${p.id}')" class="bg-brand-card p-5 rounded-2xl border border-brand-orange/30 hover:border-brand-orange/70 cursor-pointer transition-all shadow-sm">
+                    <div class="flex items-center justify-between mb-2"><span class="text-[10px] font-bold uppercase tracking-widest text-brand-orange">🏛️ Club</span><span class="text-xs text-brand-muted">${formatTime(p.createdAt)}</span></div>
+                    <h4 class="font-heading font-bold text-lg text-brand-dark line-clamp-2">${escapeHtml(p.title)}</h4>
+                    ${p.location ? `<p class="text-xs text-brand-muted mt-1">📍 ${escapeHtml(p.location)}</p>` : ''}
+                    <div class="mt-3 pt-3 border-t border-brand-border flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider ${m.role === 'owner' ? 'text-brand-orange' : 'text-brand-ultra'}">${escapeHtml(m.roleName || (m.role === 'owner' ? 'Owner' : 'Member'))}</span>
+                        <span class="text-brand-orange text-sm font-semibold">View →</span>
                     </div>
-                `;
+                </div>`;
             }).join('');
         }
 
@@ -2522,9 +2190,7 @@
             return 'bg-brand-light text-brand-dark';
         }
 
-        function isAnonCategory(cat) {
-            return cat === 'anon' || (cat && cat.startsWith('anon-'));
-        }
+        function isAnonCategory(cat) { return cat === 'anon' || (cat && cat.startsWith('anon-')); }
 
         function makePostCard(p, extraClass = '') {
             const canDelete = currentUser && p.userId && currentUser.uid === p.userId;
@@ -2533,52 +2199,37 @@
             const isClub = p.isClub === true;
             const authorInfo = getPostAuthorInfo(p);
             const schedules = isActivity ? getActivitySchedules(p) : [];
-
             let scheduleHtml = '';
             if (isActivity && schedules.length > 0) {
                 const first = scheduleEntryDisplay(schedules[0]);
                 const restCount = schedules.length - 1;
                 scheduleHtml = `<p class="text-xs font-semibold text-brand-ultra">🗓 ${escapeHtml(first)}${restCount > 0 ? ` <span class="text-brand-muted font-normal">+${restCount} more</span>` : ''}</p>`;
-            } else if (p.schedule) {
-                scheduleHtml = `<p class="text-xs font-semibold text-brand-ultra">🗓 ${escapeHtml(p.schedule)}</p>`;
-            }
-
-            return `
-                <div class="bg-brand-card p-6 rounded-3xl border ${isClub ? 'border-brand-orange/40' : 'border-brand-border'} shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/60 transition-all relative group cursor-pointer ${extraClass}"
-                     onclick="openDetailModal('${p.id}')">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between gap-2">
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${getCategoryColor(p)}">${getCategoryLabel(p)}</span>
-                                ${isClub ? `<span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-orange text-white">Club</span>` : ''}
-                            </div>
-                            <span class="text-xs text-brand-muted flex-shrink-0">${formatTime(p.createdAt)}${p.updatedAt ? ' · edited' : ''}</span>
+            } else if (p.schedule) scheduleHtml = `<p class="text-xs font-semibold text-brand-ultra">🗓 ${escapeHtml(p.schedule)}</p>`;
+            return `<div class="bg-brand-card p-6 rounded-3xl border ${isClub ? 'border-brand-orange/40' : 'border-brand-border'} shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/60 transition-all relative group cursor-pointer ${extraClass}" onclick="openDetailModal('${p.id}')">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${getCategoryColor(p)}">${getCategoryLabel(p)}</span>
+                            ${isClub ? `<span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-orange text-white">Club</span>` : ''}
                         </div>
-                        <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
-                        ${scheduleHtml}
-                        ${p.location && isActivity ? `<p class="text-xs text-brand-muted">📍 ${escapeHtml(p.location)}</p>` : ''}
-                        <p class="text-sm text-brand-muted leading-relaxed line-clamp-3">${escapeHtml(p.content)}</p>
+                        <span class="text-xs text-brand-muted flex-shrink-0">${formatTime(p.createdAt)}${p.updatedAt ? ' · edited' : ''}</span>
                     </div>
-                    <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
-                        ${(!isAnon && isActivity && p.isHost === false) ? '<span class="text-brand-muted">Posted anonymously</span>' : `
-                            <div class="flex items-center gap-2 min-w-0 ${!isAnon && p.userId && p.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && p.userId && p.isHost !== false ? `onclick="event.stopPropagation(); openProfile('${p.userId}')"` : ''}>
-                                ${!isAnon && p.isHost !== false ? (() => {
-                                    const c = authorInfo.color || '#FF5722';
-                                    return `<div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold" style="background-color:${c}26;color:${c}">${escapeHtml(authorInfo.name.charAt(0).toUpperCase())}</div>`;
-                                })() : ''}
-                                <span class="truncate">${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Host: ' : 'By ') + escapeHtml(authorInfo.name)}</span>
-                            </div>
-                        `}
-                        <div class="flex items-center gap-3 flex-shrink-0">
-                            ${canDelete ? `
-                                ${isActivity ? `<button type="button" onclick="event.stopPropagation(); editActivity('${p.id}')" class="text-brand-ultra hover:underline">Edit</button>` : ''}
-                                <button type="button" onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-ruby hover:underline">Delete</button>
-                            ` : ''}
-                            <span class="text-brand-orange">View →</span>
-                        </div>
+                    <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
+                    ${scheduleHtml}
+                    ${p.location && isActivity ? `<p class="text-xs text-brand-muted">📍 ${escapeHtml(p.location)}</p>` : ''}
+                    <p class="text-sm text-brand-muted leading-relaxed line-clamp-3">${escapeHtml(p.content)}</p>
+                </div>
+                <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
+                    ${(!isAnon && isActivity && p.isHost === false) ? '<span class="text-brand-muted">Posted anonymously</span>' : `<div class="flex items-center gap-2 min-w-0 ${!isAnon && p.userId && p.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && p.userId && p.isHost !== false ? `onclick="event.stopPropagation(); openProfile('${p.userId}')"` : ''}>
+                        ${!isAnon && p.isHost !== false ? (() => { const c = authorInfo.color || '#FF5722'; return `<div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold" style="background-color:${c}26;color:${c}">${escapeHtml(authorInfo.name.charAt(0).toUpperCase())}</div>`; })() : ''}
+                        <span class="truncate">${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Host: ' : 'By ') + escapeHtml(authorInfo.name)}</span>
+                    </div>`}
+                    <div class="flex items-center gap-3 flex-shrink-0">
+                        ${canDelete ? `${isActivity ? `<button type="button" onclick="event.stopPropagation(); editActivity('${p.id}')" class="text-brand-ultra hover:underline">Edit</button>` : ''}<button type="button" onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-ruby hover:underline">Delete</button>` : ''}
+                        <span class="text-brand-orange">View →</span>
                     </div>
                 </div>
-            `;
+            </div>`;
         }
 
         function renderPosts() {
@@ -2587,13 +2238,12 @@
             const mainFeedPosts = posts.filter(p => ['lifehack','spot','inquiry'].includes(p.category));
             const filtered = feedFilter === 'all' ? mainFeedPosts : mainFeedPosts.filter(p => p.category === feedFilter);
             if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-16 text-center space-y-3 bg-brand-card rounded-3xl border border-dashed border-brand-border">
-                        <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
-                        <h4 class="font-heading font-bold text-lg text-brand-dark">No posts in the feed yet</h4>
-                        <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to drop a lifehack, secret spot or inquiry!</p>
-                        <button type="button" onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Drop a Post</button>
-                    </div>`;
+                grid.innerHTML = `<div class="col-span-full py-16 text-center space-y-3 bg-brand-card rounded-3xl border border-dashed border-brand-border">
+                    <div class="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto text-brand-muted font-bold text-xl">∅</div>
+                    <h4 class="font-heading font-bold text-lg text-brand-dark">No posts in the feed yet</h4>
+                    <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to drop a lifehack, secret spot or inquiry!</p>
+                    <button type="button" onclick="openModal()" class="mt-2 inline-block bg-brand-orange text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">Drop a Post</button>
+                </div>`;
                 return;
             }
             grid.innerHTML = filtered.map(p => makePostCard(p)).join('');
@@ -2603,10 +2253,7 @@
             const grid = document.getElementById('articles-grid');
             if (!grid) return;
             const articles = posts.filter(p => p.category === 'article');
-            if (articles.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">No independent articles published yet.</div>`;
-                return;
-            }
+            if (articles.length === 0) { grid.innerHTML = `<div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">No independent articles published yet.</div>`; return; }
             grid.innerHTML = articles.map(p => makePostCard(p)).join('');
         }
 
@@ -2617,10 +2264,7 @@
             if (anonFilter === 'lifehack') anons = anons.filter(p => p.category === 'anon-lifehack' || p.category === 'anon');
             else if (anonFilter === 'spot') anons = anons.filter(p => p.category === 'anon-spot');
             else if (anonFilter === 'inquiry') anons = anons.filter(p => p.category === 'anon-inquiry');
-            if (anons.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">The anonymous board is clean.</div>`;
-                return;
-            }
+            if (anons.length === 0) { grid.innerHTML = `<div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">The anonymous board is clean.</div>`; return; }
             grid.innerHTML = anons.map(p => makePostCard(p)).join('');
         }
 
@@ -2628,19 +2272,15 @@
             const grid = document.getElementById('activities-grid');
             if (!grid) return;
             let acts = posts.filter(p => p.category === 'activity' || p.category === 'corner');
-            if (activityFilter === 'clubs') {
-                acts = acts.filter(p => p.isClub === true);
-            } else if (activityFilter !== 'all') {
-                acts = acts.filter(p => (p.eventType || 'weekly') === activityFilter);
-            }
+            if (activityFilter === 'clubs') acts = acts.filter(p => p.isClub === true);
+            else if (activityFilter !== 'all') acts = acts.filter(p => (p.eventType || 'weekly') === activityFilter);
             if (acts.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full py-16 text-center space-y-3 bg-brand-card rounded-3xl border border-dashed border-brand-border">
-                        <div class="w-12 h-12 bg-brand-ultra/10 rounded-full flex items-center justify-center mx-auto text-brand-ultra font-bold text-xl">📅</div>
-                        <h4 class="font-heading font-bold text-lg text-brand-dark">No activities yet</h4>
-                        <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to host a one-time event, weekly club, or monthly meetup!</p>
-                        <button type="button" onclick="openActivityModal()" class="mt-2 inline-block bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">+ Host Activity</button>
-                    </div>`;
+                grid.innerHTML = `<div class="col-span-full py-16 text-center space-y-3 bg-brand-card rounded-3xl border border-dashed border-brand-border">
+                    <div class="w-12 h-12 bg-brand-ultra/10 rounded-full flex items-center justify-center mx-auto text-brand-ultra font-bold text-xl">📅</div>
+                    <h4 class="font-heading font-bold text-lg text-brand-dark">No activities yet</h4>
+                    <p class="text-sm text-brand-muted max-w-sm mx-auto">Be the first to host a one-time event, weekly club, or monthly meetup!</p>
+                    <button type="button" onclick="openActivityModal()" class="mt-2 inline-block bg-brand-ultra text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">+ Host Activity</button>
+                </div>`;
                 return;
             }
             grid.innerHTML = acts.map(p => makePostCard(p)).join('');
@@ -2666,17 +2306,44 @@
 
         function boot() {
             generateStars();
+
+            // Bind forms via addEventListener — more reliable than inline onsubmit in WebViews
+            const authForm = document.getElementById('authForm');
+            if (authForm) {
+                authForm.removeAttribute('onsubmit');
+                authForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleAuth(ev); });
+            }
+            const submissionForm = document.getElementById('submissionForm');
+            if (submissionForm) {
+                submissionForm.removeAttribute('onsubmit');
+                submissionForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleSubmission(ev); });
+            }
+            const activityForm = document.getElementById('activityForm');
+            if (activityForm) {
+                activityForm.removeAttribute('onsubmit');
+                activityForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleActivitySubmission(ev); });
+            }
+            const dmSendForm = document.getElementById('dm-send-form');
+            if (dmSendForm) {
+                dmSendForm.removeAttribute('onsubmit');
+                dmSendForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.sendDm(ev); });
+            }
+
+            // Event delegation for dynamically-created comment forms
+            document.addEventListener('submit', function(ev) {
+                const form = ev.target;
+                if (form && form.id === 'commentForm') {
+                    ev.preventDefault();
+                    window.addComment(ev);
+                }
+            });
+
             try {
                 const catSelect = document.getElementById('postCategory');
                 if (catSelect) catSelect.addEventListener('change', updateAnonNote);
-            } catch (err) {
-                console.error('[Liuzhou Loop] category select init failed:', err);
-            }
-            try {
-                renderScheduleEntries('one-time', [{}]);
-            } catch (err) {
-                console.error('[Liuzhou Loop] schedule list init failed:', err);
-            }
+            } catch (err) { console.error('[Liuzhou Loop] category select init failed:', err); }
+            try { renderScheduleEntries('one-time', [{}]); } catch (err) { console.error('[Liuzhou Loop] schedule list init failed:', err); }
+
             try {
                 const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
                 onSnapshot(q, (snapshot) => {
@@ -2700,11 +2367,10 @@
                     if (el) el.innerText = snapshot.size;
                     renderAll();
                     renderFriendsContent();
-                }, (error) => {
-                    console.warn("Users listener error:", error);
-                });
+                }, (error) => { console.warn("Users listener error:", error); });
             } catch (err) {
                 console.error('[Liuzhou Loop] Firestore listeners failed:', err);
+                if (window.__lzShowError) window.__lzShowError('Could not connect to the database. Please refresh the page.');
             }
         }
 
