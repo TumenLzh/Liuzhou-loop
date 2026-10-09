@@ -661,17 +661,38 @@
         </div>
     </div>
 
+    <!-- Messages Modal -->
     <div id="messagesModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-card rounded-3xl max-w-md w-full shadow-2xl border border-brand-border max-h-[90vh] overflow-hidden flex flex-col" style="height:min(640px,90vh)">
+
+            <!-- Chat list view -->
             <div id="dm-list-view" class="flex flex-col h-full">
                 <div class="flex items-center justify-between p-5 border-b border-brand-border">
                     <h3 class="font-heading font-extrabold text-xl text-brand-dark">Messages</h3>
                     <button type="button" onclick="closeMessages()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark">&times;</button>
                 </div>
                 <div id="dm-chat-list" class="overflow-y-auto flex-1 p-3 space-y-1">
-                    <p class="text-sm text-brand-muted text-center py-10">Pick a friend from the Friends list to start chatting.</p>
+                    <p class="text-sm text-brand-muted text-center py-10">Loading...</p>
                 </div>
+                <p class="text-[10px] text-brand-muted text-center px-4 pb-3">You can only message friends. Add friends from their profiles.</p>
             </div>
+
+            <!-- Conversation view -->
+            <div id="dm-thread-view" class="hidden flex flex-col h-full">
+                <div class="flex items-center gap-3 p-4 border-b border-brand-border">
+                    <button type="button" onclick="showDmList()" class="w-8 h-8 rounded-full bg-brand-light flex items-center justify-center text-brand-muted hover:text-brand-dark text-lg">&larr;</button>
+                    <div id="dm-thread-header" class="flex-1 min-w-0 flex items-center gap-2">
+                        <div id="dm-thread-avatar" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"></div>
+                        <p class="font-heading font-bold text-brand-dark truncate" id="dm-thread-name">Chat</p>
+                    </div>
+                </div>
+                <div id="dm-messages" class="overflow-y-auto flex-1 p-4 space-y-3 bg-brand-light/40"></div>
+                <form id="dm-send-form" onsubmit="sendDm(event)" class="p-3 border-t border-brand-border flex gap-2">
+                    <input type="text" id="dm-input" placeholder="Type a message..." class="flex-1 bg-brand-light border border-brand-border rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-brand-orange" autocomplete="off">
+                    <button type="submit" class="bg-brand-orange hover:bg-orange-600 text-white rounded-full px-4 py-2.5 text-sm font-semibold transition-colors">Send</button>
+                </form>
+            </div>
+
         </div>
     </div>
 
@@ -725,6 +746,11 @@
 
         let myClubMemberships = [];
         let clubMembershipsUnsub = null;
+
+        // DM state
+        let currentDmPartner = null;
+        let currentDmPartnerName = '';
+        let dmMessagesUnsub = null;
 
         function escapeHtml(str) {
             if (!str) return '';
@@ -1502,17 +1528,193 @@
             document.getElementById('profileModal').classList.remove('flex');
         };
 
+        // ---------- Direct Messages ----------
+        function getChatId(uidA, uidB) {
+            return [uidA, uidB].sort().join('_');
+        }
+
+        async function ensureChatDoc(partnerUid) {
+            if (!currentUser || !partnerUid) return;
+            const chatId = getChatId(currentUser.uid, partnerUid);
+            try {
+                await setDoc(doc(db, "chats", chatId), {
+                    members: [currentUser.uid, partnerUid].sort()
+                }, { merge: true });
+            } catch (e) {
+                console.warn('ensureChatDoc failed:', e);
+            }
+        }
+
         window.openMessages = function() {
-            document.getElementById('messagesModal').classList.remove('hidden');
-            document.getElementById('messagesModal').classList.add('flex');
+            if (!currentUser) { openAuthModal('signup'); return; }
+            const modal = document.getElementById('messagesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            showDmList();
         };
+
         window.closeMessages = function() {
             document.getElementById('messagesModal').classList.add('hidden');
             document.getElementById('messagesModal').classList.remove('flex');
+            if (dmMessagesUnsub) { dmMessagesUnsub(); dmMessagesUnsub = null; }
+            currentDmPartner = null;
+            currentDmPartnerName = '';
         };
-        window.showDmList = function() {};
-        window.startDm = function(uid, name) { closeProfile(); openMessages(); };
-        window.sendDm = async function(e) { e.preventDefault(); };
+
+        window.showDmList = function() {
+            document.getElementById('dm-list-view').classList.remove('hidden');
+            const thread = document.getElementById('dm-thread-view');
+            thread.classList.add('hidden');
+            thread.classList.remove('flex');
+            if (dmMessagesUnsub) { dmMessagesUnsub(); dmMessagesUnsub = null; }
+            currentDmPartner = null;
+            currentDmPartnerName = '';
+            renderDmFriendList();
+        };
+
+        async function renderDmFriendList() {
+            const list = document.getElementById('dm-chat-list');
+            if (!list) return;
+            if (!currentUser) {
+                list.innerHTML = '<p class="text-sm text-brand-muted text-center py-10">Log in first.</p>';
+                return;
+            }
+            if (myFriends.length === 0) {
+                list.innerHTML = '<p class="text-sm text-brand-muted text-center py-10">No friends yet. Add someone from the Friends list first.</p>';
+                return;
+            }
+
+            const enriched = await Promise.all(myFriends.map(async f => {
+                const chatId = getChatId(currentUser.uid, f.uid);
+                let lastMessage = null;
+                let lastMessageAt = null;
+                try {
+                    const snap = await getDoc(doc(db, "chats", chatId));
+                    if (snap.exists()) {
+                        const d = snap.data();
+                        lastMessage = d.lastMessage || null;
+                        lastMessageAt = d.lastMessageAt || null;
+                    }
+                } catch (e) { /* silent */ }
+                return { ...f, lastMessage, lastMessageAt };
+            }));
+
+            enriched.sort((a, b) => {
+                const ta = a.lastMessageAt?.toMillis?.() || 0;
+                const tb = b.lastMessageAt?.toMillis?.() || 0;
+                return tb - ta;
+            });
+
+            list.innerHTML = enriched.map(f => {
+                const u = usersMap[f.uid] || {};
+                const name = u.displayName || 'User';
+                const color = u.color || '#FF5722';
+                const preview = f.lastMessage ? escapeHtml(f.lastMessage) : 'Tap to open chat';
+                const previewClass = f.lastMessage ? 'text-brand-muted' : 'text-brand-muted italic';
+                return `
+                    <button type="button" onclick="startDm('${f.uid}', '${escapeHtml(name).replace(/'/g, "\\'")}')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-brand-light transition-colors text-left">
+                        <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
+                            <p class="text-[11px] ${previewClass} truncate">${preview}</p>
+                        </div>
+                        ${f.lastMessageAt ? `<span class="text-[10px] text-brand-muted flex-shrink-0">${formatTime(f.lastMessageAt)}</span>` : `<span class="text-brand-orange text-sm">→</span>`}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        window.startDm = async function(uid, name) {
+            if (!currentUser) return;
+            const profileModal = document.getElementById('profileModal');
+            if (profileModal && !profileModal.classList.contains('hidden')) closeProfile();
+            const modal = document.getElementById('messagesModal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+            document.getElementById('dm-list-view').classList.add('hidden');
+            const thread = document.getElementById('dm-thread-view');
+            thread.classList.remove('hidden');
+            thread.classList.add('flex');
+
+            currentDmPartner = uid;
+            currentDmPartnerName = name || 'Chat';
+
+            const u = usersMap[uid] || {};
+            const color = u.color || '#FF5722';
+            const initial = (name || 'U').charAt(0).toUpperCase();
+            document.getElementById('dm-thread-name').textContent = name || 'Chat';
+            const avatar = document.getElementById('dm-thread-avatar');
+            avatar.style.background = color + '26';
+            avatar.style.color = color;
+            avatar.textContent = initial;
+
+            document.getElementById('dm-messages').innerHTML = '<p class="text-sm text-brand-muted text-center py-6">Loading...</p>';
+
+            await ensureChatDoc(uid);
+            loadDmMessages(uid);
+        };
+
+        function loadDmMessages(partnerUid) {
+            if (dmMessagesUnsub) { dmMessagesUnsub(); dmMessagesUnsub = null; }
+            const chatId = getChatId(currentUser.uid, partnerUid);
+            const q = query(
+                collection(db, "chats", chatId, "messages"),
+                orderBy("createdAt", "asc")
+            );
+            dmMessagesUnsub = onSnapshot(q, (snap) => {
+                const container = document.getElementById('dm-messages');
+                if (!container) return;
+                if (snap.empty) {
+                    container.innerHTML = '<p class="text-sm text-brand-muted text-center py-6">No messages yet. Say hi 👋</p>';
+                    return;
+                }
+                container.innerHTML = snap.docs.map(d => {
+                    const m = d.data();
+                    const isMine = m.senderId === currentUser.uid;
+                    return `
+                        <div class="flex ${isMine ? 'justify-end' : 'justify-start'}">
+                            <div class="max-w-[80%] ${isMine ? 'bg-brand-orange text-white' : 'bg-brand-card text-brand-dark border border-brand-border'} rounded-2xl px-4 py-2.5 shadow-sm">
+                                <p class="text-sm whitespace-pre-wrap break-words">${escapeHtml(m.text)}</p>
+                                <p class="text-[9px] mt-1 ${isMine ? 'text-white/70' : 'text-brand-muted'}">${formatTime(m.createdAt)}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                container.scrollTop = container.scrollHeight;
+            }, (error) => {
+                console.error('DM listener error:', error);
+                const container = document.getElementById('dm-messages');
+                if (container) container.innerHTML = '<p class="text-sm text-brand-ruby text-center py-6">Could not load messages. Check Firestore rules.</p>';
+            });
+        }
+
+        window.sendDm = async function(e) {
+            e.preventDefault();
+            if (!currentUser || !currentDmPartner) return;
+            const input = document.getElementById('dm-input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            const chatId = getChatId(currentUser.uid, currentDmPartner);
+            try {
+                await setDoc(doc(db, "chats", chatId), {
+                    members: [currentUser.uid, currentDmPartner].sort(),
+                    lastMessage: text,
+                    lastMessageAt: serverTimestamp(),
+                    lastSender: currentUser.uid
+                }, { merge: true });
+                await addDoc(collection(db, "chats", chatId, "messages"), {
+                    text,
+                    senderId: currentUser.uid,
+                    createdAt: serverTimestamp()
+                });
+            } catch (err) {
+                console.error('Send failed:', err);
+                alert('Could not send message: ' + (err.message || 'unknown'));
+            }
+        };
 
         window.switchMainTab = function(tab) {
             currentMainTab = tab;
