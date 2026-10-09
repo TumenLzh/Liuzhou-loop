@@ -1403,14 +1403,16 @@
                     </div>
                     <div class="space-y-2 text-sm">`;
                 if (u.about) html += `<p class="text-brand-muted">${escapeHtml(u.about)}</p>`;
-                if (u.age) html += `<p><span class="font-semibold">Age:</span> ${escapeHtml(u.age)}</p>`;
-                if (u.gender) html += `<p><span class="font-semibold">Gender:</span> ${escapeHtml(u.gender)}</p>`;
-                if (u.mbti) html += `<p><span class="font-semibold">MBTI:</span> ${escapeHtml(u.mbti)}</p>`;
-                if (u.status) html += `<p><span class="font-semibold">Status:</span> ${escapeHtml(u.status)}</p>`;
-                if (u.hobbies) html += `<p><span class="font-semibold">Hobbies:</span> ${escapeHtml(u.hobbies)}</p>`;
-                if (u.likes) html += `<p><span class="font-semibold">Likes:</span> ${escapeHtml(u.likes)}</p>`;
-                if (u.dislikes) html += `<p><span class="font-semibold">Dislikes:</span> ${escapeHtml(u.dislikes)}</p>`;
-                if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
+if (u.age) html += `<p><span class="font-semibold">Age:</span> ${escapeHtml(u.age)}</p>`;
+if (u.birthday) html += `<p><span class="font-semibold">Birthday:</span> ${escapeHtml(u.birthday)}</p>`;
+if (u.gender) html += `<p><span class="font-semibold">Gender:</span> ${escapeHtml(u.gender)}</p>`;
+if (u.mbti) html += `<p><span class="font-semibold">MBTI:</span> ${escapeHtml(u.mbti)}</p>`;
+if (u.status) html += `<p><span class="font-semibold">Status:</span> ${escapeHtml(u.status)}</p>`;
+if (u.orientation) html += `<p><span class="font-semibold">Orientation:</span> ${escapeHtml(u.orientation)}</p>`;
+if (u.hobbies) html += `<p><span class="font-semibold">Hobbies:</span> ${escapeHtml(u.hobbies)}</p>`;
+if (u.likes) html += `<p><span class="font-semibold">Likes:</span> ${escapeHtml(u.likes)}</p>`;
+if (u.dislikes) html += `<p><span class="font-semibold">Dislikes:</span> ${escapeHtml(u.dislikes)}</p>`;
+if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
                 html += `</div>`;
                 if (u.showClubsOnProfile !== false) {
                     try {
