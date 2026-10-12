@@ -760,22 +760,52 @@
         }
 
         // ---------- Event attendance ----------
-        function getCurrentCycleKey(post) {
-            const now = new Date();
-            const type = post.eventType || 'one-time';
-            if (type === 'one-time') return 'once';
-            if (type === 'weekly') {
-                const d = new Date(now);
-                const day = d.getDay();
-                const diff = day === 0 ? -6 : 1 - day;
-                d.setDate(d.getDate() + diff);
-                d.setHours(0,0,0,0);
-                return `w${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+        function getNextOccurrenceDate(schedules) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const candidates = [];
+    const weekdayMap = { 'Sunday': 0, 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6 };
+
+    for (const s of schedules) {
+        if (s.type === 'one-time') {
+            if (s.date) {
+                const d = new Date(s.date + 'T00:00:00');
+                if (d >= today) candidates.push(d);
             }
-            if (type === 'monthly') return `m${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}`;
-            if (type === 'yearly') return `y${now.getFullYear()}`;
-            return 'once';
+        } else if (s.type === 'weekly') {
+            const targetDay = weekdayMap[s.weekday];
+            if (targetDay === undefined) continue;
+            const d = new Date(today);
+            let diff = targetDay - d.getDay();
+            if (diff < 0) diff += 7;
+            d.setDate(d.getDate() + diff);
+            candidates.push(d);
+        } else if (s.type === 'monthly') {
+            const target = s.monthDay;
+            if (!target) continue;
+            const d = new Date(today.getFullYear(), today.getMonth(), target);
+            if (d < today) d.setMonth(d.getMonth() + 1);
+            candidates.push(d);
+        } else if (s.type === 'yearly') {
+            const tm = (s.month || 1) - 1;
+            const td = s.day || 1;
+            let d = new Date(today.getFullYear(), tm, td);
+            if (d < today) d = new Date(today.getFullYear() + 1, tm, td);
+            candidates.push(d);
         }
+    }
+    if (candidates.length === 0) return null;
+    candidates.sort((a, b) => a - b);
+    return candidates[0];
+}
+
+function getCurrentCycleKey(post) {
+    const type = post.eventType || 'one-time';
+    if (type === 'one-time') return 'once';
+    const next = getNextOccurrenceDate(getActivitySchedules(post));
+    if (!next) return 'never';
+    return `cyc${next.getFullYear()}${String(next.getMonth()+1).padStart(2,'0')}${String(next.getDate()).padStart(2,'0')}`;
+}
 
         function isOneTimeEventEnded(post) {
             if ((post.eventType || 'one-time') !== 'one-time') return false;
