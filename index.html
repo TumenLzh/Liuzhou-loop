@@ -6,14 +6,11 @@
     <title>The Liuzhou Loop — Expat & Youth Insider</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='12' fill='%23FF5722'/><text x='50%' y='54%' font-family='Syne, sans-serif' font-weight='800' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'>L</text></svg>">
 
-    <!-- Non-blocking font load (critical for Chinese networks where Google Fonts is slow) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E6%9F%B3%E5%B7%9E&display=swap" media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap">
-    </noscript>
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap"></noscript>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -37,7 +34,6 @@
         }
     </script>
 
-    <!-- Early error banner: shows JS errors on screen so WebView users aren't stuck with a dead page -->
     <script>
         (function() {
             window.__lzShowError = function(msg) {
@@ -50,7 +46,7 @@
                         document.body ? document.body.appendChild(el) : document.addEventListener('DOMContentLoaded', () => document.body.appendChild(el));
                     }
                     el.textContent = msg;
-                } catch (e) { /* silent */ }
+                } catch (e) {}
             };
             window.addEventListener('error', function(ev) {
                 console.error('[Liuzhou Loop Error]', ev.error || ev.message);
@@ -87,78 +83,22 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .decor-root {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-        .decor-layer {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.35s ease, transform 0.35s ease;
-            will-change: opacity, transform;
-        }
+        .decor-root { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+        .decor-layer { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; opacity: 0; transform: translateY(40px); transition: opacity 0.35s ease, transform 0.35s ease; will-change: opacity, transform; }
         body.theme-feed .decor-feed,
         body.theme-articles .decor-articles,
         body.theme-anon .decor-anon,
-        body.theme-activities .decor-activities {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s,
-                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
-        }
+        body.theme-activities .decor-activities { opacity: 1; transform: translateY(0); transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s; }
         .decor-feed { color: #1A1A1A; }
-        .decor-lz {
-            position: absolute;
-            top: 8vh;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
-            font-weight: 900;
-            font-size: clamp(180px, 46vw, 760px);
-            line-height: 0.82;
-            letter-spacing: -0.09em;
-            white-space: nowrap;
-            opacity: 0.045;
-            user-select: none;
-        }
+        .decor-lz { position: absolute; top: 8vh; left: 50%; transform: translateX(-50%); font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif; font-weight: 900; font-size: clamp(180px, 46vw, 760px); line-height: 0.82; letter-spacing: -0.09em; white-space: nowrap; opacity: 0.045; user-select: none; }
         .decor-articles { color: #123524; }
-        .decor-skyline {
-            position: absolute;
-            top: 30vh;
-            left: 0;
-            width: 100%;
-            height: auto;
-            opacity: 0.055;
-        }
+        .decor-skyline { position: absolute; top: 30vh; left: 0; width: 100%; height: auto; opacity: 0.055; }
         .decor-anon { color: #F8F1E0; }
         .decor-stars { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; }
-        .decor-star {
-            position: absolute;
-            background: #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
-            animation: starTwinkle 4s ease-in-out infinite;
-            will-change: opacity, transform;
-        }
-        @keyframes starTwinkle {
-            0%, 100% { opacity: 0.12; transform: scale(0.85); }
-            50%      { opacity: 0.85; transform: scale(1.15); }
-        }
+        .decor-star { position: absolute; background: #ffffff; border-radius: 50%; box-shadow: 0 0 6px rgba(255, 255, 255, 0.7); animation: starTwinkle 4s ease-in-out infinite; will-change: opacity, transform; }
+        @keyframes starTwinkle { 0%, 100% { opacity: 0.12; transform: scale(0.85); } 50% { opacity: 0.85; transform: scale(1.15); } }
         .decor-activities { color: #120A8F; }
-        .decor-people {
-            position: absolute;
-            top: 32vh;
-            left: 0;
-            width: 100%;
-            height: auto;
-            opacity: 0.05;
-        }
+        .decor-people { position: absolute; top: 32vh; left: 0; width: 100%; height: auto; opacity: 0.05; }
         @media (prefers-reduced-motion: reduce) {
             .decor-star { animation: none; opacity: 0.5; }
             .decor-layer { transition: opacity 0.3s ease; transform: none !important; }
@@ -174,55 +114,31 @@
     </noscript>
 
     <div class="decor-root" aria-hidden="true">
-        <div class="decor-layer decor-feed">
-            <span class="decor-lz">柳州</span>
-        </div>
+        <div class="decor-layer decor-feed"><span class="decor-lz">柳州</span></div>
         <div class="decor-layer decor-articles">
             <svg class="decor-skyline" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
                 <g fill="currentColor">
-                    <rect x="0"    y="260" width="60"  height="140"/>
-                    <rect x="60"   y="200" width="40"  height="200"/>
-                    <rect x="100"  y="300" width="80"  height="100"/>
-                    <rect x="180"  y="160" width="50"  height="240"/>
-                    <rect x="230"  y="240" width="70"  height="160"/>
-                    <rect x="300"  y="200" width="45"  height="200"/>
-                    <rect x="345"  y="280" width="90"  height="120"/>
-                    <rect x="435"  y="140" width="55"  height="260"/>
-                    <rect x="456"  y="100" width="2"   height="40"/>
-                    <rect x="490"  y="220" width="60"  height="180"/>
-                    <rect x="550"  y="300" width="100" height="100"/>
-                    <rect x="650"  y="120" width="50"  height="280"/>
-                    <rect x="671"  y="80"  width="2"   height="40"/>
-                    <rect x="700"  y="200" width="70"  height="200"/>
-                    <rect x="770"  y="160" width="45"  height="240"/>
-                    <rect x="815"  y="260" width="90"  height="140"/>
-                    <rect x="905"  y="180" width="55"  height="220"/>
-                    <rect x="960"  y="280" width="80"  height="120"/>
-                    <rect x="1040" y="140" width="60"  height="260"/>
-                    <rect x="1066" y="100" width="2"   height="40"/>
-                    <rect x="1100" y="220" width="45"  height="180"/>
-                    <rect x="1145" y="260" width="55"  height="140"/>
+                    <rect x="0" y="260" width="60" height="140"/><rect x="60" y="200" width="40" height="200"/><rect x="100" y="300" width="80" height="100"/>
+                    <rect x="180" y="160" width="50" height="240"/><rect x="230" y="240" width="70" height="160"/><rect x="300" y="200" width="45" height="200"/>
+                    <rect x="345" y="280" width="90" height="120"/><rect x="435" y="140" width="55" height="260"/><rect x="456" y="100" width="2" height="40"/>
+                    <rect x="490" y="220" width="60" height="180"/><rect x="550" y="300" width="100" height="100"/><rect x="650" y="120" width="50" height="280"/>
+                    <rect x="671" y="80" width="2" height="40"/><rect x="700" y="200" width="70" height="200"/><rect x="770" y="160" width="45" height="240"/>
+                    <rect x="815" y="260" width="90" height="140"/><rect x="905" y="180" width="55" height="220"/><rect x="960" y="280" width="80" height="120"/>
+                    <rect x="1040" y="140" width="60" height="260"/><rect x="1066" y="100" width="2" height="40"/><rect x="1100" y="220" width="45" height="180"/>
+                    <rect x="1145" y="260" width="55" height="140"/>
                 </g>
             </svg>
         </div>
-        <div class="decor-layer decor-anon">
-            <div id="decor-stars" class="decor-stars"></div>
-        </div>
+        <div class="decor-layer decor-anon"><div id="decor-stars" class="decor-stars"></div></div>
         <div class="decor-layer decor-activities">
             <svg class="decor-people" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
                 <g fill="currentColor">
-                    <circle cx="180" cy="200" r="30"/>
-                    <path d="M 120 400 L 120 280 Q 120 240 180 240 Q 240 240 240 280 L 240 400 Z"/>
-                    <circle cx="340" cy="220" r="26"/>
-                    <path d="M 286 400 L 286 295 Q 286 260 340 260 Q 394 260 394 295 L 394 400 Z"/>
-                    <circle cx="520" cy="190" r="34"/>
-                    <path d="M 452 400 L 452 275 Q 452 235 520 235 Q 588 235 588 275 L 588 400 Z"/>
-                    <circle cx="700" cy="230" r="24"/>
-                    <path d="M 650 400 L 650 300 Q 650 268 700 268 Q 750 268 750 300 L 750 400 Z"/>
-                    <circle cx="860" cy="210" r="30"/>
-                    <path d="M 800 400 L 800 285 Q 800 245 860 245 Q 920 245 920 285 L 920 400 Z"/>
-                    <circle cx="1040" cy="225" r="26"/>
-                    <path d="M 986 400 L 986 295 Q 986 262 1040 262 Q 1094 262 1094 295 L 1094 400 Z"/>
+                    <circle cx="180" cy="200" r="30"/><path d="M 120 400 L 120 280 Q 120 240 180 240 Q 240 240 240 280 L 240 400 Z"/>
+                    <circle cx="340" cy="220" r="26"/><path d="M 286 400 L 286 295 Q 286 260 340 260 Q 394 260 394 295 L 394 400 Z"/>
+                    <circle cx="520" cy="190" r="34"/><path d="M 452 400 L 452 275 Q 452 235 520 235 Q 588 235 588 275 L 588 400 Z"/>
+                    <circle cx="700" cy="230" r="24"/><path d="M 650 400 L 650 300 Q 650 268 700 268 Q 750 268 750 300 L 750 400 Z"/>
+                    <circle cx="860" cy="210" r="30"/><path d="M 800 400 L 800 285 Q 800 245 860 245 Q 920 245 920 285 L 920 400 Z"/>
+                    <circle cx="1040" cy="225" r="26"/><path d="M 986 400 L 986 295 Q 986 262 1040 262 Q 1094 262 1094 295 L 1094 400 Z"/>
                 </g>
             </svg>
         </div>
@@ -290,6 +206,7 @@
     </section>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full">
+
         <section id="panel-feed" class="main-panel space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-brand-border pb-6 transition-colors">
                 <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
@@ -357,6 +274,7 @@
                 <div class="col-span-full py-16 text-center text-sm text-brand-muted">Loading activities...</div>
             </div>
         </section>
+
     </main>
 
     <div id="authModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
@@ -433,22 +351,10 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Event Type</label>
                     <div class="grid grid-cols-2 gap-2">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="eventType" value="one-time" class="peer sr-only" checked onchange="toggleActivityFields()">
-                            <div class="peer-checked:bg-brand-ultra peer-checked:text-white peer-checked:border-brand-ultra bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-center text-sm font-semibold transition-all">One-time</div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="eventType" value="weekly" class="peer sr-only" onchange="toggleActivityFields()">
-                            <div class="peer-checked:bg-brand-ultra peer-checked:text-white peer-checked:border-brand-ultra bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-center text-sm font-semibold transition-all">Weekly</div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="eventType" value="monthly" class="peer sr-only" onchange="toggleActivityFields()">
-                            <div class="peer-checked:bg-brand-ultra peer-checked:text-white peer-checked:border-brand-ultra bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-center text-sm font-semibold transition-all">Monthly</div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="eventType" value="yearly" class="peer sr-only" onchange="toggleActivityFields()">
-                            <div class="peer-checked:bg-brand-ultra peer-checked:text-white peer-checked:border-brand-ultra bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-center text-sm font-semibold transition-all">Yearly</div>
-                        </label>
+                        <label class="cursor-pointer"><input type="radio" name="eventType" value="one-time" class="peer sr-only" checked onchange="toggleActivityFields()"><div class="peer-checked:bg-brand-ultra peer-checked:text-white peer-checked:border-brand-ultra bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-center text-sm font-semibold transition-all">One-time</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="eventType" value="weekly" class="peer sr-only" onchange="toggleActivityFields()"><div class="peer-checked:bg-brand-ultra peer-checked:text-white peer-checked:border-brand-ultra bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-center text-sm font-semibold transition-all">Weekly</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="eventType" value="monthly" class="peer sr-only" onchange="toggleActivityFields()"><div class="peer-checked:bg-brand-ultra peer-checked:text-white peer-checked:border-brand-ultra bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-center text-sm font-semibold transition-all">Monthly</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="eventType" value="yearly" class="peer sr-only" onchange="toggleActivityFields()"><div class="peer-checked:bg-brand-ultra peer-checked:text-white peer-checked:border-brand-ultra bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-center text-sm font-semibold transition-all">Yearly</div></label>
                     </div>
                 </div>
                 <div>
@@ -472,6 +378,23 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Description</label>
                     <textarea id="actContent" required rows="3" placeholder="What happens at this activity? Who is it for? Any level required?" class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-ultra"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Activity Color</label>
+                    <p class="text-[10px] text-brand-muted mb-2">Independent from your profile color — this only colors this activity's card.</p>
+                    <div class="flex flex-wrap gap-2" id="activity-color-picker">
+                        <button type="button" data-color="#FF5722" onclick="pickActivityColor('#FF5722')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#FF5722"></button>
+                        <button type="button" data-color="#123524" onclick="pickActivityColor('#123524')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#123524"></button>
+                        <button type="button" data-color="#9B1E2E" onclick="pickActivityColor('#9B1E2E')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#9B1E2E"></button>
+                        <button type="button" data-color="#120A8F" onclick="pickActivityColor('#120A8F')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#120A8F"></button>
+                        <button type="button" data-color="#FFC40C" onclick="pickActivityColor('#FFC40C')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#FFC40C"></button>
+                        <button type="button" data-color="#2A9D8F" onclick="pickActivityColor('#2A9D8F')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#2A9D8F"></button>
+                        <button type="button" data-color="#E76F51" onclick="pickActivityColor('#E76F51')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#E76F51"></button>
+                        <button type="button" data-color="#7B2D8E" onclick="pickActivityColor('#7B2D8E')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#7B2D8E"></button>
+                        <button type="button" data-color="#264653" onclick="pickActivityColor('#264653')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#264653"></button>
+                        <button type="button" data-color="#F4A261" onclick="pickActivityColor('#F4A261')" class="activity-swatch w-8 h-8 rounded-full border-2 border-transparent" style="background:#F4A261"></button>
+                    </div>
+                    <input type="hidden" id="activityColor" value="#FF5722">
                 </div>
                 <div class="bg-brand-ultra/5 border border-brand-ultra/20 rounded-2xl p-4">
                     <label class="flex items-start gap-3 cursor-pointer">
@@ -515,12 +438,10 @@
             <p id="menu-friend-code" class="font-heading font-extrabold text-brand-dark text-sm">—</p>
         </div>
         <button type="button" onclick="openMessages(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors flex items-center justify-between gap-3">
-            <span>Messages</span>
-            <span id="messages-badge" class="hidden bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
+            <span>Messages</span><span id="messages-badge" class="hidden bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
         </button>
         <button type="button" onclick="openFriends(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors flex items-center justify-between gap-3">
-            <span>Friends</span>
-            <span id="friends-badge" class="hidden bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
+            <span>Friends</span><span id="friends-badge" class="hidden bg-brand-orange text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">0</span>
         </button>
         <button type="button" onclick="openSettings(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-dark hover:bg-brand-light transition-colors">Settings</button>
         <button type="button" onclick="handleLogout(); closeAccountMenu();" class="w-full text-left px-4 py-2.5 text-sm font-semibold text-brand-ruby hover:bg-brand-light transition-colors">Log out</button>
@@ -574,69 +495,48 @@
                 <input type="hidden" id="settingsColor" value="#FF5722">
             </div>
             <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Display Name</label>
-                <input type="text" id="settingsName" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
+                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Profile Emoji</label>
+                <p class="text-[10px] text-brand-muted mb-2">Pick an emoji to show instead of your initials on posts, comments, and everywhere you appear.</p>
+                <div class="grid grid-cols-8 gap-1.5 mb-3" id="emoji-picker"></div>
+                <button type="button" onclick="clearEmoji()" class="text-xs font-bold text-brand-ruby hover:underline">Remove emoji — use initials</button>
+                <input type="hidden" id="settingsEmoji" value="">
+            </div>
+            <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Display Name</label>
+                <input type="text" id="settingsName" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Age</label>
+                    <input type="number" id="settingsAge" min="13" max="120" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
+                <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Gender</label>
+                    <input type="text" id="settingsGender" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Age</label>
-                    <input type="number" id="settingsAge" min="13" max="120" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Gender</label>
-                    <input type="text" id="settingsGender" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-                </div>
+                <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Birthday</label>
+                    <input type="text" id="settingsBirthday" placeholder="e.g. March 15" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
+                <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">MBTI</label>
+                    <input type="text" id="settingsMbti" placeholder="e.g. INFP" maxlength="4" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange uppercase"></div>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Birthday</label>
-                    <input type="text" id="settingsBirthday" placeholder="e.g. March 15" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">MBTI</label>
-                    <input type="text" id="settingsMbti" placeholder="e.g. INFP" maxlength="4" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange uppercase">
-                </div>
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Romantic Status</label>
+            <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Romantic Status</label>
                 <select id="settingsStatus" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
                     <option value="">— Prefer not to say —</option>
-                    <option value="Single">Single</option>
-                    <option value="Dating">Dating</option>
-                    <option value="In a relationship">In a relationship</option>
-                    <option value="Engaged">Engaged</option>
-                    <option value="Married">Married</option>
-                    <option value="Open for relationship">Open for relationship</option>
-                    <option value="Not looking">Not looking</option>
-                    <option value="It's complicated">It's complicated</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Orientation</label>
-                <input type="text" id="settingsOrientation" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">About yourself</label>
-                <textarea id="settingsAbout" rows="3" placeholder="A short intro..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></textarea>
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Hobbies</label>
-                <input type="text" id="settingsHobbies" placeholder="e.g. photography, hiking, coding" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-            </div>
+                    <option value="Single">Single</option><option value="Dating">Dating</option>
+                    <option value="In a relationship">In a relationship</option><option value="Engaged">Engaged</option>
+                    <option value="Married">Married</option><option value="Open for relationship">Open for relationship</option>
+                    <option value="Not looking">Not looking</option><option value="It's complicated">It's complicated</option>
+                </select></div>
+            <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Orientation</label>
+                <input type="text" id="settingsOrientation" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
+            <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">About yourself</label>
+                <textarea id="settingsAbout" rows="3" placeholder="A short intro..." class="w-full bg-brand-light border border-brand-border rounded-2xl p-4 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></textarea></div>
+            <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Hobbies</label>
+                <input type="text" id="settingsHobbies" placeholder="e.g. photography, hiking, coding" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
             <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Likes</label>
-                    <input type="text" id="settingsLikes" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Dislikes</label>
-                    <input type="text" id="settingsDislikes" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-                </div>
+                <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Likes</label>
+                    <input type="text" id="settingsLikes" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
+                <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">Dislikes</label>
+                    <input type="text" id="settingsDislikes" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
             </div>
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">WeChat ID</label>
-                <input type="text" id="settingsWechat" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange">
-            </div>
+            <div><label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-2">WeChat ID</label>
+                <input type="text" id="settingsWechat" placeholder="—" class="w-full bg-brand-light border border-brand-border rounded-2xl px-4 py-3 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-orange"></div>
             <p class="text-[10px] text-brand-muted">All fields except name are optional. Empty fields stay hidden on your public profile.</p>
             <p id="settings-error" class="text-sm text-brand-ruby hidden"></p>
             <button type="button" onclick="saveSettings()" id="settingsSaveBtn" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-2xl shadow-sm transition-colors">Save Profile</button>
@@ -655,8 +555,7 @@
             <div class="p-4 border-b border-brand-border bg-brand-ultra/5">
                 <label class="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-2">Add friend by code</label>
                 <div class="flex gap-2">
-                    <input type="text" id="friend-code-input" placeholder="6-digit code" maxlength="6" inputmode="numeric" autocomplete="off"
-                        class="flex-1 bg-white border border-brand-border rounded-2xl px-4 py-2.5 text-sm font-bold tracking-widest text-brand-dark focus:outline-none focus:border-brand-ultra">
+                    <input type="text" id="friend-code-input" placeholder="6-digit code" maxlength="6" inputmode="numeric" autocomplete="off" class="flex-1 bg-white border border-brand-border rounded-2xl px-4 py-2.5 text-sm font-bold tracking-widest text-brand-dark focus:outline-none focus:border-brand-ultra">
                     <button type="button" onclick="addFriendByCode()" class="bg-brand-ultra hover:bg-blue-900 text-white text-sm font-bold px-4 py-2.5 rounded-2xl transition-colors">Add</button>
                 </div>
                 <p id="friend-code-status" class="text-xs mt-2 hidden"></p>
@@ -728,21 +627,15 @@
 
         const app = initializeApp(firebaseConfig);
 
-        // Robust auth initialization with persistence fallback (fixes Safari / WeChat WebView storage issues)
         let auth;
         try {
-            auth = initializeAuth(app, {
-                persistence: [browserLocalPersistence, browserSessionPersistence, inMemoryPersistence]
-            });
+            auth = initializeAuth(app, { persistence: [browserLocalPersistence, browserSessionPersistence, inMemoryPersistence] });
         } catch (e) {
             console.warn('initializeAuth failed, falling back to getAuth:', e);
-            try {
-                auth = getAuth(app);
-            } catch (e2) {
+            try { auth = getAuth(app); }
+            catch (e2) {
                 console.error('getAuth also failed:', e2);
-                if (window.__lzShowError) {
-                    window.__lzShowError('Authentication is not available in this browser. Please try Chrome, Firefox, or Safari (not in a private window).');
-                }
+                if (window.__lzShowError) window.__lzShowError('Authentication is not available in this browser. Please try Chrome, Firefox, or Safari (not in a private window).');
                 throw e2;
             }
         }
@@ -775,11 +668,60 @@
         let currentDmPartnerName = '';
         let dmMessagesUnsub = null;
 
+        const EMOJI_CHOICES = [
+            '🐱','🐶','🦊','🐼','🐨','🐯','🦁','🐸','🐧','🦉','🦄','🐙','🦖','🐢','🦋',
+            '🌟','🔥','⚡','🌈','💎','🎨','✨','🌙','☀️','⭐',
+            '☕','🍜','🍕','🍣','🧋','🍰','🍺','🥟',
+            '🎮','🎧','🎸','📷','🚀','📚','🎯','🏀','⚽','🎬',
+            '👾','🤖','👽','🎃','💀','👻','🤡','🐲'
+        ];
+
+        function displayEmojiOrInitial(userData, fallbackName) {
+            if (userData && userData.emoji) return userData.emoji;
+            const name = (userData && userData.displayName) || fallbackName || 'U';
+            return escapeHtml(name.charAt(0).toUpperCase());
+        }
+
+        function hexToRgb(hex) {
+            const h = String(hex || '').replace('#','');
+            if (h.length !== 6) return { r: 255, g: 255, b: 255 };
+            return { r: parseInt(h.substring(0,2),16), g: parseInt(h.substring(2,4),16), b: parseInt(h.substring(4,6),16) };
+        }
+        function rgbToHex(r, g, b) { return '#' + [r, g, b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2,'0')).join(''); }
+        function mixRgb(a, b, alpha) { return { r: a.r * alpha + b.r * (1 - alpha), g: a.g * alpha + b.g * (1 - alpha), b: a.b * alpha + b.b * (1 - alpha) }; }
+        function lightenRgb(rgb, amount) { return { r: rgb.r + (255 - rgb.r) * amount, g: rgb.g + (255 - rgb.g) * amount, b: rgb.b + (255 - rgb.b) * amount }; }
+        function relativeLuminance({ r, g, b }) {
+            const toLin = (c) => { c = c / 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+            return 0.2126 * toLin(r) + 0.7152 * toLin(g) + 0.0722 * toLin(b);
+        }
+        function getThemeBaseRgb() {
+            if (currentMainTab === 'anon') return { r: 28, g: 24, b: 30 };
+            return { r: 255, g: 254, b: 249 };
+        }
+        function getCardPalette(accentHex) {
+            const accentRgb = hexToRgb(accentHex);
+            const base = getThemeBaseRgb();
+            const tinted = mixRgb(accentRgb, base, 0.22);
+            const lum = relativeLuminance(tinted);
+            const isDarkCard = lum < 0.5;
+            const text = isDarkCard ? '#FFFFFF' : '#1A1A1A';
+            const muted = isDarkCard ? 'rgba(255,255,255,0.70)' : 'rgba(26,26,26,0.66)';
+            const lightened = lightenRgb(accentRgb, 0.55);
+            const accentOnCard = isDarkCard ? rgbToHex(lightened.r, lightened.g, lightened.b) : accentHex;
+            const deleteColor = isDarkCard ? '#FF8A8A' : '#9B1E2E';
+            return { bg: rgbToHex(tinted.r, tinted.g, tinted.b), text, muted, accentOnCard, deleteColor, borderSoft: accentHex + '55', divider: accentHex + '33' };
+        }
+        function getAccentColorForPost(post) {
+            if (isAnonCategory(post.category)) return '#9B1E2E';
+            if (post.category === 'activity' || post.category === 'corner') return post.activityColor || post.authorColor || '#FF5722';
+            const info = getPostAuthorInfo(post);
+            return info.color || '#FF5722';
+        }
+
         function escapeHtml(str) {
             if (!str) return '';
             return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
-
         function formatTime(ts) {
             if (!ts) return '';
             const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -791,13 +733,11 @@
             if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
             return d.toLocaleDateString();
         }
-
         function getActivitySchedules(post) {
             if (post.schedules && Array.isArray(post.schedules) && post.schedules.length > 0) return post.schedules;
             if (post.scheduleData) return [{ ...post.scheduleData, type: post.eventType || post.scheduleData.type || 'weekly' }];
             return [];
         }
-
         function scheduleEntryDisplay(s) {
             const monthNames = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
             if (s.type === 'one-time') return (s.date || '') + (s.time ? ' at ' + s.time : '');
@@ -806,23 +746,92 @@
             if (s.type === 'yearly') return 'Every year on ' + (monthNames[s.month] || '') + ' ' + (s.day || '') + (s.time ? ' at ' + s.time : '');
             return '';
         }
-
         function formatScheduleString(schedules) {
             if (!schedules || schedules.length === 0) return '';
             return schedules.map(scheduleEntryDisplay).filter(Boolean).join(' · ');
         }
-
         function getPostAuthorInfo(post) {
             const isAnon = isAnonCategory(post.category);
             if (isAnon) return { name: post.author || 'Anonymous Insider', color: '' };
             if (post.userId && usersMap[post.userId]) {
-                return {
-                    name: usersMap[post.userId].displayName || post.author || 'User',
-                    color: usersMap[post.userId].color || post.authorColor || '#FF5722'
-                };
+                return { name: usersMap[post.userId].displayName || post.author || 'User', color: usersMap[post.userId].color || post.authorColor || '#FF5722' };
             }
             return { name: post.author || 'User', color: post.authorColor || '#FF5722' };
         }
+
+        // ---------- Event attendance ----------
+        function getCurrentCycleKey(post) {
+            const now = new Date();
+            const type = post.eventType || 'one-time';
+            if (type === 'one-time') return 'once';
+            if (type === 'weekly') {
+                const d = new Date(now);
+                const day = d.getDay();
+                const diff = day === 0 ? -6 : 1 - day;
+                d.setDate(d.getDate() + diff);
+                d.setHours(0,0,0,0);
+                return `w${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+            }
+            if (type === 'monthly') return `m${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}`;
+            if (type === 'yearly') return `y${now.getFullYear()}`;
+            return 'once';
+        }
+
+        function isOneTimeEventEnded(post) {
+            if ((post.eventType || 'one-time') !== 'one-time') return false;
+            const schedules = getActivitySchedules(post);
+            if (schedules.length === 0) return false;
+            const todayStart = new Date();
+            todayStart.setHours(0,0,0,0);
+            for (const s of schedules) {
+                if (s.date) {
+                    const eventEnd = new Date(s.date + 'T23:59:59');
+                    if (eventEnd >= todayStart) return false;
+                }
+            }
+            return true;
+        }
+
+        async function loadEventAttendees(eventId, cycleKey) {
+            try {
+                const q = query(
+                    collection(db, "eventAttendees"),
+                    where("eventId", "==", eventId),
+                    where("cycleKey", "==", cycleKey)
+                );
+                const snap = await getDocs(q);
+                return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            } catch (e) {
+                console.warn('loadEventAttendees failed:', e);
+                return [];
+            }
+        }
+
+        window.toggleEventAttendance = async function(eventId) {
+            if (!currentUser) { openAuthModal('signup'); return; }
+            const post = posts.find(p => p.id === eventId);
+            if (!post) return;
+            const cycleKey = getCurrentCycleKey(post);
+            const docId = `${eventId}_${currentUser.uid}_${cycleKey}`;
+            const docRef = doc(db, "eventAttendees", docId);
+            try {
+                const snap = await getDoc(docRef);
+                if (snap.exists()) {
+                    await deleteDoc(docRef);
+                } else {
+                    await setDoc(docRef, {
+                        eventId,
+                        userId: currentUser.uid,
+                        cycleKey,
+                        signedUpAt: serverTimestamp()
+                    });
+                }
+                if (currentDetailPostId === eventId) openDetailModal(eventId);
+            } catch (e) {
+                console.error(e);
+                alert('Could not update attendance: ' + (e.message || 'unknown'));
+            }
+        };
 
         async function generateUniqueFriendCodeAsync() {
             for (let attempt = 0; attempt < 20; attempt++) {
@@ -835,7 +844,6 @@
             }
             return String(Date.now()).slice(-6);
         }
-
         async function ensureFriendCode(uid) {
             try {
                 const snap = await getDoc(doc(db, "users", uid));
@@ -862,26 +870,21 @@
                 (error) => { console.warn('Club memberships listener error:', error); }
             );
         }
-
         async function loadClubMembers(clubId) {
             try {
                 const snap = await getDocs(query(collection(db, "clubMembers"), where("clubId", "==", clubId)));
                 return snap.docs.map(d => ({ id: d.id, ...d.data() }));
             } catch (e) { console.error('loadClubMembers failed:', e); return []; }
         }
-
         window.joinClub = async function(clubId) {
             if (!currentUser) { openAuthModal('signup'); return; }
             if (isClubMember(clubId)) return;
             const membershipId = `${clubId}_${currentUser.uid}`;
             try {
-                await setDoc(doc(db, "clubMembers", membershipId), {
-                    clubId, userId: currentUser.uid, role: 'member', roleName: 'Member', joinedAt: serverTimestamp()
-                });
+                await setDoc(doc(db, "clubMembers", membershipId), { clubId, userId: currentUser.uid, role: 'member', roleName: 'Member', joinedAt: serverTimestamp() });
                 if (currentDetailPostId === clubId) openDetailModal(clubId);
             } catch (e) { console.error(e); alert('Could not join club.'); }
         };
-
         window.leaveClub = async function(clubId) {
             if (!currentUser) return;
             if (!confirm('Leave this club?')) return;
@@ -891,13 +894,11 @@
                 if (currentDetailPostId === clubId) openDetailModal(clubId);
             } catch (e) { console.error(e); alert('Could not leave club.'); }
         };
-
         window.updateMemberRole = async function(membershipId, newRoleName) {
             const clean = (newRoleName || '').trim() || 'Member';
             try { await updateDoc(doc(db, "clubMembers", membershipId), { roleName: clean }); }
             catch (e) { console.error(e); alert('Could not update role.'); }
         };
-
         window.removeClubMember = async function(membershipId) {
             if (!confirm('Remove this member from the club?')) return;
             try {
@@ -914,21 +915,21 @@
             if (currentUser) {
                 const name = currentUserProfile?.displayName || currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'Insider');
                 const color = currentUserProfile?.color || '#FF5722';
-                const initial = name.charAt(0).toUpperCase();
+                const hasEmoji = !!(currentUserProfile && currentUserProfile.emoji);
+                const avatarContent = hasEmoji ? currentUserProfile.emoji : escapeHtml(name.charAt(0).toUpperCase());
+                const avatarStyle = hasEmoji ? `background-color:${color}26; color:${color};` : `background-color:${color}; color:#fff;`;
                 area.innerHTML = `
                     <button type="button" onclick="toggleAccountMenu(event)" class="flex items-center gap-2 group">
-                        <div class="w-9 h-9 rounded-full text-white flex items-center justify-center font-bold text-sm" style="background-color: ${color}">${escapeHtml(initial)}</div>
+                        <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm" style="${avatarStyle}">${avatarContent}</div>
                         <span class="text-sm font-semibold text-brand-dark hidden sm:inline">Hi, ${escapeHtml(name)}</span>
                         <span class="text-brand-muted text-xs">▾</span>
-                    </button>
-                `;
+                    </button>`;
                 if (floating && currentMainTab !== 'activities') floating.classList.remove('hidden');
                 if (menuCode) menuCode.textContent = '#' + (currentUserProfile?.friendCode || '—');
             } else {
                 area.innerHTML = `
                     <button type="button" onclick="openAuthModal('login')" class="text-sm font-semibold text-brand-dark hover:text-brand-orange transition-colors">Log in</button>
-                    <button type="button" onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>
-                `;
+                    <button type="button" onclick="openAuthModal('signup')" class="bg-brand-dark hover:bg-brand-orange text-white text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-all">Sign up</button>`;
                 if (floating) floating.classList.add('hidden');
                 if (menuCode) menuCode.textContent = '—';
             }
@@ -939,21 +940,16 @@
             authMode = mode || 'signup';
             const modal = document.getElementById('authModal');
             if (!modal) return;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
             updateAuthForm();
         };
         window.closeAuthModal = function() {
             const modal = document.getElementById('authModal');
             if (!modal) return;
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
             document.getElementById('auth-error').classList.add('hidden');
         };
-        window.toggleAuthMode = function() {
-            authMode = authMode === 'signup' ? 'login' : 'signup';
-            updateAuthForm();
-        };
+        window.toggleAuthMode = function() { authMode = authMode === 'signup' ? 'login' : 'signup'; updateAuthForm(); };
         function updateAuthForm() {
             const isSignup = authMode === 'signup';
             document.getElementById('auth-title').innerText = isSignup ? 'Create Account' : 'Log In';
@@ -962,7 +958,6 @@
             document.getElementById('auth-switch-btn').innerText = isSignup ? 'Log in' : 'Sign up';
             document.getElementById('display-name-wrapper').classList.toggle('hidden', !isSignup);
         }
-
         window.handleAuth = async function(e) {
             if (e && e.preventDefault) e.preventDefault();
             const emailEl = document.getElementById('authEmail');
@@ -975,10 +970,7 @@
             const displayName = (nameEl && nameEl.value || '').trim();
             if (errEl) errEl.classList.add('hidden');
             if (!email || !password) {
-                if (errEl) {
-                    errEl.innerText = 'Email and password are required.';
-                    errEl.classList.remove('hidden');
-                }
+                if (errEl) { errEl.innerText = 'Email and password are required.'; errEl.classList.remove('hidden'); }
                 return;
             }
             if (btn) { btn.disabled = true; btn.innerText = 'Please wait...'; }
@@ -987,12 +979,7 @@
                     const cred = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(cred.user, { displayName: displayName || email.split('@')[0] });
                     const friendCode = await generateUniqueFriendCodeAsync();
-                    const newProfile = {
-                        displayName: displayName || email.split('@')[0],
-                        email, color: '#FF5722', friendCode,
-                        showClubsOnProfile: true,
-                        createdAt: serverTimestamp()
-                    };
+                    const newProfile = { displayName: displayName || email.split('@')[0], email, color: '#FF5722', friendCode, emoji: null, showClubsOnProfile: true, createdAt: serverTimestamp() };
                     await setDoc(doc(db, "users", cred.user.uid), newProfile);
                     currentUserProfile = newProfile;
                 } else {
@@ -1002,7 +989,6 @@
             } catch (err) {
                 console.error('Auth error:', err);
                 let msg = err && err.message ? err.message : 'Authentication failed.';
-                // Friendlier messages for common cases
                 if (/network/i.test(msg)) msg = 'Network error. Please check your connection and try again.';
                 else if (/invalid-credential|wrong-password|invalid-login/i.test(msg)) msg = 'Wrong email or password.';
                 else if (/user-not-found/i.test(msg)) msg = 'No account with that email. Try signing up first.';
@@ -1027,12 +1013,8 @@
                         const code = await ensureFriendCode(user.uid);
                         if (code) currentUserProfile.friendCode = code;
                     }
-                } catch (e) {
-                    currentUserProfile = { displayName: user.displayName, color: '#FF5722' };
-                }
-            } else {
-                currentUserProfile = null;
-            }
+                } catch (e) { currentUserProfile = { displayName: user.displayName, color: '#FF5722' }; }
+            } else currentUserProfile = null;
             updateAuthUI();
             setupFriendsListeners();
             setupClubListeners();
@@ -1058,48 +1040,35 @@
                             if (friendUid) myFriends.push({ friendshipId: d.id, uid: friendUid });
                         }
                     });
-                    renderFriendsContent();
-                    updateFriendsBadges();
+                    renderFriendsContent(); updateFriendsBadges();
                 },
                 (error) => { console.warn('Friends listener error:', error); }
             );
-
             incomingListenerUnsub = onSnapshot(
                 query(collection(db, "friendRequests"), where("to", "==", uid)),
                 (snap) => {
                     incomingRequests = [];
-                    snap.forEach(d => {
-                        const data = d.data();
-                        if (data.status === 'pending') incomingRequests.push({ id: d.id, ...data });
-                    });
-                    renderFriendsContent();
-                    updateFriendsBadges();
+                    snap.forEach(d => { const data = d.data(); if (data.status === 'pending') incomingRequests.push({ id: d.id, ...data }); });
+                    renderFriendsContent(); updateFriendsBadges();
                 },
                 (error) => { console.warn('Incoming requests listener error:', error); }
             );
-
             outgoingListenerUnsub = onSnapshot(
                 query(collection(db, "friendRequests"), where("from", "==", uid)),
                 (snap) => {
                     outgoingRequests = [];
-                    snap.forEach(d => {
-                        const data = d.data();
-                        if (data.status === 'pending') outgoingRequests.push({ id: d.id, ...data });
-                    });
+                    snap.forEach(d => { const data = d.data(); if (data.status === 'pending') outgoingRequests.push({ id: d.id, ...data }); });
                     renderFriendsContent();
                 },
                 (error) => { console.warn('Outgoing requests listener error:', error); }
             );
         }
-
         function updateFriendsBadges() {
             const badge = document.getElementById('friends-badge');
             if (!badge) return;
             const count = incomingRequests.length;
-            if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
-            else badge.classList.add('hidden');
+            if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
         }
-
         window.openFriends = function() {
             if (!currentUser) { openAuthModal('signup'); return; }
             document.getElementById('friendsModal').classList.remove('hidden');
@@ -1112,15 +1081,12 @@
             document.getElementById('friendsModal').classList.add('hidden');
             document.getElementById('friendsModal').classList.remove('flex');
         };
-
         window.switchFriendsTab = function(tab) {
             currentFriendsTab = tab;
             ['list', 'incoming', 'outgoing'].forEach(t => {
                 const btn = document.getElementById(`ftab-${t}`);
                 if (!btn) return;
-                btn.className = (t === tab)
-                    ? 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all'
-                    : 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all';
+                btn.className = (t === tab) ? 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl bg-brand-dark text-white transition-all' : 'friends-tab flex-1 text-xs font-bold uppercase tracking-wider py-2.5 rounded-t-xl text-brand-muted hover:bg-brand-light transition-all';
             });
             renderFriendsContent();
         };
@@ -1141,7 +1107,7 @@
                     return `
                         <div class="flex items-center justify-between gap-2 p-2 rounded-2xl hover:bg-brand-light transition-colors">
                             <div class="flex items-center gap-3 min-w-0">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${displayEmojiOrInitial(u, name)}</div>
                                 <div class="min-w-0">
                                     <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
                                     ${u.friendCode ? `<p class="text-[10px] text-brand-muted font-bold tracking-wider">#${escapeHtml(u.friendCode)}</p>` : ''}
@@ -1163,7 +1129,7 @@
                     return `
                         <div class="bg-brand-light rounded-2xl p-3 space-y-2">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${displayEmojiOrInitial(u, name)}</div>
                                 <div class="min-w-0 flex-1">
                                     <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
                                     ${code ? `<p class="text-[10px] text-brand-muted font-bold tracking-wider">${escapeHtml(code)}</p>` : ''}
@@ -1185,7 +1151,7 @@
                     return `
                         <div class="flex items-center justify-between gap-2 p-2 rounded-2xl hover:bg-brand-light transition-colors">
                             <div class="flex items-center gap-3 min-w-0">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${displayEmojiOrInitial(u, name)}</div>
                                 <div class="min-w-0">
                                     <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
                                     ${code ? `<p class="text-[10px] text-brand-muted font-bold tracking-wider">${code} · Pending</p>` : '<p class="text-[10px] text-brand-muted">Pending</p>'}
@@ -1241,12 +1207,8 @@
                     status: 'pending', createdAt: serverTimestamp()
                 });
                 return { ok: true, message: 'Request sent! They\'ll see it in their Requests tab.' };
-            } catch (e) {
-                console.error(e);
-                return { ok: false, message: 'Could not send request: ' + (e.message || 'unknown error') };
-            }
+            } catch (e) { console.error(e); return { ok: false, message: 'Could not send request: ' + (e.message || 'unknown error') }; }
         }
-
         window.sendFriendRequest = async function(targetUid) {
             const targetSnap = await getDoc(doc(db, "users", targetUid));
             const targetData = targetSnap.exists() ? targetSnap.data() : {};
@@ -1254,7 +1216,6 @@
             if (!result.ok) alert(result.message);
             else if (!document.getElementById('profileModal').classList.contains('hidden')) openProfile(targetUid);
         };
-
         window.acceptFriendRequest = async function(requestId, fromUid) {
             if (!currentUser) return;
             try {
@@ -1263,20 +1224,17 @@
                 await updateDoc(doc(db, "friendRequests", requestId), { status: 'accepted', respondedAt: serverTimestamp() });
             } catch (e) { console.error(e); alert('Could not accept request: ' + (e.message || 'unknown error')); }
         };
-
         window.declineFriendRequest = async function(requestId) {
             if (!currentUser) return;
             try { await updateDoc(doc(db, "friendRequests", requestId), { status: 'declined', respondedAt: serverTimestamp() }); }
             catch (e) { console.error(e); alert('Could not decline request.'); }
         };
-
         window.cancelFriendRequest = async function(requestId) {
             if (!currentUser) return;
             if (!confirm('Cancel this friend request?')) return;
             try { await deleteDoc(doc(db, "friendRequests", requestId)); }
             catch (e) { console.error(e); alert('Could not cancel request.'); }
         };
-
         window.removeFriend = async function(friendshipId) {
             if (!confirm('Remove this friend?')) return;
             try { await deleteDoc(doc(db, "friends", friendshipId)); }
@@ -1322,6 +1280,9 @@
             document.getElementById('settingsShowClubs').checked = data.showClubsOnProfile !== false;
             const color = data.color || '#FF5722';
             document.getElementById('settingsColor').value = color;
+            const emoji = data.emoji || '';
+            document.getElementById('settingsEmoji').value = emoji;
+            renderEmojiPicker(emoji);
             pickColor(color);
         };
         window.closeSettings = function() {
@@ -1336,11 +1297,33 @@
         window.pickColor = function(c) {
             document.getElementById('settingsColor').value = c;
             document.querySelectorAll('.color-swatch').forEach(s => { s.style.borderColor = s.dataset.color === c ? '#1A1A1A' : 'transparent'; });
-            const name = document.getElementById('settingsName').value || '?';
-            document.getElementById('settings-pfp-preview').style.backgroundColor = c + '26';
-            document.getElementById('settings-pfp-initial').style.color = c;
-            document.getElementById('settings-pfp-initial').innerText = name.charAt(0).toUpperCase();
+            refreshSettingsPreview();
         };
+        function refreshSettingsPreview() {
+            const c = document.getElementById('settingsColor').value || '#FF5722';
+            const name = document.getElementById('settingsName').value || '?';
+            const emoji = document.getElementById('settingsEmoji').value;
+            const preview = document.getElementById('settings-pfp-preview');
+            const initialEl = document.getElementById('settings-pfp-initial');
+            if (!preview || !initialEl) return;
+            preview.style.backgroundColor = c + '26';
+            initialEl.style.color = c;
+            initialEl.textContent = emoji || name.charAt(0).toUpperCase();
+        }
+        function renderEmojiPicker(selected) {
+            const picker = document.getElementById('emoji-picker');
+            if (!picker) return;
+            picker.innerHTML = EMOJI_CHOICES.map(e => `
+                <button type="button" onclick="pickEmoji('${e}')" class="w-9 h-9 rounded-full flex items-center justify-center text-lg border-2 transition-all ${e === selected ? 'border-brand-orange bg-brand-orange/10' : 'border-transparent hover:bg-brand-light'}">${e}</button>
+            `).join('');
+        }
+        window.pickEmoji = function(e) { document.getElementById('settingsEmoji').value = e; renderEmojiPicker(e); refreshSettingsPreview(); };
+        window.clearEmoji = function() { document.getElementById('settingsEmoji').value = ''; renderEmojiPicker(''); refreshSettingsPreview(); };
+        window.pickActivityColor = function(c) {
+            document.getElementById('activityColor').value = c;
+            document.querySelectorAll('.activity-swatch').forEach(s => { s.style.borderColor = s.dataset.color === c ? '#1A1A1A' : 'transparent'; });
+        };
+
         window.saveSettings = async function() {
             if (!currentUser) return;
             const btn = document.getElementById('settingsSaveBtn');
@@ -1360,19 +1343,17 @@
                     likes: document.getElementById('settingsLikes').value.trim() || null,
                     dislikes: document.getElementById('settingsDislikes').value.trim() || null,
                     wechat: document.getElementById('settingsWechat').value.trim() || null,
+                    emoji: document.getElementById('settingsEmoji').value || null,
                     showClubsOnProfile: document.getElementById('settingsShowClubs').checked
                 };
                 await setDoc(doc(db, "users", currentUser.uid), data, { merge: true });
                 await updateProfile(currentUser, { displayName: data.displayName });
                 currentUserProfile = { ...currentUserProfile, ...data };
-                updateAuthUI();
-                closeSettings();
+                updateAuthUI(); closeSettings();
             } catch (err) {
                 document.getElementById('settings-error').innerText = err.message;
                 document.getElementById('settings-error').classList.remove('hidden');
-            } finally {
-                btn.disabled = false; btn.innerText = 'Save Profile';
-            }
+            } finally { btn.disabled = false; btn.innerText = 'Save Profile'; }
         };
         window.confirmDeleteAccount = async function() {
             if (!confirm('Permanently delete your account and all data? This cannot be undone.')) return;
@@ -1395,25 +1376,26 @@
                 const color = u.color || '#FF5722';
                 const name = u.displayName || 'Insider';
                 const isMe = currentUser && currentUser.uid === uid;
-                let html = `
-                    <div class="flex flex-col items-center gap-3">
-                        <div class="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
-                        <h4 class="font-heading font-extrabold text-xl text-brand-dark">${escapeHtml(name)}</h4>
-                        ${u.friendCode ? `<button type="button" onclick="copyProfileFriendCode('${escapeHtml(u.friendCode)}')" class="text-xs font-bold tracking-wider text-brand-ultra bg-brand-ultra/10 px-3 py-1 rounded-full hover:bg-brand-ultra/20 transition-colors">#${escapeHtml(u.friendCode)} · Tap to copy</button>` : ''}
-                    </div>
-                    <div class="space-y-2 text-sm">`;
+                const profileAvatarContent = u.emoji ? u.emoji : escapeHtml(name.charAt(0).toUpperCase());
+                let html = `<div class="flex flex-col items-center gap-3">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold" style="background:${color}26;color:${color}">${profileAvatarContent}</div>
+                    <h4 class="font-heading font-extrabold text-xl text-brand-dark">${escapeHtml(name)}</h4>
+                    ${u.friendCode ? `<button type="button" onclick="copyProfileFriendCode('${escapeHtml(u.friendCode)}')" class="text-xs font-bold tracking-wider text-brand-ultra bg-brand-ultra/10 px-3 py-1 rounded-full hover:bg-brand-ultra/20 transition-colors">#${escapeHtml(u.friendCode)} · Tap to copy</button>` : ''}
+                </div>
+                <div class="space-y-2 text-sm">`;
                 if (u.about) html += `<p class="text-brand-muted">${escapeHtml(u.about)}</p>`;
-if (u.age) html += `<p><span class="font-semibold">Age:</span> ${escapeHtml(u.age)}</p>`;
-if (u.birthday) html += `<p><span class="font-semibold">Birthday:</span> ${escapeHtml(u.birthday)}</p>`;
-if (u.gender) html += `<p><span class="font-semibold">Gender:</span> ${escapeHtml(u.gender)}</p>`;
-if (u.mbti) html += `<p><span class="font-semibold">MBTI:</span> ${escapeHtml(u.mbti)}</p>`;
-if (u.status) html += `<p><span class="font-semibold">Status:</span> ${escapeHtml(u.status)}</p>`;
-if (u.orientation) html += `<p><span class="font-semibold">Orientation:</span> ${escapeHtml(u.orientation)}</p>`;
-if (u.hobbies) html += `<p><span class="font-semibold">Hobbies:</span> ${escapeHtml(u.hobbies)}</p>`;
-if (u.likes) html += `<p><span class="font-semibold">Likes:</span> ${escapeHtml(u.likes)}</p>`;
-if (u.dislikes) html += `<p><span class="font-semibold">Dislikes:</span> ${escapeHtml(u.dislikes)}</p>`;
-if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
+                if (u.age) html += `<p><span class="font-semibold">Age:</span> ${escapeHtml(u.age)}</p>`;
+                if (u.birthday) html += `<p><span class="font-semibold">Birthday:</span> ${escapeHtml(u.birthday)}</p>`;
+                if (u.gender) html += `<p><span class="font-semibold">Gender:</span> ${escapeHtml(u.gender)}</p>`;
+                if (u.mbti) html += `<p><span class="font-semibold">MBTI:</span> ${escapeHtml(u.mbti)}</p>`;
+                if (u.status) html += `<p><span class="font-semibold">Status:</span> ${escapeHtml(u.status)}</p>`;
+                if (u.orientation) html += `<p><span class="font-semibold">Orientation:</span> ${escapeHtml(u.orientation)}</p>`;
+                if (u.hobbies) html += `<p><span class="font-semibold">Hobbies:</span> ${escapeHtml(u.hobbies)}</p>`;
+                if (u.likes) html += `<p><span class="font-semibold">Likes:</span> ${escapeHtml(u.likes)}</p>`;
+                if (u.dislikes) html += `<p><span class="font-semibold">Dislikes:</span> ${escapeHtml(u.dislikes)}</p>`;
+                if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtml(u.wechat)}</p>`;
                 html += `</div>`;
+
                 if (u.showClubsOnProfile !== false) {
                     try {
                         const mSnap = await getDocs(query(collection(db, "clubMembers"), where("userId", "==", uid)));
@@ -1434,6 +1416,7 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                         }
                     } catch (e) { console.warn('Could not load clubs for profile:', e); }
                 }
+
                 if (!isMe) {
                     const isFriend = myFriends.some(f => f.uid === uid);
                     const hasOutgoing = outgoingRequests.some(r => r.to === uid);
@@ -1458,41 +1441,33 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             document.getElementById('profileModal').classList.remove('flex');
         };
 
-        // DM
         function getChatId(uidA, uidB) { return [uidA, uidB].sort().join('_'); }
-
         async function ensureChatDoc(partnerUid) {
             if (!currentUser || !partnerUid) return;
             const chatId = getChatId(currentUser.uid, partnerUid);
-            try {
-                await setDoc(doc(db, "chats", chatId), { members: [currentUser.uid, partnerUid].sort() }, { merge: true });
-            } catch (e) { console.warn('ensureChatDoc failed:', e); }
+            try { await setDoc(doc(db, "chats", chatId), { members: [currentUser.uid, partnerUid].sort() }, { merge: true }); }
+            catch (e) { console.warn('ensureChatDoc failed:', e); }
         }
-
         window.openMessages = function() {
             if (!currentUser) { openAuthModal('signup'); return; }
             const modal = document.getElementById('messagesModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
             showDmList();
         };
         window.closeMessages = function() {
             document.getElementById('messagesModal').classList.add('hidden');
             document.getElementById('messagesModal').classList.remove('flex');
             if (dmMessagesUnsub) { dmMessagesUnsub(); dmMessagesUnsub = null; }
-            currentDmPartner = null;
-            currentDmPartnerName = '';
+            currentDmPartner = null; currentDmPartnerName = '';
         };
         window.showDmList = function() {
             document.getElementById('dm-list-view').classList.remove('hidden');
             const thread = document.getElementById('dm-thread-view');
             thread.classList.add('hidden'); thread.classList.remove('flex');
             if (dmMessagesUnsub) { dmMessagesUnsub(); dmMessagesUnsub = null; }
-            currentDmPartner = null;
-            currentDmPartnerName = '';
+            currentDmPartner = null; currentDmPartnerName = '';
             renderDmFriendList();
         };
-
         async function renderDmFriendList() {
             const list = document.getElementById('dm-chat-list');
             if (!list) return;
@@ -1520,7 +1495,7 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                 const previewClass = f.lastMessage ? 'text-brand-muted' : 'text-brand-muted italic';
                 return `
                     <button type="button" onclick="startDm('${f.uid}', '${escapeHtml(name).replace(/'/g, "\\'")}')" class="w-full flex items-center gap-3 p-2.5 rounded-2xl hover:bg-brand-light transition-colors text-left">
-                        <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${escapeHtml(name.charAt(0).toUpperCase())}</div>
+                        <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${color}26;color:${color}">${displayEmojiOrInitial(u, name)}</div>
                         <div class="flex-1 min-w-0">
                             <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
                             <p class="text-[11px] ${previewClass} truncate">${preview}</p>
@@ -1529,7 +1504,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                     </button>`;
             }).join('');
         }
-
         window.startDm = async function(uid, name) {
             if (!currentUser) return;
             const profileModal = document.getElementById('profileModal');
@@ -1546,14 +1520,14 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             const initial = (name || 'U').charAt(0).toUpperCase();
             document.getElementById('dm-thread-name').textContent = name || 'Chat';
             const avatar = document.getElementById('dm-thread-avatar');
+            const dmEmoji = u.emoji || null;
             avatar.style.background = color + '26';
             avatar.style.color = color;
-            avatar.textContent = initial;
+            avatar.textContent = dmEmoji || initial;
             document.getElementById('dm-messages').innerHTML = '<p class="text-sm text-brand-muted text-center py-6">Loading...</p>';
             await ensureChatDoc(uid);
             loadDmMessages(uid);
         };
-
         function loadDmMessages(partnerUid) {
             if (dmMessagesUnsub) { dmMessagesUnsub(); dmMessagesUnsub = null; }
             const chatId = getChatId(currentUser.uid, partnerUid);
@@ -1579,7 +1553,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                 if (container) container.innerHTML = '<p class="text-sm text-brand-ruby text-center py-6">Could not load messages. Check Firestore rules.</p>';
             });
         }
-
         window.sendDm = async function(e) {
             e.preventDefault();
             if (!currentUser || !currentDmPartner) return;
@@ -1687,7 +1660,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             if (forcedCategory && options.some(o => o.value === forcedCategory)) select.value = forcedCategory;
             updateAnonNote();
         }
-
         window.openModal = function() {
             if (!currentUser) { openAuthModal('signup'); return; }
             populateCategoryOptions();
@@ -1752,7 +1724,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             const checked = document.querySelector('input[name="eventType"]:checked');
             return checked ? checked.value : 'one-time';
         }
-
         function scheduleEntryHtml(type, data, index) {
             data = data || {};
             let fields = '';
@@ -1794,14 +1765,12 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                     <button type="button" onclick="removeScheduleEntry(this)" class="text-brand-ruby text-[10px] font-bold uppercase tracking-wider hover:underline">Remove</button>
                 </div>${fields}</div>`;
         }
-
         function renderScheduleEntries(type, schedules) {
             const container = document.getElementById('schedule-list');
             if (!container) return;
             if (!schedules || schedules.length === 0) schedules = [{}];
             container.innerHTML = schedules.map((s, i) => scheduleEntryHtml(type, s, i)).join('');
         }
-
         window.addScheduleEntry = function() {
             const type = getCurrentEventType();
             const container = document.getElementById('schedule-list');
@@ -1810,7 +1779,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             div.innerHTML = scheduleEntryHtml(type, {}, index);
             container.appendChild(div.firstElementChild);
         };
-
         window.removeScheduleEntry = function(btn) {
             const container = document.getElementById('schedule-list');
             if (container.children.length <= 1) { alert('At least one time slot is required.'); return; }
@@ -1821,12 +1789,7 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                 if (label) label.textContent = `Time slot ${i + 1}`;
             });
         };
-
-        window.toggleActivityFields = function() {
-            const type = getCurrentEventType();
-            renderScheduleEntries(type, [{}]);
-        };
-
+        window.toggleActivityFields = function() { renderScheduleEntries(getCurrentEventType(), [{}]); };
         function collectSchedules() {
             const type = getCurrentEventType();
             const entries = document.querySelectorAll('#schedule-list .schedule-entry');
@@ -1862,6 +1825,9 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             document.getElementById('activityModalTitle').innerText = existingPost ? 'Edit City Activity' : 'Host a City Activity';
             document.getElementById('actSubmitBtn').innerText = existingPost ? 'Save Changes' : 'Publish Activity';
             document.getElementById('activityForm').reset();
+            const initialActColor = (existingPost && existingPost.activityColor) || (currentUserProfile && currentUserProfile.color) || '#FF5722';
+            document.getElementById('activityColor').value = initialActColor;
+            pickActivityColor(initialActColor);
             if (existingPost) {
                 const type = existingPost.eventType || 'one-time';
                 const radio = document.querySelector(`input[name="eventType"][value="${type}"]`);
@@ -1881,14 +1847,12 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             }
             modal.classList.remove('hidden'); modal.classList.add('flex');
         };
-
         window.closeActivityModal = function() {
             const modal = document.getElementById('activityModal');
             if (!modal) return;
             modal.classList.add('hidden'); modal.classList.remove('flex');
             editingActivityId = null;
         };
-
         window.editActivity = function(postId) {
             const post = posts.find(p => p.id === postId);
             if (!post) return;
@@ -1896,7 +1860,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             closeDetailModal();
             openActivityModal(post);
         };
-
         window.handleActivitySubmission = async function(event) {
             event.preventDefault();
             if (!currentUser) { openAuthModal('signup'); return; }
@@ -1925,6 +1888,7 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                     schedules, schedule: scheduleString, author: authorName,
                     userId: currentUser.uid,
                     authorColor: beHost ? authorColor : '',
+                    activityColor: document.getElementById('activityColor').value || authorColor,
                     isHost: beHost, isClub: isClub
                 };
                 if (editingActivityId) {
@@ -1933,19 +1897,13 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                         const ownerMemberId = `${editingActivityId}_${currentUser.uid}`;
                         const ownerSnap = await getDoc(doc(db, "clubMembers", ownerMemberId));
                         if (!ownerSnap.exists()) {
-                            await setDoc(doc(db, "clubMembers", ownerMemberId), {
-                                clubId: editingActivityId, userId: currentUser.uid,
-                                role: 'owner', roleName: 'Owner', joinedAt: serverTimestamp()
-                            });
+                            await setDoc(doc(db, "clubMembers", ownerMemberId), { clubId: editingActivityId, userId: currentUser.uid, role: 'owner', roleName: 'Owner', joinedAt: serverTimestamp() });
                         }
                     }
                 } else {
                     const postRef = await addDoc(collection(db, "posts"), { ...payload, createdAt: serverTimestamp() });
                     if (isClub) {
-                        await setDoc(doc(db, "clubMembers", `${postRef.id}_${currentUser.uid}`), {
-                            clubId: postRef.id, userId: currentUser.uid,
-                            role: 'owner', roleName: 'Owner', joinedAt: serverTimestamp()
-                        });
+                        await setDoc(doc(db, "clubMembers", `${postRef.id}_${currentUser.uid}`), { clubId: postRef.id, userId: currentUser.uid, role: 'owner', roleName: 'Owner', joinedAt: serverTimestamp() });
                     }
                 }
                 closeActivityModal();
@@ -1961,6 +1919,8 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                 await deleteDoc(doc(db, "posts", postId));
                 const membersSnap = await getDocs(query(collection(db, "clubMembers"), where("clubId", "==", postId)));
                 await Promise.all(membersSnap.docs.map(d => deleteDoc(d.ref)));
+                const attendeeSnap = await getDocs(query(collection(db, "eventAttendees"), where("eventId", "==", postId)));
+                await Promise.all(attendeeSnap.docs.map(d => deleteDoc(d.ref)));
                 const commentsSnap = await getDocs(query(collection(db, "comments"), where("postId", "==", postId)));
                 await Promise.all(commentsSnap.docs.map(d => deleteDoc(d.ref)));
             } catch (error) { console.error(error); alert("Could not delete. Check your Firestore security rules."); }
@@ -1977,6 +1937,52 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             const schedules = getActivitySchedules(post);
             const isOwner = currentUser && post.userId === currentUser.uid;
             const isClub = post.isClub === true;
+            const accent = getAccentColorForPost(post);
+
+            // --- Attendee section for non-club activities ---
+            let attendanceSectionHtml = '';
+            if (isActivity && !isClub) {
+                const cycleKey = getCurrentCycleKey(post);
+                const ended = isOneTimeEventEnded(post);
+                const attendees = await loadEventAttendees(postId, cycleKey);
+                const iAmAttending = currentUser && attendees.some(a => a.userId === currentUser.uid);
+                const isOneTime = (post.eventType || 'one-time') === 'one-time';
+                const labelIdle = isOneTime ? "I wanna go" : "I wanna join";
+                const labelActive = isOneTime ? "You're going ✓" : "You're in ✓";
+                const sectionTitle = isOneTime ? "Who's going" : "Who's in";
+
+                const attendeeCircles = attendees.length === 0
+                    ? `<p class="text-sm text-brand-muted">No one yet — be the first!</p>`
+                    : `<div class="flex flex-wrap gap-3">${attendees.map(a => {
+                        const u = usersMap[a.userId] || {};
+                        const name = u.displayName || 'User';
+                        const color = u.color || '#FF5722';
+                        const avatarContent = displayEmojiOrInitial(u, name);
+                        const isMe = currentUser && a.userId === currentUser.uid;
+                        return `<button type="button" onclick="openProfile('${a.userId}')" class="flex flex-col items-center gap-1 group" title="${escapeHtml(name)}${isMe ? ' (you)' : ''}">
+                            <div class="w-11 h-11 rounded-full flex items-center justify-center text-base font-bold border-2 transition-transform group-hover:scale-110" style="background:${color}26;color:${color};border-color:${color}66;">${avatarContent}</div>
+                            <span class="text-[10px] font-semibold text-brand-dark max-w-[52px] truncate">${escapeHtml(name.split(' ')[0])}${isMe ? ' (you)' : ''}</span>
+                        </button>`;
+                    }).join('')}</div>`;
+
+                attendanceSectionHtml = `
+                    <div class="border-t border-brand-border pt-6 space-y-4">
+                        <div class="flex items-center justify-between flex-wrap gap-3">
+                            <h4 class="font-heading font-bold text-lg text-brand-dark">
+                                ${sectionTitle}
+                                <span class="text-brand-muted font-normal text-sm">(${attendees.length})</span>
+                            </h4>
+                            ${ended
+                                ? `<span class="text-xs font-bold uppercase tracking-wider text-brand-muted bg-brand-light border border-brand-border px-4 py-2 rounded-full">Event ended</span>`
+                                : `<button type="button" onclick="toggleEventAttendance('${postId}')" class="text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full transition-colors ${iAmAttending ? 'bg-brand-phthalo text-white hover:bg-emerald-900' : 'bg-brand-orange hover:bg-orange-600 text-white'}">${iAmAttending ? labelActive : labelIdle}</button>`
+                            }
+                        </div>
+                        ${attendeeCircles}
+                        ${!isOneTime ? `<p class="text-[10px] text-brand-muted italic">List resets automatically each new cycle.</p>` : ''}
+                    </div>
+                `;
+            }
+
             let clubSectionHtml = '';
             if (isClub) {
                 const members = await loadClubMembers(postId);
@@ -2000,7 +2006,7 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                             const isMeRow = currentUser && m.userId === currentUser.uid;
                             const isOwnerRow = m.role === 'owner';
                             return `<div class="flex items-center gap-3 p-2.5 bg-brand-light rounded-2xl">
-                                <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 cursor-pointer" style="background:${mColor}26;color:${mColor}" onclick="event.stopPropagation(); openProfile('${m.userId}')">${escapeHtml(mName.charAt(0).toUpperCase())}</div>
+                                <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 cursor-pointer" style="background:${mColor}26;color:${mColor}" onclick="event.stopPropagation(); openProfile('${m.userId}')">${displayEmojiOrInitial(u, mName)}</div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-semibold text-brand-dark truncate cursor-pointer" onclick="event.stopPropagation(); openProfile('${m.userId}')">${escapeHtml(mName)}${isMeRow ? ' <span class="text-brand-muted font-normal">(you)</span>' : ''}</p>
                                     ${ownerView && !isOwnerRow ? `<input type="text" value="${escapeHtml(m.roleName || 'Member')}" onclick="event.stopPropagation()" onchange="updateMemberRole('${m.id}', this.value)" placeholder="Rank" maxlength="24" class="mt-1 w-full bg-white border border-brand-border rounded-lg px-2 py-1 text-[11px] font-bold text-brand-ultra focus:outline-none focus:border-brand-ultra">` : `<p class="text-[10px] font-bold uppercase tracking-wider ${isOwnerRow ? 'text-brand-orange' : 'text-brand-ultra'}">${escapeHtml(m.roleName || (isOwnerRow ? 'Owner' : 'Member'))}</p>`}
@@ -2012,6 +2018,10 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                     ${ownerView ? `<p class="text-[10px] text-brand-muted italic">Tip: click any member's rank to rename it — "Coach", "VIP", "Moderator", anything you want.</p>` : ''}
                 </div>`;
             }
+
+            const emojiForAuthor = post.userId && usersMap[post.userId] ? usersMap[post.userId].emoji : null;
+            const detailAvatarContent = emojiForAuthor || escapeHtml(authorInfo.name.charAt(0).toUpperCase());
+
             contentEl.innerHTML = `
                 <div class="space-y-4">
                     <div class="flex items-center justify-between text-xs flex-wrap gap-2">
@@ -2033,12 +2043,13 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                     <p class="text-brand-muted leading-relaxed whitespace-pre-wrap">${escapeHtml(post.content)}</p>
                     <div class="flex items-center justify-between text-sm flex-wrap gap-2">
                         ${(!isAnon && isActivity && post.isHost === false) ? '<span class="text-brand-muted">Posted anonymously</span>' : `<div class="flex items-center gap-2 font-semibold text-brand-dark ${!isAnon && post.userId && post.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && post.userId && post.isHost !== false ? `onclick="openProfile('${post.userId}')"` : ''}>
-                            ${!isAnon && post.isHost !== false ? (() => { const c = authorInfo.color || '#FF5722'; return `<div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background-color:${c}26;color:${c}">${escapeHtml(authorInfo.name.charAt(0).toUpperCase())}</div>`; })() : ''}
+                            ${!isAnon && post.isHost !== false ? `<div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background-color:${accent}26;color:${accent}">${detailAvatarContent}</div>` : ''}
                             <span>${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Hosted by ' : 'By ') + escapeHtml(authorInfo.name)}</span>
                         </div>`}
                         ${isOwner ? `<div class="flex items-center gap-3">${isActivity ? `<button type="button" onclick="editActivity('${post.id}')" class="text-brand-ultra text-xs font-bold hover:underline">Edit</button>` : ''}<button type="button" onclick="deletePost('${post.id}', '${post.userId}'); closeDetailModal();" class="text-brand-ruby text-xs font-bold hover:underline">Delete</button></div>` : ''}
                     </div>
                 </div>
+                ${attendanceSectionHtml}
                 ${clubSectionHtml}
                 <div class="border-t border-brand-border pt-6 space-y-4">
                     <h4 class="font-heading font-bold text-lg text-brand-dark">Comments</h4>
@@ -2049,7 +2060,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             document.getElementById('detailModal').classList.add('flex');
             loadComments(postId);
         };
-
         window.closeDetailModal = function() {
             document.getElementById('detailModal').classList.add('hidden');
             document.getElementById('detailModal').classList.remove('flex');
@@ -2086,7 +2096,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                 }).join('');
             } catch (err) { console.error(err); listEl.innerHTML = `<p class="text-sm text-brand-ruby">Could not load comments. Check rules or index.</p>`; }
         }
-
         window.deleteComment = async function(commentId, commentUserId) {
             if (!currentUser || currentUser.uid !== commentUserId) { alert("You can only delete your own comments."); return; }
             if (!confirm("Delete this comment?")) return;
@@ -2130,14 +2139,12 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
         function renderAll() {
             renderPosts(); renderArticles(); renderAnon(); renderActivities(); renderYourClubs(); updateCounters();
         }
-
         function updateCounters() {
             const postsEl = document.getElementById('posts-count');
             if (postsEl) postsEl.innerText = posts.length;
             const feedPosts = posts.filter(p => ['lifehack','spot','inquiry'].includes(p.category));
             document.getElementById('post-count').innerText = feedFilter === 'all' ? feedPosts.length : feedPosts.filter(p => p.category === feedFilter).length;
         }
-
         function renderYourClubs() {
             const section = document.getElementById('your-clubs-section');
             const grid = document.getElementById('your-clubs-grid');
@@ -2151,13 +2158,16 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             section.classList.remove('hidden');
             grid.innerHTML = entries.map(m => {
                 const p = m.clubPost;
-                return `<div onclick="openDetailModal('${p.id}')" class="bg-brand-card p-5 rounded-2xl border border-brand-orange/30 hover:border-brand-orange/70 cursor-pointer transition-all shadow-sm">
-                    <div class="flex items-center justify-between mb-2"><span class="text-[10px] font-bold uppercase tracking-widest text-brand-orange">🏛️ Club</span><span class="text-xs text-brand-muted">${formatTime(p.createdAt)}</span></div>
-                    <h4 class="font-heading font-bold text-lg text-brand-dark line-clamp-2">${escapeHtml(p.title)}</h4>
-                    ${p.location ? `<p class="text-xs text-brand-muted mt-1">📍 ${escapeHtml(p.location)}</p>` : ''}
-                    <div class="mt-3 pt-3 border-t border-brand-border flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider ${m.role === 'owner' ? 'text-brand-orange' : 'text-brand-ultra'}">${escapeHtml(m.roleName || (m.role === 'owner' ? 'Owner' : 'Member'))}</span>
-                        <span class="text-brand-orange text-sm font-semibold">View →</span>
+                const accent = getAccentColorForPost(p);
+                const palette = getCardPalette(accent);
+                return `<div onclick="openDetailModal('${p.id}')" class="p-5 rounded-2xl cursor-pointer transition-all shadow-sm"
+                    style="background-color:${palette.bg}; border: 1px solid ${palette.borderSoft}; border-left: 4px solid ${accent};">
+                    <div class="flex items-center justify-between mb-2"><span class="text-[10px] font-bold uppercase tracking-widest" style="color:${palette.accentOnCard}">🏛️ Club</span><span class="text-xs" style="color:${palette.muted}">${formatTime(p.createdAt)}</span></div>
+                    <h4 class="font-heading font-bold text-lg line-clamp-2" style="color:${palette.text}">${escapeHtml(p.title)}</h4>
+                    ${p.location ? `<p class="text-xs mt-1" style="color:${palette.muted}">📍 ${escapeHtml(p.location)}</p>` : ''}
+                    <div class="mt-3 pt-3 flex items-center justify-between" style="border-top: 1px solid ${palette.divider}">
+                        <span class="text-xs font-bold uppercase tracking-wider" style="color:${palette.accentOnCard}">${escapeHtml(m.roleName || (m.role === 'owner' ? 'Owner' : 'Member'))}</span>
+                        <span class="text-sm font-semibold" style="color:${palette.accentOnCard}">View →</span>
                     </div>
                 </div>`;
             }).join('');
@@ -2181,17 +2191,15 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             }
             return getCategoryLabel(p.category);
         }
-
         function getCategoryColor(p) {
             const cat = typeof p === 'string' ? p : p.category;
-            if (cat === 'spot' || cat === 'anon-spot') return 'bg-brand-mikado/15 text-brand-mikado';
-            if (cat === 'article') return 'bg-brand-phthalo/10 text-brand-phthalo';
+            if (cat === 'spot' || cat === 'anon-spot') return 'bg-brand-mikado/25 text-brand-dark';
+            if (cat === 'article') return 'bg-brand-phthalo/15 text-brand-phthalo';
             if (cat === 'anon' || (cat && cat.startsWith('anon-'))) return 'bg-brand-ruby/20 text-red-400';
-            if (cat === 'inquiry' || cat === 'anon-inquiry') return 'bg-brand-ultra/10 text-brand-ultra';
-            if (cat === 'corner' || cat === 'activity') return 'bg-brand-ultra/10 text-brand-ultra';
-            return 'bg-brand-light text-brand-dark';
+            if (cat === 'inquiry' || cat === 'anon-inquiry') return 'bg-brand-ultra/15 text-brand-ultra';
+            if (cat === 'corner' || cat === 'activity') return 'bg-brand-ultra/15 text-brand-ultra';
+            return 'bg-black/10 text-brand-dark';
         }
-
         function isAnonCategory(cat) { return cat === 'anon' || (cat && cat.startsWith('anon-')); }
 
         function makePostCard(p, extraClass = '') {
@@ -2201,37 +2209,81 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             const isClub = p.isClub === true;
             const authorInfo = getPostAuthorInfo(p);
             const schedules = isActivity ? getActivitySchedules(p) : [];
+
+            // Anon path: plain card, no tint, no emoji avatar
+            if (isAnon) {
+                let scheduleHtmlAnon = '';
+                if (p.schedule) scheduleHtmlAnon = `<p class="text-xs font-semibold text-brand-ultra">🗓 ${escapeHtml(p.schedule)}</p>`;
+                return `
+                    <div class="bg-brand-card p-6 rounded-3xl border border-brand-border shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/40 transition-all relative group cursor-pointer ${extraClass}"
+                         onclick="openDetailModal('${p.id}')">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${getCategoryColor(p)}">${getCategoryLabel(p)}</span>
+                                <span class="text-xs text-brand-muted flex-shrink-0">${formatTime(p.createdAt)}${p.updatedAt ? ' · edited' : ''}</span>
+                            </div>
+                            <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
+                            ${scheduleHtmlAnon}
+                            <p class="text-sm text-brand-muted leading-relaxed line-clamp-3">${escapeHtml(p.content)}</p>
+                        </div>
+                        <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
+                            <span class="truncate">${escapeHtml(authorInfo.name)}</span>
+                            <div class="flex items-center gap-3 flex-shrink-0">
+                                ${canDelete ? `<button type="button" onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-ruby hover:underline">Delete</button>` : ''}
+                                <span class="text-brand-orange">View →</span>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            const accent = getAccentColorForPost(p);
+            const palette = getCardPalette(accent);
+            const avatarEmoji = p.userId && usersMap[p.userId] ? usersMap[p.userId].emoji : null;
+            const avatarContent = avatarEmoji || escapeHtml(authorInfo.name.charAt(0).toUpperCase());
+
             let scheduleHtml = '';
             if (isActivity && schedules.length > 0) {
                 const first = scheduleEntryDisplay(schedules[0]);
                 const restCount = schedules.length - 1;
-                scheduleHtml = `<p class="text-xs font-semibold text-brand-ultra">🗓 ${escapeHtml(first)}${restCount > 0 ? ` <span class="text-brand-muted font-normal">+${restCount} more</span>` : ''}</p>`;
-            } else if (p.schedule) scheduleHtml = `<p class="text-xs font-semibold text-brand-ultra">🗓 ${escapeHtml(p.schedule)}</p>`;
-            return `<div class="bg-brand-card p-6 rounded-3xl border ${isClub ? 'border-brand-orange/40' : 'border-brand-border'} shadow-sm flex flex-col justify-between space-y-4 hover:border-brand-orange/60 transition-all relative group cursor-pointer ${extraClass}" onclick="openDetailModal('${p.id}')">
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${getCategoryColor(p)}">${getCategoryLabel(p)}</span>
-                            ${isClub ? `<span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-orange text-white">Club</span>` : ''}
+                scheduleHtml = `<p class="text-xs font-semibold" style="color:${palette.accentOnCard}">🗓 ${escapeHtml(first)}${restCount > 0 ? ` <span class="font-normal" style="color:${palette.muted}">+${restCount} more</span>` : ''}</p>`;
+            } else if (p.schedule) {
+                scheduleHtml = `<p class="text-xs font-semibold" style="color:${palette.accentOnCard}">🗓 ${escapeHtml(p.schedule)}</p>`;
+            }
+
+            return `
+                <div class="p-6 rounded-3xl shadow-sm flex flex-col justify-between space-y-4 hover:shadow-lg transition-all relative group cursor-pointer ${extraClass}"
+                     style="background-color:${palette.bg}; border: 1px solid ${palette.borderSoft}; border-left: 4px solid ${accent};"
+                     onclick="openDetailModal('${p.id}')">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${getCategoryColor(p)}">${getCategoryLabel(p)}</span>
+                                ${isClub ? `<span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-orange text-white">Club</span>` : ''}
+                            </div>
+                            <span class="text-xs flex-shrink-0" style="color:${palette.muted}">${formatTime(p.createdAt)}${p.updatedAt ? ' · edited' : ''}</span>
                         </div>
-                        <span class="text-xs text-brand-muted flex-shrink-0">${formatTime(p.createdAt)}${p.updatedAt ? ' · edited' : ''}</span>
+                        <h3 class="font-heading font-bold text-xl" style="color:${palette.text}">${escapeHtml(p.title)}</h3>
+                        ${scheduleHtml}
+                        ${p.location && isActivity ? `<p class="text-xs" style="color:${palette.muted}">📍 ${escapeHtml(p.location)}</p>` : ''}
+                        <p class="text-sm leading-relaxed line-clamp-3" style="color:${palette.muted}">${escapeHtml(p.content)}</p>
                     </div>
-                    <h3 class="font-heading font-bold text-xl text-brand-dark">${escapeHtml(p.title)}</h3>
-                    ${scheduleHtml}
-                    ${p.location && isActivity ? `<p class="text-xs text-brand-muted">📍 ${escapeHtml(p.location)}</p>` : ''}
-                    <p class="text-sm text-brand-muted leading-relaxed line-clamp-3">${escapeHtml(p.content)}</p>
-                </div>
-                <div class="pt-4 border-t border-brand-border flex items-center justify-between text-xs font-semibold text-brand-dark">
-                    ${(!isAnon && isActivity && p.isHost === false) ? '<span class="text-brand-muted">Posted anonymously</span>' : `<div class="flex items-center gap-2 min-w-0 ${!isAnon && p.userId && p.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && p.userId && p.isHost !== false ? `onclick="event.stopPropagation(); openProfile('${p.userId}')"` : ''}>
-                        ${!isAnon && p.isHost !== false ? (() => { const c = authorInfo.color || '#FF5722'; return `<div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold" style="background-color:${c}26;color:${c}">${escapeHtml(authorInfo.name.charAt(0).toUpperCase())}</div>`; })() : ''}
-                        <span class="truncate">${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Host: ' : 'By ') + escapeHtml(authorInfo.name)}</span>
-                    </div>`}
-                    <div class="flex items-center gap-3 flex-shrink-0">
-                        ${canDelete ? `${isActivity ? `<button type="button" onclick="event.stopPropagation(); editActivity('${p.id}')" class="text-brand-ultra hover:underline">Edit</button>` : ''}<button type="button" onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="text-brand-ruby hover:underline">Delete</button>` : ''}
-                        <span class="text-brand-orange">View →</span>
+                    <div class="pt-4 flex items-center justify-between text-xs font-semibold" style="border-top: 1px solid ${palette.divider}; color:${palette.text}">
+                        ${(!isAnon && isActivity && p.isHost === false) ? `<span style="color:${palette.muted}">Posted anonymously</span>` : `
+                            <div class="flex items-center gap-2 min-w-0 ${!isAnon && p.userId && p.isHost !== false ? 'hover:opacity-80 cursor-pointer' : ''}" ${!isAnon && p.userId && p.isHost !== false ? `onclick="event.stopPropagation(); openProfile('${p.userId}')"` : ''}>
+                                ${!isAnon && p.isHost !== false ? `<div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold" style="background:${accent}40;color:${palette.text}">${avatarContent}</div>` : ''}
+                                <span class="truncate">${isAnon ? escapeHtml(authorInfo.name) : (isActivity ? 'Host: ' : 'By ') + escapeHtml(authorInfo.name)}</span>
+                            </div>
+                        `}
+                        <div class="flex items-center gap-3 flex-shrink-0">
+                            ${canDelete ? `
+                                ${isActivity ? `<button type="button" onclick="event.stopPropagation(); editActivity('${p.id}')" class="hover:underline" style="color:${palette.muted}">Edit</button>` : ''}
+                                <button type="button" onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="hover:underline" style="color:${palette.deleteColor}">Delete</button>
+                            ` : ''}
+                            <span style="color:${palette.accentOnCard}">View →</span>
+                        </div>
                     </div>
                 </div>
-            </div>`;
+            `;
         }
 
         function renderPosts() {
@@ -2250,7 +2302,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             }
             grid.innerHTML = filtered.map(p => makePostCard(p)).join('');
         }
-
         function renderArticles() {
             const grid = document.getElementById('articles-grid');
             if (!grid) return;
@@ -2258,7 +2309,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             if (articles.length === 0) { grid.innerHTML = `<div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">No independent articles published yet.</div>`; return; }
             grid.innerHTML = articles.map(p => makePostCard(p)).join('');
         }
-
         function renderAnon() {
             const grid = document.getElementById('anon-grid');
             if (!grid) return;
@@ -2269,7 +2319,6 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
             if (anons.length === 0) { grid.innerHTML = `<div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-dashed border-brand-border text-brand-muted text-sm">The anonymous board is clean.</div>`; return; }
             grid.innerHTML = anons.map(p => makePostCard(p)).join('');
         }
-
         function renderActivities() {
             const grid = document.getElementById('activities-grid');
             if (!grid) return;
@@ -2308,43 +2357,28 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
 
         function boot() {
             generateStars();
-
-            // Bind forms via addEventListener — more reliable than inline onsubmit in WebViews
             const authForm = document.getElementById('authForm');
-            if (authForm) {
-                authForm.removeAttribute('onsubmit');
-                authForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleAuth(ev); });
-            }
+            if (authForm) { authForm.removeAttribute('onsubmit'); authForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleAuth(ev); }); }
             const submissionForm = document.getElementById('submissionForm');
-            if (submissionForm) {
-                submissionForm.removeAttribute('onsubmit');
-                submissionForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleSubmission(ev); });
-            }
+            if (submissionForm) { submissionForm.removeAttribute('onsubmit'); submissionForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleSubmission(ev); }); }
             const activityForm = document.getElementById('activityForm');
-            if (activityForm) {
-                activityForm.removeAttribute('onsubmit');
-                activityForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleActivitySubmission(ev); });
-            }
+            if (activityForm) { activityForm.removeAttribute('onsubmit'); activityForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.handleActivitySubmission(ev); }); }
             const dmSendForm = document.getElementById('dm-send-form');
-            if (dmSendForm) {
-                dmSendForm.removeAttribute('onsubmit');
-                dmSendForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.sendDm(ev); });
-            }
-
-            // Event delegation for dynamically-created comment forms
+            if (dmSendForm) { dmSendForm.removeAttribute('onsubmit'); dmSendForm.addEventListener('submit', function(ev) { ev.preventDefault(); window.sendDm(ev); }); }
             document.addEventListener('submit', function(ev) {
                 const form = ev.target;
-                if (form && form.id === 'commentForm') {
-                    ev.preventDefault();
-                    window.addComment(ev);
-                }
+                if (form && form.id === 'commentForm') { ev.preventDefault(); window.addComment(ev); }
             });
-
             try {
                 const catSelect = document.getElementById('postCategory');
                 if (catSelect) catSelect.addEventListener('change', updateAnonNote);
             } catch (err) { console.error('[Liuzhou Loop] category select init failed:', err); }
             try { renderScheduleEntries('one-time', [{}]); } catch (err) { console.error('[Liuzhou Loop] schedule list init failed:', err); }
+            try {
+                const settingsNameInput = document.getElementById('settingsName');
+                if (settingsNameInput) settingsNameInput.addEventListener('input', refreshSettingsPreview);
+            } catch (err) { console.error('[Liuzhou Loop] settings name bind failed:', err); }
+            try { renderEmojiPicker(''); } catch (err) { console.error('[Liuzhou Loop] emoji picker init failed:', err); }
 
             try {
                 const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
@@ -2357,18 +2391,13 @@ if (u.wechat) html += `<p><span class="font-semibold">WeChat:</span> ${escapeHtm
                     const grid = document.getElementById('posts-grid');
                     if (grid) grid.innerHTML = `<div class="col-span-full py-12 text-center bg-brand-card rounded-3xl border border-brand-border text-brand-ruby font-semibold text-sm">Cloud database connection error.</div>`;
                 });
-
                 onSnapshot(collection(db, "users"), (snapshot) => {
                     usersMap = {};
                     snapshot.forEach((docSnap) => usersMap[docSnap.id] = docSnap.data());
-                    if (currentUser && usersMap[currentUser.uid]) {
-                        currentUserProfile = usersMap[currentUser.uid];
-                        updateAuthUI();
-                    }
+                    if (currentUser && usersMap[currentUser.uid]) { currentUserProfile = usersMap[currentUser.uid]; updateAuthUI(); }
                     const el = document.getElementById('active-count');
                     if (el) el.innerText = snapshot.size;
-                    renderAll();
-                    renderFriendsContent();
+                    renderAll(); renderFriendsContent();
                 }, (error) => { console.warn("Users listener error:", error); });
             } catch (err) {
                 console.error('[Liuzhou Loop] Firestore listeners failed:', err);
