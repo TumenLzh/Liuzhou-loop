@@ -162,7 +162,6 @@
                     </div>
                 </a>
                 <div class="flex items-center gap-2 order-2 md:order-3 flex-shrink-0">
-                    <!-- Notification bell (only when logged in) -->
                     <div id="notif-bell-wrap" class="hidden relative">
                         <button type="button" onclick="toggleNotificationsMenu(event)" id="notif-bell-btn" class="relative w-10 h-10 rounded-full flex items-center justify-center text-brand-dark hover:bg-black/5 transition-colors">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -695,9 +694,12 @@
         let dmMessagesUnsub = null;
 
         // Notification state
-        let notifications = []; // newest first
-        let seenChatMessages = new Set();
+        let notifications = [];
         let chatNotifUnsub = null;
+        let chatLastSeen = new Map();
+        let chatNotifInitialized = false;
+        let friendsNotifInitialized = false;
+        let incomingNotifInitialized = false;
 
         const EMOJI_CHOICES = [
             '🐱','🐶','🦊','🐼','🐨','🐯','🦁','🐸','🐧','🦉','🦄','🐙','🦖','🐢','🦋',
@@ -809,7 +811,6 @@
                 const raw = localStorage.getItem(key);
                 notifications = raw ? JSON.parse(raw) : [];
                 if (!Array.isArray(notifications)) notifications = [];
-                // Cap at 50
                 if (notifications.length > 50) notifications = notifications.slice(0, 50);
             } catch (e) {
                 console.warn('Failed to load notifications:', e);
@@ -830,12 +831,11 @@
         function addNotification(n) {
             if (!currentUser) return;
             const now = Date.now();
-            // Dedup: same type + fromUid + link within 30 seconds
             const isDup = notifications.find(x =>
                 x.type === n.type &&
                 x.fromUid === (n.fromUid || null) &&
                 x.link === (n.link || null) &&
-                (now - x.createdAt) < 30000
+                (now - x.createdAt) < 15000
             );
             if (isDup) return;
 
@@ -873,10 +873,8 @@
             const menu = document.getElementById('notificationsMenu');
             if (!menu) return;
             if (!menu.classList.contains('hidden')) { menu.classList.add('hidden'); return; }
-            // Close account menu if open
             const accountMenu = document.getElementById('accountMenu');
             if (accountMenu) accountMenu.classList.add('hidden');
-            // Position under the bell
             const btn = document.getElementById('notif-bell-btn');
             if (!btn) return;
             const rect = btn.getBoundingClientRect();
@@ -946,7 +944,6 @@
         };
 
         function showToast(n) {
-            // Skip if user is already viewing the relevant content
             if (n.type === 'message' && currentDmPartner && n.fromUid === currentDmPartner) {
                 const msgsModal = document.getElementById('messagesModal');
                 if (msgsModal && !msgsModal.classList.contains('hidden')) return;
@@ -976,49 +973,51 @@
         }
 
         // ============================================================
-        //  CHAT NOTIFICATION LISTENER
+        //  CHAT NOTIFICATION LISTENER (robust version)
         // ============================================================
         function setupChatNotifListener() {
             if (chatNotifUnsub) { chatNotifUnsub(); chatNotifUnsub = null; }
+            chatLastSeen = new Map();
+            chatNotifInitialized = false;
             if (!currentUser) return;
             const uid = currentUser.uid;
-            let firstSnap = true;
+
             try {
                 chatNotifUnsub = onSnapshot(
                     query(collection(db, "chats"), where("members", "array-contains", uid)),
                     (snap) => {
-                        if (!firstSnap) {
-                            snap.docChanges().forEach(change => {
-                                if (change.type !== 'added' && change.type !== 'modified') return;
-                                const data = change.doc.data();
-                                if (!data.lastSender || data.lastSender === uid) return;
-                                if (!data.lastMessage) return;
-                                const lastAt = data.lastMessageAt;
-                                const tsKey = (lastAt && (lastAt.toMillis ? lastAt.toMillis() : lastAt.seconds)) || Date.now();
-                                const key = `${change.doc.id}_${tsKey}`;
-                                if (seenChatMessages.has(key)) return;
-                                seenChatMessages.add(key);
-                                const otherUid = (data.members || []).find(u => u !== uid);
-                                if (!otherUid) return;
-                                const otherName = (usersMap[otherUid] && usersMap[otherUid].displayName) || 'Someone';
-                                addNotification({
-                                    type: 'message',
-                                    title: `New message from ${otherName}`,
-                                    body: data.lastMessage || '',
-                                    fromUid: otherUid,
-                                    link: `dm_${otherUid}`
-                                });
-                            });
-                        }
-                        // Mark every existing chat's current last-message timestamp as seen
                         snap.docs.forEach(d => {
                             const data = d.data();
                             const lastAt = data.lastMessageAt;
                             if (!lastAt) return;
-                            const tsKey = (lastAt.toMillis ? lastAt.toMillis() : lastAt.seconds) || 0;
-                            if (tsKey) seenChatMessages.add(`${d.id}_${tsKey}`);
+
+                            let tsKey = 0;
+                            if (typeof lastAt.toMillis === 'function') tsKey = lastAt.toMillis();
+                            else if (lastAt.seconds) tsKey = lastAt.seconds * 1000;
+                            else if (typeof lastAt === 'number') tsKey = lastAt;
+                            if (!tsKey) return;
+
+                            const prevSeen = chatLastSeen.get(d.id) || 0;
+
+                            if (chatNotifInitialized && tsKey > prevSeen) {
+                                if (data.lastSender && data.lastSender !== uid && data.lastMessage) {
+                                    const otherUid = (data.members || []).find(u => u !== uid);
+                                    if (otherUid) {
+                                        const otherName = (usersMap[otherUid] && usersMap[otherUid].displayName) || 'Someone';
+                                        addNotification({
+                                            type: 'message',
+                                            title: `New message from ${otherName}`,
+                                            body: data.lastMessage || '',
+                                            fromUid: otherUid,
+                                            link: `dm_${otherUid}`
+                                        });
+                                    }
+                                }
+                            }
+
+                            chatLastSeen.set(d.id, tsKey);
                         });
-                        firstSnap = false;
+                        chatNotifInitialized = true;
                     },
                     (error) => { console.warn('Chat notif listener error:', error); }
                 );
@@ -1298,7 +1297,8 @@
             } else {
                 currentUserProfile = null;
                 notifications = [];
-                seenChatMessages = new Set();
+                chatLastSeen = new Map();
+                chatNotifInitialized = false;
                 closeNotificationsMenu();
             }
             updateAuthUI();
@@ -1313,10 +1313,12 @@
             if (incomingListenerUnsub) { incomingListenerUnsub(); incomingListenerUnsub = null; }
             if (outgoingListenerUnsub) { outgoingListenerUnsub(); outgoingListenerUnsub = null; }
             myFriends = []; incomingRequests = []; outgoingRequests = [];
+            friendsNotifInitialized = false;
+            incomingNotifInitialized = false;
             if (!currentUser) { renderFriendsContent(); updateFriendsBadges(); return; }
             const uid = currentUser.uid;
-            let firstFriendsSnap = true;
-            let firstIncomingSnap = true;
+            const knownFriendUids = new Set();
+            const knownIncomingIds = new Set();
 
             friendsListenerUnsub = onSnapshot(
                 query(collection(db, "friends"), where("users", "array-contains", uid)),
@@ -1329,13 +1331,15 @@
                             if (friendUid) myFriends.push({ friendshipId: d.id, uid: friendUid });
                         }
                     });
-                    // Detect brand-new friendships (accepted requests)
-                    if (!firstFriendsSnap) {
-                        snap.docChanges().forEach(change => {
-                            if (change.type !== 'added') return;
-                            const data = change.doc.data();
-                            const otherUid = (data.users || []).find(u => u !== uid);
-                            if (!otherUid) return;
+                    // Fire notifications for genuinely new friendships (after first snapshot)
+                    snap.docs.forEach(d => {
+                        const data = d.data();
+                        const otherUid = (data.users || []).find(u => u !== uid);
+                        if (!otherUid) return;
+                        const key = `${d.id}_${otherUid}`;
+                        if (knownFriendUids.has(key)) return;
+                        knownFriendUids.add(key);
+                        if (friendsNotifInitialized) {
                             const otherName = (usersMap[otherUid] && usersMap[otherUid].displayName) || 'Someone';
                             addNotification({
                                 type: 'friend_accepted',
@@ -1344,9 +1348,9 @@
                                 fromUid: otherUid,
                                 link: `profile_${otherUid}`
                             });
-                        });
-                    }
-                    firstFriendsSnap = false;
+                        }
+                    });
+                    friendsNotifInitialized = true;
                     renderFriendsContent();
                     updateFriendsBadges();
                 },
@@ -1358,12 +1362,12 @@
                 (snap) => {
                     incomingRequests = [];
                     snap.forEach(d => { const data = d.data(); if (data.status === 'pending') incomingRequests.push({ id: d.id, ...data }); });
-                    // Detect brand-new incoming requests
-                    if (!firstIncomingSnap) {
-                        snap.docChanges().forEach(change => {
-                            if (change.type !== 'added') return;
-                            const data = change.doc.data();
-                            if (data.status !== 'pending') return;
+                    snap.docs.forEach(d => {
+                        const data = d.data();
+                        if (data.status !== 'pending') return;
+                        if (knownIncomingIds.has(d.id)) return;
+                        knownIncomingIds.add(d.id);
+                        if (incomingNotifInitialized) {
                             const fromUid = data.from;
                             if (!fromUid) return;
                             const fromName = data.fromName || (usersMap[fromUid] && usersMap[fromUid].displayName) || 'Someone';
@@ -1374,9 +1378,9 @@
                                 fromUid: fromUid,
                                 link: 'friends_requests'
                             });
-                        });
-                    }
-                    firstIncomingSnap = false;
+                        }
+                    });
+                    incomingNotifInitialized = true;
                     renderFriendsContent();
                     updateFriendsBadges();
                 },
@@ -1588,12 +1592,10 @@
         };
 
         document.addEventListener('click', (e) => {
-            // Close account menu if click is outside it
             const accountMenu = document.getElementById('accountMenu');
             if (accountMenu && !accountMenu.classList.contains('hidden') && !accountMenu.contains(e.target)) {
                 accountMenu.classList.add('hidden');
             }
-            // Close notifications menu if click is outside it AND outside the bell button
             const notifMenu = document.getElementById('notificationsMenu');
             const bellBtn = document.getElementById('notif-bell-btn');
             if (notifMenu && !notifMenu.classList.contains('hidden')) {
@@ -2656,7 +2658,7 @@
                         `}
                         <div class="flex items-center gap-3 flex-shrink-0">
                             ${canDelete ? `<button type="button" onclick="event.stopPropagation(); deletePost('${p.id}', '${p.userId}')" class="hover:underline" style="color:${palette.deleteColor}">Delete</button>` : ''}
-                            <span style="color:${palette.accentOnColor || palette.accentOnCard}">View →</span>
+                            <span style="color:${palette.accentOnCard}">View →</span>
                         </div>
                     </div>
                 </div>`;
