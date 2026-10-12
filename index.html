@@ -347,6 +347,8 @@
         let notifications = [];
         let chatsMap = {};              // chatId → chat doc data (live)
         let chatNotifUnsub = null;
+        let dmUnreadListeners = {};
+        let dmUnreadCounts = {}; // chatId -> number of unread incoming messages
 
         const EMOJI_CHOICES = ['🐱','🐶','🦊','🐼','🐨','🐯','🦁','🐸','🐧','🦉','🦄','🐙','🦖','🐢','🦋','🌟','🔥','⚡','🌈','💎','🎨','✨','🌙','☀️','⭐','☕','🍜','🍕','🍣','🧋','🍰','🍺','🥟','🎮','🎧','🎸','📷','🚀','📚','🎯','🏀','⚽','🎬','👾','🤖','👽','🎃','💀','👻','🤡','🐲'];
 
@@ -523,8 +525,11 @@
 
         function setupChatNotifListener() {
             if (chatNotifUnsub) { chatNotifUnsub(); chatNotifUnsub = null; }
+            Object.values(dmUnreadListeners).forEach(unsub => { try { unsub(); } catch (e) {} });
+            dmUnreadListeners = {};
+            dmUnreadCounts = {};
             chatsMap = {};
-            if (!currentUser) return;
+            if (!currentUser) { updateMessagesBadge(); renderDmFriendList(); return; }
             const uid = currentUser.uid;
             const seenMap = loadChatSeenMap();
 
@@ -532,29 +537,53 @@
                 chatNotifUnsub = onSnapshot(
                     query(collection(db, "chats"), where("members", "array-contains", uid)),
                     (snap) => {
+                        const activeIds = new Set();
                         snap.docs.forEach(d => {
                             const data = d.data();
                             chatsMap[d.id] = data;
+                            activeIds.add(d.id);
+                            // Count individual incoming messages, not merely unread conversations.
+                            if (!dmUnreadListeners[d.id]) {
+                                const chatId = d.id;
+                                dmUnreadListeners[chatId] = onSnapshot(
+                                    query(collection(db, "chats", chatId, "messages"), orderBy("createdAt", "asc")),
+                                    (messagesSnap) => {
+                                        const readAt = loadChatReadMap()[chatId] || 0;
+                                        let count = 0;
+                                        messagesSnap.docs.forEach(md => {
+                                            const message = md.data();
+                                            const ts = getTsMillis(message.createdAt);
+                                            if (message.senderId !== uid && ts && ts > readAt) count++;
+                                        });
+                                        dmUnreadCounts[chatId] = count;
+                                        updateMessagesBadge();
+                                        renderDmFriendList();
+                                    },
+                                    error => console.warn('Unread DM listener:', error)
+                                );
+                            }
                             const tsKey = getTsMillis(data.lastMessageAt);
-                            if (!tsKey) return; // server timestamp not resolved yet
+                            if (!tsKey) return;
                             const prev = seenMap[d.id] || 0;
                             const isMine = data.lastSender === uid;
                             if (tsKey > prev && !isMine && data.lastMessage && currentUser) {
                                 const otherUid = (data.members || []).find(u => u !== uid);
                                 if (otherUid) {
                                     const otherName = (usersMap[otherUid] && usersMap[otherUid].displayName) || 'Someone';
-                                    addNotification({
-                                        type: 'message',
-                                        title: `New message from ${otherName}`,
-                                        body: data.lastMessage || '',
-                                        fromUid: otherUid,
-                                        link: `dm_${otherUid}`
-                                    });
+                                    addNotification({ type: 'message', title: `New message from ${otherName}`, body: data.lastMessage || '', fromUid: otherUid, link: `dm_${otherUid}` });
                                 }
                             }
                             seenMap[d.id] = tsKey;
                         });
+                        Object.keys(dmUnreadListeners).forEach(chatId => {
+                            if (!activeIds.has(chatId)) {
+                                try { dmUnreadListeners[chatId](); } catch (e) {}
+                                delete dmUnreadListeners[chatId];
+                                delete dmUnreadCounts[chatId];
+                            }
+                        });
                         saveChatSeenMap(seenMap);
+                        updateMessagesBadge();
                         renderDmFriendList();
                     },
                     (error) => { console.warn('Chat listener error:', error); }
@@ -584,25 +613,25 @@
             const readMap = loadChatReadMap();
             readMap[chatId] = tsKey;
             saveChatReadMap(readMap);
+            dmUnreadCounts[chatId] = 0;
             updateMessagesBadge();
             renderDmFriendList();
         }
-        function isChatUnread(partnerUid) {
-            if (!currentUser) return false;
+        function getUnreadCount(partnerUid) {
+            if (!currentUser) return 0;
             const chatId = getChatId(currentUser.uid, partnerUid);
+            if (typeof dmUnreadCounts[chatId] === 'number') return dmUnreadCounts[chatId];
+            // Fallback until the per-message listener has delivered its first snapshot.
             const chat = chatsMap[chatId];
-            if (!chat || !chat.lastMessageAt || !chat.lastSender) return false;
-            if (chat.lastSender === currentUser.uid) return false;
-            const tsKey = getTsMillis(chat.lastMessageAt);
-            if (!tsKey) return false;
-            const readMap = loadChatReadMap();
-            return tsKey > (readMap[chatId] || 0);
+            if (!chat || !chat.lastMessageAt || !chat.lastSender || chat.lastSender === currentUser.uid) return 0;
+            return getTsMillis(chat.lastMessageAt) > (loadChatReadMap()[chatId] || 0) ? 1 : 0;
         }
+        function isChatUnread(partnerUid) { return getUnreadCount(partnerUid) > 0; }
         function updateMessagesBadge() {
             const badge = document.getElementById('messages-badge'); if (!badge) return;
-            let count = 0;
-            myFriends.forEach(f => { if (isChatUnread(f.uid)) count++; });
-            if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else badge.classList.add('hidden');
+            // Sum unread messages, not the number of conversations with unread messages.
+            const count = myFriends.reduce((total, friend) => total + getUnreadCount(friend.uid), 0);
+            if (count > 0) { badge.textContent = count > 99 ? '99+' : String(count); badge.classList.remove('hidden'); } else badge.classList.add('hidden');
         }
 
         // ============================================================
@@ -1061,14 +1090,15 @@
                 const chatId = getChatId(currentUser.uid, f.uid);
                 const chat = chatsMap[chatId] || {};
                 const unread = isChatUnread(f.uid);
-                return { f, u, name, color, chat, unread };
+                const unreadCount = getUnreadCount(f.uid);
+                return { f, u, name, color, chat, unread, unreadCount };
             });
             rows.sort((a, b) => {
                 const ta = getTsMillis(a.chat.lastMessageAt);
                 const tb = getTsMillis(b.chat.lastMessageAt);
                 return tb - ta;
             });
-            list.innerHTML = rows.map(({ f, u, name, color, chat, unread }) => {
+            list.innerHTML = rows.map(({ f, u, name, color, chat, unread, unreadCount }) => {
                 const preview = chat.lastMessage ? escapeHtml(chat.lastMessage) : 'Tap to open chat';
                 const previewClass = chat.lastMessage ? (unread ? 'text-brand-dark font-semibold' : 'text-brand-muted') : 'text-brand-muted italic';
                 return `
@@ -1077,7 +1107,7 @@
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2">
                                 <p class="font-semibold text-brand-dark text-sm truncate">${escapeHtml(name)}</p>
-                                ${unread ? '<span class="w-2 h-2 rounded-full bg-brand-orange flex-shrink-0"></span>' : ''}
+                                ${unread ? `<span class="min-w-[20px] h-5 px-1 rounded-full bg-brand-orange text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">${unreadCount > 99 ? '99+' : unreadCount}</span>` : ''}
                             </div>
                             <p class="text-[11px] ${previewClass} truncate">${preview}</p>
                         </div>
