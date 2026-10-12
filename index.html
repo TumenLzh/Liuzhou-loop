@@ -148,7 +148,6 @@
         </div>
     </div>
 
-    <!-- Toast container (top-right) -->
     <div id="toast-container" class="fixed top-24 right-4 z-[60] space-y-2 pointer-events-none"></div>
 
     <header class="sticky top-0 z-50 bg-[#F8F1E0]/90 backdrop-blur-md border-b border-brand-border transition-colors duration-300">
@@ -186,7 +185,6 @@
         </div>
     </header>
 
-    <!-- Notifications dropdown -->
     <div id="notificationsMenu" class="fixed z-[55] hidden bg-brand-card border border-brand-border rounded-2xl shadow-xl w-[340px] max-w-[calc(100vw-16px)] overflow-hidden">
         <div class="flex items-center justify-between px-4 py-2.5 border-b border-brand-border">
             <p class="font-heading font-bold text-sm text-brand-dark">Notifications</p>
@@ -486,6 +484,11 @@
                 </div>
                 <p class="text-[10px] text-brand-muted mt-2">Share this code with anyone so they can add you instantly — no need for them to find you in a post first.</p>
             </div>
+            <div class="bg-brand-orange/5 border border-brand-orange/30 rounded-2xl p-4">
+                <p class="text-xs font-bold uppercase tracking-wider text-brand-dark mb-1">Debug</p>
+                <p class="text-[10px] text-brand-muted mb-2">Click to fire a fake notification so you can verify the bell, badge, and toast are working.</p>
+                <button type="button" onclick="sendTestNotification()" class="text-xs font-bold uppercase tracking-wider bg-brand-orange text-white hover:bg-orange-600 px-4 py-2 rounded-full transition-colors">Send test notification</button>
+            </div>
             <div class="flex items-center justify-between bg-brand-light border border-brand-border rounded-2xl p-4">
                 <div class="pr-3">
                     <p class="text-sm font-bold text-brand-dark">Show my clubs on my profile</p>
@@ -695,11 +698,15 @@
 
         // Notification state
         let notifications = [];
-        let chatNotifUnsub = null;
         let chatLastSeen = new Map();
         let chatNotifInitialized = false;
-        let friendsNotifInitialized = false;
-        let incomingNotifInitialized = false;
+        let chatNotifUnsub = null;
+
+        const DEBUG_NOTIF = true; // set false to silence logs
+
+        function nlog(...args) {
+            if (DEBUG_NOTIF) console.log('[Notif]', ...args);
+        }
 
         const EMOJI_CHOICES = [
             '🐱','🐶','🦊','🐼','🐨','🐯','🦁','🐸','🐧','🦉','🦄','🐙','🦖','🐢','🦋',
@@ -763,7 +770,10 @@
         }
         function formatTime(ts) {
             if (!ts) return '';
-            const d = ts.toDate ? ts.toDate() : new Date(ts);
+            let d;
+            if (ts.toDate) d = ts.toDate();
+            else if (ts.seconds) d = new Date(ts.seconds * 1000);
+            else d = new Date(ts);
             const now = new Date();
             const diff = (now - d) / 1000;
             if (diff < 60) return 'just now';
@@ -816,6 +826,7 @@
                 console.warn('Failed to load notifications:', e);
                 notifications = [];
             }
+            nlog('loaded', notifications.length, 'from storage');
             updateNotificationsBadge();
             renderNotificationsList();
         }
@@ -829,15 +840,15 @@
         }
 
         function addNotification(n) {
-            if (!currentUser) return;
+            if (!currentUser) { nlog('addNotification skipped: no user'); return; }
             const now = Date.now();
             const isDup = notifications.find(x =>
                 x.type === n.type &&
                 x.fromUid === (n.fromUid || null) &&
                 x.link === (n.link || null) &&
-                (now - x.createdAt) < 15000
+                (now - x.createdAt) < 30000
             );
-            if (isDup) return;
+            if (isDup) { nlog('dedup skipped:', n); return; }
 
             const notif = {
                 id: `n_${now}_${Math.random().toString(36).slice(2, 8)}`,
@@ -854,7 +865,18 @@
             updateNotificationsBadge();
             renderNotificationsList();
             showToast(notif);
+            nlog('added:', notif);
         }
+
+        window.sendTestNotification = function() {
+            addNotification({
+                type: 'message',
+                title: '🔔 Test notification',
+                body: 'If you see this, the notification system works.',
+                fromUid: null,
+                link: null
+            });
+        };
 
         function updateNotificationsBadge() {
             const badge = document.getElementById('notif-bell-badge');
@@ -973,51 +995,71 @@
         }
 
         // ============================================================
-        //  CHAT NOTIFICATION LISTENER (robust version)
+        //  CHAT NOTIFICATION LISTENER (v2, timestamp-diff approach)
         // ============================================================
+        function getTsMillis(ts) {
+            if (!ts) return 0;
+            try {
+                if (typeof ts.toMillis === 'function') return ts.toMillis();
+            } catch (e) { /* pending */ }
+            if (typeof ts.seconds === 'number' && ts.seconds > 0) return ts.seconds * 1000;
+            if (typeof ts === 'number') return ts;
+            if (typeof ts === 'string') {
+                const parsed = Date.parse(ts);
+                if (!isNaN(parsed)) return parsed;
+            }
+            return 0;
+        }
+
         function setupChatNotifListener() {
             if (chatNotifUnsub) { chatNotifUnsub(); chatNotifUnsub = null; }
             chatLastSeen = new Map();
             chatNotifInitialized = false;
-            if (!currentUser) return;
+            if (!currentUser) { nlog('chat listener skipped: no user'); return; }
             const uid = currentUser.uid;
+            nlog('setting up chat listener for', uid);
 
             try {
                 chatNotifUnsub = onSnapshot(
                     query(collection(db, "chats"), where("members", "array-contains", uid)),
                     (snap) => {
+                        nlog('chat snapshot fired, docs:', snap.docs.length, 'initialized:', chatNotifInitialized);
                         snap.docs.forEach(d => {
                             const data = d.data();
                             const lastAt = data.lastMessageAt;
-                            if (!lastAt) return;
-
-                            let tsKey = 0;
-                            if (typeof lastAt.toMillis === 'function') tsKey = lastAt.toMillis();
-                            else if (lastAt.seconds) tsKey = lastAt.seconds * 1000;
-                            else if (typeof lastAt === 'number') tsKey = lastAt;
-                            if (!tsKey) return;
-
+                            const tsKey = getTsMillis(lastAt);
+                            if (!tsKey) {
+                                nlog('  chat', d.id, 'has no resolved lastMessageAt yet');
+                                return;
+                            }
                             const prevSeen = chatLastSeen.get(d.id) || 0;
+                            const sender = data.lastSender;
+                            const isMine = sender === uid;
+                            const newer = tsKey > prevSeen;
 
-                            if (chatNotifInitialized && tsKey > prevSeen) {
-                                if (data.lastSender && data.lastSender !== uid && data.lastMessage) {
-                                    const otherUid = (data.members || []).find(u => u !== uid);
-                                    if (otherUid) {
-                                        const otherName = (usersMap[otherUid] && usersMap[otherUid].displayName) || 'Someone';
-                                        addNotification({
-                                            type: 'message',
-                                            title: `New message from ${otherName}`,
-                                            body: data.lastMessage || '',
-                                            fromUid: otherUid,
-                                            link: `dm_${otherUid}`
-                                        });
-                                    }
+                            nlog('  chat', d.id, 'ts:', tsKey, 'prev:', prevSeen, 'sender:', sender, 'newer:', newer, 'init:', chatNotifInitialized);
+
+                            if (chatNotifInitialized && newer && !isMine && data.lastMessage) {
+                                const otherUid = (data.members || []).find(u => u !== uid);
+                                if (otherUid) {
+                                    const otherName = (usersMap[otherUid] && usersMap[otherUid].displayName) || 'Someone';
+                                    nlog('  -> ADDING NOTIFICATION from', otherName);
+                                    addNotification({
+                                        type: 'message',
+                                        title: `New message from ${otherName}`,
+                                        body: data.lastMessage || '',
+                                        fromUid: otherUid,
+                                        link: `dm_${otherUid}`
+                                    });
                                 }
                             }
 
                             chatLastSeen.set(d.id, tsKey);
                         });
-                        chatNotifInitialized = true;
+                        if (!chatNotifInitialized) {
+                            chatNotifInitialized = true;
+                            nlog('chat listener initialization complete');
+                        }
                     },
                     (error) => { console.warn('Chat notif listener error:', error); }
                 );
@@ -1313,12 +1355,10 @@
             if (incomingListenerUnsub) { incomingListenerUnsub(); incomingListenerUnsub = null; }
             if (outgoingListenerUnsub) { outgoingListenerUnsub(); outgoingListenerUnsub = null; }
             myFriends = []; incomingRequests = []; outgoingRequests = [];
-            friendsNotifInitialized = false;
-            incomingNotifInitialized = false;
             if (!currentUser) { renderFriendsContent(); updateFriendsBadges(); return; }
             const uid = currentUser.uid;
-            const knownFriendUids = new Set();
-            const knownIncomingIds = new Set();
+            let firstFriendsSnap = true;
+            let firstIncomingSnap = true;
 
             friendsListenerUnsub = onSnapshot(
                 query(collection(db, "friends"), where("users", "array-contains", uid)),
@@ -1331,16 +1371,14 @@
                             if (friendUid) myFriends.push({ friendshipId: d.id, uid: friendUid });
                         }
                     });
-                    // Fire notifications for genuinely new friendships (after first snapshot)
-                    snap.docs.forEach(d => {
-                        const data = d.data();
-                        const otherUid = (data.users || []).find(u => u !== uid);
-                        if (!otherUid) return;
-                        const key = `${d.id}_${otherUid}`;
-                        if (knownFriendUids.has(key)) return;
-                        knownFriendUids.add(key);
-                        if (friendsNotifInitialized) {
+                    if (!firstFriendsSnap) {
+                        snap.docChanges().forEach(change => {
+                            if (change.type !== 'added') return;
+                            const data = change.doc.data();
+                            const otherUid = (data.users || []).find(u => u !== uid);
+                            if (!otherUid) return;
                             const otherName = (usersMap[otherUid] && usersMap[otherUid].displayName) || 'Someone';
+                            nlog('new friendship detected with', otherName);
                             addNotification({
                                 type: 'friend_accepted',
                                 title: `${otherName} accepted your friend request`,
@@ -1348,9 +1386,9 @@
                                 fromUid: otherUid,
                                 link: `profile_${otherUid}`
                             });
-                        }
-                    });
-                    friendsNotifInitialized = true;
+                        });
+                    }
+                    firstFriendsSnap = false;
                     renderFriendsContent();
                     updateFriendsBadges();
                 },
@@ -1362,15 +1400,15 @@
                 (snap) => {
                     incomingRequests = [];
                     snap.forEach(d => { const data = d.data(); if (data.status === 'pending') incomingRequests.push({ id: d.id, ...data }); });
-                    snap.docs.forEach(d => {
-                        const data = d.data();
-                        if (data.status !== 'pending') return;
-                        if (knownIncomingIds.has(d.id)) return;
-                        knownIncomingIds.add(d.id);
-                        if (incomingNotifInitialized) {
+                    if (!firstIncomingSnap) {
+                        snap.docChanges().forEach(change => {
+                            if (change.type !== 'added') return;
+                            const data = change.doc.data();
+                            if (data.status !== 'pending') return;
                             const fromUid = data.from;
                             if (!fromUid) return;
                             const fromName = data.fromName || (usersMap[fromUid] && usersMap[fromUid].displayName) || 'Someone';
+                            nlog('new incoming friend request from', fromName);
                             addNotification({
                                 type: 'friend_request',
                                 title: `${fromName} sent you a friend request`,
@@ -1378,9 +1416,9 @@
                                 fromUid: fromUid,
                                 link: 'friends_requests'
                             });
-                        }
-                    });
-                    incomingNotifInitialized = true;
+                        });
+                    }
+                    firstIncomingSnap = false;
                     renderFriendsContent();
                     updateFriendsBadges();
                 },
@@ -1830,8 +1868,8 @@
                 return { ...f, lastMessage, lastMessageAt };
             }));
             enriched.sort((a, b) => {
-                const ta = a.lastMessageAt?.toMillis?.() || 0;
-                const tb = b.lastMessageAt?.toMillis?.() || 0;
+                const ta = getTsMillis(a.lastMessageAt);
+                const tb = getTsMillis(b.lastMessageAt);
                 return tb - ta;
             });
             list.innerHTML = enriched.map(f => {
